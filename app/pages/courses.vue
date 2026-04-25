@@ -44,21 +44,25 @@
 
     <ul v-else class="divide-y divide-(--ui-border) rounded-lg border border-(--ui-border)">
       <li v-for="c in items" :key="c.slug">
-        <NuxtLink
-          :to="wikiUrl.page(c.slug)"
-          class="flex flex-wrap items-center justify-between gap-3 px-4 py-3 hover:bg-(--ui-bg-elevated)"
+        <div
+          class="relative flex flex-wrap items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-(--ui-bg-elevated)"
           :style="{ borderLeftColor: c.dotColor }"
           style="border-left-width: 3px"
         >
+          <NuxtLink
+            :to="wikiUrl.page(c.slug)"
+            :aria-label="c.title"
+            class="absolute inset-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-(--ui-color-primary-500)"
+          />
           <div class="flex min-w-0 items-center gap-3">
-            <CoursePill :slug="c.slug" :accent="c.firstTag" />
+            <CoursePill class="relative" :slug="c.slug" :accent="c.firstTag" />
             <span class="truncate font-medium">{{ c.title }}</span>
           </div>
           <div class="flex items-center gap-3 text-xs text-(--ui-text-muted)">
             <span>{{ c.zapiskuLabel }}</span>
             <span v-if="c.updatedShort">upraveno {{ c.updatedShort }}</span>
           </div>
-        </NuxtLink>
+        </div>
       </li>
     </ul>
   </div>

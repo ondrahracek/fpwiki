@@ -1,7 +1,12 @@
 <template>
-  <NuxtLink :to="path" class="block rounded p-2 hover:bg-(--ui-bg-elevated)">
+  <div class="relative rounded p-2 transition-colors hover:bg-(--ui-bg-elevated)">
+    <NuxtLink
+      :to="path"
+      :aria-label="title"
+      class="absolute inset-0 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-(--ui-color-primary-500)"
+    />
     <div class="flex items-start gap-3">
-      <CoursePill v-if="firstCourse" :slug="firstCourse" class="mt-0.5 shrink-0" />
+      <CoursePill v-if="firstCourse" :slug="firstCourse" class="relative mt-0.5 shrink-0" />
       <div class="min-w-0 flex-1">
         <div class="truncate text-sm font-medium">{{ title }}</div>
         <div class="text-xs text-(--ui-text-muted)">
@@ -9,7 +14,7 @@
         </div>
       </div>
     </div>
-  </NuxtLink>
+  </div>
 </template>
 
 <script setup lang="ts">

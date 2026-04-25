@@ -1,11 +1,15 @@
 <template>
-  <NuxtLink
-    :to="wikiUrl.page(slug)"
-    class="block rounded-lg border border-l-4 border-(--ui-border) bg-(--ui-bg-elevated) p-5 transition-colors hover:border-(--ui-color-primary-300)"
+  <div
+    class="relative rounded-lg border border-l-4 border-(--ui-border) bg-(--ui-bg-elevated) p-5 transition-colors hover:border-(--ui-color-primary-300)"
     :style="{ borderLeftColor: hueVars['--course-hue-dot'], ...hueVars }"
   >
+    <NuxtLink
+      :to="wikiUrl.page(slug)"
+      :aria-label="title"
+      class="absolute inset-0 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-(--ui-color-primary-500)"
+    />
     <div class="mb-2 flex items-start justify-between gap-2">
-      <CoursePill :slug="slug" :accent="firstTag" big />
+      <CoursePill class="relative" :slug="slug" :accent="firstTag" big />
       <span v-if="zapiskuLabel" class="shrink-0 text-xs text-(--ui-text-muted)">
         {{ zapiskuLabel }}
       </span>
@@ -15,13 +19,13 @@
       {{ description }}
     </p>
     <!-- TODO(course-meta): show garant + courseName once schema fields populated -->
-    <div v-if="tags.length" class="mt-3 flex flex-wrap gap-1.5">
+    <div v-if="tags.length" class="relative mt-3 flex flex-wrap gap-1.5">
       <TagPill v-for="t in tags" :key="t" :tag="t" />
     </div>
     <div v-if="updatedShort" class="mt-3 text-xs text-(--ui-text-muted)">
       upraveno {{ updatedShort }}
     </div>
-  </NuxtLink>
+  </div>
 </template>
 
 <script setup lang="ts">

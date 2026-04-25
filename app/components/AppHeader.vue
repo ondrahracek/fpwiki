@@ -96,7 +96,7 @@ const toggleColorMode = () => {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
 }
 
-const searchOpen = ref(false)
+const searchOpen = useState('app-search-open', () => false)
 
 defineShortcuts({
   meta_k: () => {

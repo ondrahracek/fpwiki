@@ -26,25 +26,16 @@ const slug = computed(() => String(route.params.slug))
 // Search across all 4 page-collections in parallel; first hit wins. Slug
 // uniqueness is globally enforced by scripts/validate-content.ts so this
 // cannot ambiguously match.
-//
-// Dev-only `getCachedData: () => undefined` opts out of payload memoization —
-// otherwise a transient null result (e.g. during a stale .nuxt rebuild) gets
-// trapped under the route's key and every soft-nav back to this slug renders
-// 404 until hard refresh. Production prerender is immune (per-route payloads).
-const { data: found } = await useAsyncData(
-  `wiki-${slug.value}`,
-  async () => {
-    const collections: WikiCollectionName[] = ['courses', 'topics', 'summaries', 'outputs']
-    for (const name of collections) {
-      const direct = await queryCollection(name).where('stem', 'LIKE', `%/${slug.value}`).first()
-      if (direct) return { page: direct, collection: name }
-      const bare = await queryCollection(name).where('stem', '=', slug.value).first()
-      if (bare) return { page: bare, collection: name }
-    }
-    return null
-  },
-  import.meta.dev ? { getCachedData: () => undefined } : undefined,
-)
+const { data: found } = await useAsyncData(`wiki-${slug.value}`, async () => {
+  const collections: WikiCollectionName[] = ['courses', 'topics', 'summaries', 'outputs']
+  for (const name of collections) {
+    const direct = await queryCollection(name).where('stem', 'LIKE', `%/${slug.value}`).first()
+    if (direct) return { page: direct, collection: name }
+    const bare = await queryCollection(name).where('stem', '=', slug.value).first()
+    if (bare) return { page: bare, collection: name }
+  }
+  return null
+})
 
 const page = computed(() => found.value?.page ?? null)
 

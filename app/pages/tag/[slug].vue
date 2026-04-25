@@ -37,27 +37,22 @@ definePageMeta({ layout: 'sidebar' })
 const route = useRoute()
 const slug = computed(() => String(route.params.slug))
 
-// Dev-only cache opt-out — see app/pages/wiki/[slug].vue for rationale.
-const { data: pages } = await useAsyncData(
-  `tag-${slug.value}`,
-  async () => {
-    const collections: WikiCollectionName[] = ['courses', 'topics', 'summaries', 'outputs']
-    const all = await Promise.all(
-      collections.map(async (name) => {
-        const found = await queryCollection(name).all()
-        return found
-          .filter((p) => (p.tags ?? []).includes(slug.value))
-          .map((p) => ({
-            path: pathFor({ path: p.path ?? undefined, collection: name }),
-            title: p.title,
-            collection: name,
-          }))
-      }),
-    )
-    return all.flat()
-  },
-  import.meta.dev ? { getCachedData: () => undefined } : undefined,
-)
+const { data: pages } = await useAsyncData(`tag-${slug.value}`, async () => {
+  const collections: WikiCollectionName[] = ['courses', 'topics', 'summaries', 'outputs']
+  const all = await Promise.all(
+    collections.map(async (name) => {
+      const found = await queryCollection(name).all()
+      return found
+        .filter((p) => (p.tags ?? []).includes(slug.value))
+        .map((p) => ({
+          path: pathFor({ path: p.path ?? undefined, collection: name }),
+          title: p.title,
+          collection: name,
+        }))
+    }),
+  )
+  return all.flat()
+})
 
 const items = computed(() => pages.value ?? [])
 

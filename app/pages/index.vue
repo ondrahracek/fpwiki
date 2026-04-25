@@ -16,7 +16,7 @@
         <UButton to="/courses" color="primary" trailing-icon="i-lucide-arrow-right">
           Procházet předměty
         </UButton>
-        <UButton color="neutral" variant="outline" icon="i-lucide-search" @click="emitOpenSearch">
+        <UButton color="neutral" variant="outline" icon="i-lucide-search" @click="openSearch">
           Hledat
           <ClientOnly>
             <UKbd value="meta" class="ml-1" />
@@ -46,13 +46,17 @@
         </div>
         <ul class="space-y-2">
           <li v-for="c in courseList" :key="c.slug">
-            <NuxtLink
-              :to="wikiUrl.page(c.slug)"
-              class="flex items-center gap-3 rounded p-2 hover:bg-(--ui-bg-elevated)"
+            <div
+              class="relative flex items-center gap-3 rounded p-2 transition-colors hover:bg-(--ui-bg-elevated)"
             >
-              <CoursePill :slug="c.slug" :accent="c.firstTag" />
+              <NuxtLink
+                :to="wikiUrl.page(c.slug)"
+                :aria-label="c.title"
+                class="absolute inset-0 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-(--ui-color-primary-500)"
+              />
+              <CoursePill class="relative" :slug="c.slug" :accent="c.firstTag" />
               <span class="truncate text-sm">{{ c.title }}</span>
-            </NuxtLink>
+            </div>
           </li>
         </ul>
       </div>
@@ -105,11 +109,9 @@ useSeoMeta({
   ogTitle: 'fpwiki',
 })
 
-// The hero CTA dispatches the same ⌘K shortcut the header binds; AppHeader
-// owns the modal state. Programmatic key event keeps SRP — pages don't reach
-// into header state.
-const emitOpenSearch = () => {
-  window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))
+const searchOpen = useState('app-search-open', () => false)
+const openSearch = () => {
+  searchOpen.value = true
 }
 
 const { data: courses } = await useAsyncData('home-courses', () =>

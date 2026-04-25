@@ -1,13 +1,17 @@
 <template>
-  <section
-    class="grid grid-cols-2 gap-6 border-y border-dashed border-(--ui-border) py-6 sm:grid-cols-4"
-  >
-    <div v-for="s in items" :key="s.label">
-      <div class="text-2xl font-semibold tracking-tight text-(--ui-text-highlighted)">
-        {{ formatNumber(s.value) }}
-      </div>
-      <div class="mt-1 text-xs tracking-wider text-(--ui-text-muted) uppercase">
-        {{ s.label }}
+  <section class="border-y border-dashed border-(--ui-border) py-6">
+    <div class="flex flex-wrap gap-y-4">
+      <div
+        v-for="s in items"
+        :key="s.label"
+        class="border-dashed border-(--ui-border) px-6 not-first:border-l first:pl-0"
+      >
+        <div class="text-2xl font-semibold tracking-tight text-(--ui-text-highlighted)">
+          {{ formatNumber(s.value) }}
+        </div>
+        <div class="mt-1 text-xs tracking-wider text-(--ui-text-muted) uppercase">
+          {{ s.label }}
+        </div>
       </div>
     </div>
   </section>
