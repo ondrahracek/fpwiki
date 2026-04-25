@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Digitální identita a stopa"
+title: Digitální identita a digitální stopa
 course: imork
 type: summary
-tags: [digitalni-identita, digitalni-stopa, soukromi, autentizace]
+tags: [imork, digitalni-identita, digitalni-stopa, soukromi, autentizace]
 sources: [raw/imork/PRIS 2208 VUT_Bezp Digi identita a stopa.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Digitální identita a digitální stopa

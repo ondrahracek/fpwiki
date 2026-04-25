@@ -1,11 +1,11 @@
 ---
-title: "IpmrK — Neuronové sítě (výpočet)"
+title: Umělé neuronové sítě — ruční výpočet a praxe trénování
 course: ipmrk
 type: summary
 tags: [ipmrk, neuronove-site, uceni, vicevrstve-site, trenovani]
 sources: [raw/ipmrk/nn-vypocet.md]
 created: 2026-04-10
-updated: 2026-04-10
+updated: '2026-04-25'
 ---
 
 # Umělé neuronové sítě — ruční výpočet a praxe trénování

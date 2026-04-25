@@ -1,11 +1,11 @@
 ---
-title: "ImeK — kompletní přehled vzorců se zdroji a intuicí"
+title: ImeK — kompletní přehled vzorců se zdroji a intuicí
 course: imek
 type: output
-tags: [vzorce, prehled, cheatsheet, reference, mikroekonomie, makroekonomie]
+tags: [imek, vzorce, prehled, mikroekonomie, makroekonomie]
 sources: [raw/imek/kniha_scanned/]
 created: 2026-04-24
-updated: 2026-04-24
+updated: '2026-04-25'
 ---
 
 # ImeK — kompletní přehled vzorců se zdroji a intuicí

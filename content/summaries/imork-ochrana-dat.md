@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Ochrana dat"
+title: Ochrana dat
 course: imork
 type: summary
-tags: [ochrana-dat, sifrovani, nac, ids, ips, dlp, kryptografie, steganografie, elektronicky-podpis, eidas, enisa]
+tags: [imork, ochrana-dat, sifrovani, nac, ids, dlp, kryptografie, eidas]
 sources: [raw/imork/2017 VUT_Ochrana dat-2022.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Ochrana dat

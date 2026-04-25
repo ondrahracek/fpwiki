@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Internetová bezpečnost"
+title: Internetová bezpečnost — cvičení
 course: imork
 type: summary
-tags: [internet, bezpecnost, osint, apt, kyberprostor, cviceni]
+tags: [imork, internet, bezpecnost, osint, apt, kyberprostor, cviceni]
 sources: [raw/imork/CV 01 VUT_Bezp_Internetová bezpečnost-2023.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Internetová bezpečnost — cvičení

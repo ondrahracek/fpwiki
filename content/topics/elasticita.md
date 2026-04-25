@@ -1,11 +1,11 @@
 ---
-title: "Elasticita poptávky a nabídky"
+title: Elasticita poptávky a nabídky
 course: imek
 type: topic
-tags: [elasticita, cenova-elasticita, krizova-elasticita, duchodova-elasticita, mr-tr]
-sources: [raw/imek/kniha_scanned/, raw/imek/KS_prvni_blok.pdf]
+tags: [imek, elasticita, cenova-elasticita, krizova-elasticita, duchodova-elasticita, mr-tr]
+sources: [raw/imek/kniha_scanned/, raw/imek/KS_druhy_blok.pdf]
 created: 2026-04-22
-updated: 2026-04-22
+updated: '2026-04-25'
 ---
 
 # Elasticita poptávky a nabídky

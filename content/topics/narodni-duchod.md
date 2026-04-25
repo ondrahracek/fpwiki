@@ -1,11 +1,11 @@
 ---
-title: "Národní důchod — makroekonomické modely C-I, C-I-G, C-I-G-X, IS-LM"
+title: Národní důchod
 course: imek
 type: topic
-tags: [narodni-duchod, makroekonomie, gnp, spotreba, uspory, mpc, mps, ci-model, cig-model, cigx-model, is-lm, multiplikator]
+tags: [imek, narodni-duchod, makroekonomie, gnp, mpc, mps, is-lm, multiplikator]
 sources: [raw/imek/kniha_scanned/, raw/imek/KS_treti_blok.pdf]
 created: 2026-04-22
-updated: 2026-04-22
+updated: '2026-04-25'
 ---
 
 # Národní důchod

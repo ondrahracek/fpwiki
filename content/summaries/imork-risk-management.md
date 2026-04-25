@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Risk Management"
+title: ImorK — Risk Management
 course: imork
 type: summary
-tags: [rizeni-rizik, iso-31000, iso-27005, nist, hodnoceni-rizik]
+tags: [imork, rizeni-rizik, iso-31000, iso-27005, nist, hodnoceni-rizik]
 sources: [raw/imork/2003 VUT_Bezp Risk Mngmt-2021.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # ImorK — Risk Management

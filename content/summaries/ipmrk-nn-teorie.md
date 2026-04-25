@@ -1,11 +1,11 @@
 ---
-title: "IpmrK — Neuronové sítě (teorie)"
+title: Umělé neuronové sítě — teorie
 course: ipmrk
 type: summary
 tags: [ipmrk, neuronove-site, perceptron, backpropagation, aktivacni-funkce]
 sources: [raw/ipmrk/nn-teorie.md]
 created: 2026-04-10
-updated: 2026-04-10
+updated: '2026-04-25'
 ---
 
 # Umělé neuronové sítě — teorie

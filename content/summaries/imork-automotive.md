@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Automotive bezpečnost"
+title: Automotive bezpečnost
 course: imork
 type: summary
-tags: [isms, automotive, can-bus, tisax, iso-11898]
+tags: [imork, isms, automotive, can-bus, tisax, iso-11898]
 sources: [raw/imork/2010 VUT_Bezp Automotive-2023.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Automotive bezpečnost
@@ -49,7 +49,7 @@ Problematika soukromí v kontextu:
 **Trusted Information Security Assessment Exchange** — standard pro automobilový průmysl:
 
 - Vytvořen sdruženími **VDA** (Verband der Automobilindustrie) a **ENX**
-- Založen na [[iso-27001|ISO 27001]]
+- Založen na ISO 27001
 - Obsahuje **model zralosti** (maturity model)
 - **4 moduly**:
   1. ISMS

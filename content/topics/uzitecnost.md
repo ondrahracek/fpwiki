@@ -1,11 +1,11 @@
 ---
-title: "Užitečnost, Cobb-Douglas a optimalizace spotřebitele"
+title: Užitečnost, Cobb-Douglasova funkce užitečnosti a optimalizace spotřebitele
 course: imek
 type: topic
-tags: [uzitecnost, mezni-uzitecnost, cobb-douglas, indiferencni-krivky, mrcs]
-sources: [raw/imek/kniha_scanned/, raw/imek/KS_druhy_blok.pdf]
+tags: [imek, uzitecnost, mezni-uzitecnost, cobb-douglas, indiferencni-krivky, mrcs]
+sources: [raw/imek/kniha_scanned/, raw/imek/KS_treti_blok.pdf]
 created: 2026-04-22
-updated: 2026-04-22
+updated: '2026-04-25'
 ---
 
 # Užitečnost, Cobb-Douglasova funkce užitečnosti a optimalizace spotřebitele

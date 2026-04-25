@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Mobilní bezpečnost"
+title: Mobilní bezpečnost
 course: imork
 type: summary
-tags: [mobilni-bezpecnost, sim, 5g, malware, nist, common-criteria]
+tags: [imork, mobilni-bezpecnost, sim, 5g, malware, nist, common-criteria]
 sources: [raw/imork/2206 VUT_Bezp_Případovka Mobilní bezpečnost-2021.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Mobilní bezpečnost

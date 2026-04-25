@@ -1,11 +1,11 @@
 ---
-title: "Optimalizace — MATLAB Optimization Toolbox"
+title: Optimalizace — MATLAB Optimization Toolbox
 course: ipmrk
 type: summary
-tags: [ipmrk, optimalizace, matlab, fmincon, fminsearch, linprog, intlinprog, ga, optimoptions, ucelova-funkce]
+tags: [ipmrk, optimalizace, matlab, fmincon, linprog, intlinprog, ga, ucelova-funkce]
 sources: [raw/ipmrk/optimalizace-online.md]
 created: 2026-04-16
-updated: 2026-04-16
+updated: '2026-04-25'
 ---
 
 # Optimalizace — MATLAB Optimization Toolbox

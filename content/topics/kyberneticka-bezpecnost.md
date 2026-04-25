@@ -1,14 +1,11 @@
 ---
-title: "Kybernetická bezpečnost"
+title: Kybernetická bezpečnost
 courses: [imork]
 type: topic
-tags: [kyberneticka-bezpecnost, utoky, apt, ransomware, phishing, owasp]
-sources:
-  - raw/imork/CV 02 VUT_Anatomie útoku-2022.pdf
-  - raw/imork/CV 05 VUT_ AI útoky-2023 (1).pdf
-  - raw/imork/2001 VUT_Bezp Managerská 2022.pdf
+tags: [imork, kyberneticka-bezpecnost, utoky, apt, ransomware, phishing, owasp]
+sources: [raw/imork/CV 02 VUT_Anatomie útoku-2022.pdf, raw/imork/CV 05 VUT_ AI útoky-2023 (1).pdf, raw/imork/2001 VUT_Bezp Managerská 2022.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Kybernetická bezpečnost

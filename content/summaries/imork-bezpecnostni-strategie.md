@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Bezpečnostní strategie"
+title: Bezpečnostní strategie
 course: imork
 type: summary
-tags: [isms, strategie, enisa, ncss, cmmc, nukib, eu]
+tags: [imork, isms, strategie, enisa, ncss, cmmc, nukib, eu]
 sources: [raw/imork/2101 VUT_Bezpečnostní strategie-2022.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Bezpečnostní strategie

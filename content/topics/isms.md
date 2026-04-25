@@ -1,14 +1,11 @@
 ---
-title: "ISMS — Systém řízení bezpečnosti informací"
+title: ISMS — Systém řízení bezpečnosti informací
 courses: [imork]
 type: topic
-tags: [isms, iso-27001, iso-27002, informacni-bezpecnost, governance]
-sources:
-  - raw/imork/2001 VUT_Bezp Managerská 2022.pdf
-  - raw/imork/2003 VUT_Bezp Risk Mngmt-2021.pdf
-  - raw/imork/Detail předmětu.md
+tags: [imork, isms, iso-27001, iso-27002, informacni-bezpecnost, governance]
+sources: [raw/imork/2001 VUT_Bezp Managerská 2022.pdf, raw/imork/2003 VUT_Bezp Risk Mngmt-2021.pdf, raw/imork/Detail předmětu.md]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # ISMS — Systém řízení bezpečnosti informací

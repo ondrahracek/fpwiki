@@ -1,11 +1,11 @@
 ---
-title: "IpmrK — Fuzzy logika (MATLAB)"
+title: Fuzzy logika — architektura systému a MATLAB
 course: ipmrk
 type: summary
 tags: [ipmrk, fuzzy, matlab, fuzzy-system, inference]
 sources: [raw/ipmrk/fuzzy-matlab.md]
 created: 2026-04-10
-updated: 2026-04-10
+updated: '2026-04-25'
 ---
 
 # Fuzzy logika — architektura systému a MATLAB

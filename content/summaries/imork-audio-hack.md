@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Případovka: Audio Hack"
+title: 'Případovka: Audio Hack'
 course: imork
 type: summary
-tags: [zranitelnost, fyzicky-utok, hdd, cve, dos]
+tags: [imork, zranitelnost, fyzicky-utok, hdd, cve, dos]
 sources: [raw/imork/2207 VUT_Bezp_Případovka Audio Hack-2022.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Případovka: Audio Hack

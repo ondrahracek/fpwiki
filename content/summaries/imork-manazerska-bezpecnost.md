@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Manažerská bezpečnost"
+title: ImorK — Manažerská informační bezpečnost
 course: imork
 type: summary
-tags: [isms, governance, siem, log-management, isaca, nba, incident-management, iam, access-control, mobilni-bezpecnost, penetracni-testy]
+tags: [imork, isms, governance, siem, incident-management, iam, mobilni-bezpecnost, penetracni-testy]
 sources: [raw/imork/2001 VUT_Bezp Managerská 2022.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # ImorK — Manažerská informační bezpečnost
@@ -14,7 +14,7 @@ updated: 2026-04-12
 
 ## Governance informační bezpečnosti
 
-Rámce pro řízení [[informacni-bezpecnost|informační bezpečnosti]] na úrovni vedení organizace:
+Rámce pro řízení informační bezpečnosti na úrovni vedení organizace:
 
 - **ISO/IEC 27014** — governance informační bezpečnosti
 - **NIST SP 800-100** — Information Security Handbook pro management
@@ -59,7 +59,7 @@ Hierarchická dekompozice oblastí IB — od strategického řízení přes prov
 - Protokol **syslog** jako standard
 - Centralizované vs. distribuované řešení
 
-### [[siem|SIEM]] (Security Information and Event Management)
+### SIEM (Security Information and Event Management)
 
 - Korelace událostí z více zdrojů
 - Real-time monitoring a alerting
@@ -88,7 +88,7 @@ Detekce hrozeb na základě chování sítě — na rozdíl od signaturových me
 
 ### Normativní rámce
 
-- **ISO/IEC 27035** — řízení incidentů [[informacni-bezpecnost|informační bezpečnosti]]
+- **ISO/IEC 27035** — řízení incidentů informační bezpečnosti
 - **NIST SP 800-61r2** — Computer Security Incident Handling Guide
 
 ### CSIRT (Computer Security Incident Response Team)

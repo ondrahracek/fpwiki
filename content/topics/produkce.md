@@ -1,11 +1,11 @@
 ---
-title: "Produkce — produkční funkce, Cobb-Douglas, MRTS"
+title: Produkce — produkční funkce, Cobb-Douglas, MRTS
 course: imek
 type: topic
-tags: [produkce, produkcni-funkce, mpl, apl, cobb-douglas, izokvanty, mrts, euler]
+tags: [imek, produkce, produkcni-funkce, mpl-apl, cobb-douglas, izokvanty, mrts, euler]
 sources: [raw/imek/kniha_scanned/, raw/imek/KS_druhy_blok.pdf]
 created: 2026-04-22
-updated: 2026-04-22
+updated: '2026-04-25'
 ---
 
 # Produkce — produkční funkce, Cobb-Douglas, MRTS

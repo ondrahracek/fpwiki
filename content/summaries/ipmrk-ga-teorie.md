@@ -1,11 +1,11 @@
 ---
-title: "IpmrK — Genetické algoritmy (teorie)"
+title: Genetické algoritmy — teorie
 course: ipmrk
 type: summary
 tags: [ipmrk, geneticke-algoritmy, optimalizace, selekce, krizeni, mutace]
 sources: [raw/ipmrk/ga-teorie.md]
 created: 2026-04-10
-updated: 2026-04-10
+updated: '2026-04-25'
 ---
 
 # Genetické algoritmy — teorie

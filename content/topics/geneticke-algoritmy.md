@@ -1,11 +1,11 @@
 ---
-title: "Genetické algoritmy"
+title: Genetické algoritmy
 courses: [ipmrk]
 type: topic
-tags: [geneticke-algoritmy, optimalizace, evoluce, selekce, krizeni, mutace]
+tags: [ipmrk, geneticke-algoritmy, optimalizace, selekce, krizeni, mutace]
 sources: [raw/ipmrk/ga-teorie.md, raw/ipmrk/ga-vyuziti.md, raw/ipmrk/kniha.md]
 created: 2026-04-10
-updated: 2026-04-16
+updated: '2026-04-25'
 ---
 
 # Genetické algoritmy

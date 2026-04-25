@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Anatomie kybernetického útoku"
+title: Anatomie kybernetického útoku
 course: imork
 type: summary
-tags: [utoky, apt, exploit, payload, vektor-utoku, phishing, socialni-inzenyrstvi, malware, supply-chain, amplifikace, iso-osi]
+tags: [imork, kyberneticka-bezpecnost, apt, exploit, phishing, socialni-inzenyrstvi, malware, supply-chain]
 sources: [raw/imork/CV 02 VUT_Anatomie útoku-2022.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Anatomie kybernetického útoku

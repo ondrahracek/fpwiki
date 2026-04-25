@@ -1,11 +1,11 @@
 ---
-title: "IpmrK — Detail předmětu"
+title: Detail předmětu — Pokročilé metody v rozhodování
 course: ipmrk
 type: summary
 tags: [ipmrk, info]
 sources: [raw/ipmrk/Detail předmětu.md]
 created: 2026-04-10
-updated: 2026-04-10
+updated: '2026-04-25'
 ---
 
 # Detail předmětu — Pokročilé metody v rozhodování
