@@ -1,11 +1,11 @@
 ---
-title: "ImeK — Detail předmětu"
+title: Matematická ekonomie — Detail předmětu
 course: imek
 type: summary
-tags: [sylabus, zkouska]
+tags: [imek, zkouska]
 sources: [raw/imek/Detail předmětu.md]
 created: 2026-04-20
-updated: 2026-04-20
+updated: '2026-04-25'
 ---
 
 # Matematická ekonomie — Detail předmětu

@@ -1,11 +1,11 @@
 ---
-title: "ImorK — eHealth v ČR"
+title: eHealth v ČR
 course: imork
 type: summary
-tags: [ehealth, zdravotnictvi, telemedicina, ehr, elektronicka-preskripce]
+tags: [imork, ehealth, zdravotnictvi, telemedicina, ehr, elektronicka-preskripce]
 sources: [raw/imork/2105 VUT_Bezp_Případovka eHealth_2021.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # eHealth v ČR

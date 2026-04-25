@@ -1,11 +1,11 @@
 ---
-title: "ImeK — KS 1. blok: Kalkul, poptávka/nabídka, příjem/náklady/zisk"
+title: KS 1. blok — Kalkul a mikroekonomie
 course: imek
 type: summary
-tags: [kalkul, derivace, integral, lagrange, poptavka, nabidka, prijem, naklady, zisk]
+tags: [imek, kalkul, derivace, integral, lagrange, poptavka-nabidka, prijem-naklady-zisk, mikroekonomie]
 sources: [raw/imek/KS_prvni_blok.pdf]
 created: 2026-04-20
-updated: 2026-04-20
+updated: '2026-04-25'
 ---
 
 # KS 1. blok — Kalkul a mikroekonomie

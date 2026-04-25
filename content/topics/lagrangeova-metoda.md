@@ -1,11 +1,11 @@
 ---
-title: "Lagrangeova metoda"
+title: Lagrangeova metoda (vázané extrémy)
 courses: [imek, ipmrk]
 type: topic
-tags: [optimalizace, vazane-extremy, multiplikator]
+tags: [imek, optimalizace, vazane-extremy, multiplikator]
 sources: [raw/imek/KS_prvni_blok.pdf, raw/imek/KS_treti_blok.pdf]
 created: 2026-04-20
-updated: 2026-04-20
+updated: '2026-04-25'
 ---
 
 # Lagrangeova metoda (vázané extrémy)

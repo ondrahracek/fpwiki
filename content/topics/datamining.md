@@ -1,11 +1,11 @@
 ---
-title: "Datamining"
+title: Datamining
 course: ipmrk
 type: topic
-tags: [ipmrk, datamining, crisp-dm, link-analyza, klastrovani, kmeans, rozhodovaci-stromy, apriori, witness-miner, matlab, dolování-dat]
+tags: [ipmrk, datamining, crisp-dm, link-analyza, klastrovani, rozhodovaci-stromy, apriori, witness-miner]
 sources: [raw/ipmrk/kniha.md, raw/ipmrk/datamining-online.md]
 created: 2026-04-16
-updated: 2026-04-16
+updated: '2026-04-25'
 ---
 
 # Datamining

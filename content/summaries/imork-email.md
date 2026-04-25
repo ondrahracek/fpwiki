@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Bezpečnost emailových služeb"
+title: Bezpečnost emailových služeb
 course: imork
 type: summary
-tags: [email, smtp, bezpecnost, sifrovani, spf, dkim, dmarc, pgp, bec, sandboxing, mimecast]
+tags: [imork, email, sifrovani, spf, dkim, dmarc, pgp, bec]
 sources: [raw/imork/2016 VUT_Bezp Email-2022.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Bezpečnost emailových služeb
@@ -70,7 +70,7 @@ Elektronické dokumenty prokazující vlastnictví veřejného klíče:
 
 - Vydávány certifikační autoritou (CA)
 - Obsahují: veřejný klíč, identitu vlastníka, dobu platnosti, podpis CA
-- Základ pro [[informacni-bezpecnost|důvěryhodnou komunikaci]] (S/MIME, TLS)
+- Základ pro důvěryhodnou komunikaci (S/MIME, TLS)
 
 ## Emailové hrozby 21. století
 

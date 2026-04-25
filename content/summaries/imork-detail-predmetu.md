@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Detail předmětu"
+title: ImorK — Detail předmětu
 course: imork
 type: summary
-tags: [isms, informacni-bezpecnost, oborova-reseni]
+tags: [imork, isms, informacni-bezpecnost, oborova-reseni]
 sources: [raw/imork/Detail předmětu.md]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # ImorK — Detail předmětu
@@ -28,7 +28,7 @@ Předmět se zabývá implementací [[isms|ISMS]] (Information Security Manageme
 
 ## Témata přednášek
 
-1. Manažerská [[informacni-bezpecnost|informační bezpečnost]]
+1. Manažerská informační bezpečnost
 2. [[sae|SAE]] — budování bezpečnostního povědomí
 3. [[rizeni-rizik|Risk management]]
 4. [[isms|ISMS]] v akademickém prostředí
@@ -37,7 +37,7 @@ Předmět se zabývá implementací [[isms|ISMS]] (Information Security Manageme
 7. ISMS v energetice
 8. ISMS u ISP (poskytovatelů internetových služeb)
 9. Kybernetická bezpečnost
-10. [[gdpr|GDPR]] a ochrana osobních údajů
+10. GDPR a ochrana osobních údajů
 11. Bezpečnost webových aplikací
 12. Bezpečnost e-mailu
 13. Bezpečnost mobilních zařízení

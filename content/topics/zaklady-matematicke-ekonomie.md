@@ -1,11 +1,11 @@
 ---
-title: "Základy matematické ekonomie"
+title: Základy matematické ekonomie
 course: imek
 type: topic
-tags: [model, endogenni, exogenni, ceteris-paribus, komparativni-statika]
+tags: [imek, model, endogenni, exogenni, ceteris-paribus, komparativni-statika]
 sources: [raw/imek/KS_prvni_blok.pdf]
 created: 2026-04-20
-updated: 2026-04-20
+updated: '2026-04-25'
 ---
 
 # Základy matematické ekonomie

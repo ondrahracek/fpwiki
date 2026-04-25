@@ -1,11 +1,11 @@
 ---
-title: "IpmrK Kniha — Pokročilé metody analýz a modelování"
+title: IpmrK Kniha — Pokročilé metody analýz a modelování
 course: ipmrk
 type: summary
-tags: [ipmrk, kniha, fuzzy, neuronove-site, geneticke-algoritmy, evolucni-algoritmy, chaos, optimalizace, datamining, zkouska]
+tags: [ipmrk, kniha, fuzzy, neuronove-site, geneticke-algoritmy, evolucni-algoritmy, chaos, datamining]
 sources: [raw/ipmrk/kniha.md]
 created: 2026-04-16
-updated: 2026-04-16
+updated: '2026-04-25'
 ---
 
 # IpmrK Kniha — Pokročilé metody analýz a modelování

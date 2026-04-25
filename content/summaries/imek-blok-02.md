@@ -1,11 +1,11 @@
 ---
-title: "ImeK — KS 2. blok: Elasticita a produkce"
+title: KS 2. blok — Elasticita a produkce
 course: imek
 type: summary
-tags: [elasticita, produkce, cobb-douglas, ces, izokvanty, mrts]
+tags: [imek, elasticita, produkce, cobb-douglas, ces, izokvanty, mrts]
 sources: [raw/imek/KS_druhy_blok.pdf]
 created: 2026-04-20
-updated: 2026-04-20
+updated: '2026-04-25'
 ---
 
 # KS 2. blok — Elasticita a produkce

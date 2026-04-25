@@ -1,21 +1,11 @@
 ---
-title: "ImorK — Případové studie"
+title: Případové studie — ImorK
 course: imork
 type: summary
-tags: [pripadove-studie, hacking, ransomware, ehealth, tor, payment]
-sources:
-  - raw/imork/2104 VUT_Bezp_Případovka Správa login_2020.pdf
-  - raw/imork/2105 VUT_Bezp_Případovka eHealth_2021.pdf
-  - raw/imork/2106 VUT_Bezp_Případovka Nemocnice-2025.pdf
-  - raw/imork/2109 VUT_Bezp Případovka Krádež dat_2020.pdf
-  - raw/imork/2201 VUT_Bezp Případovka Řízený hacking_2018.pdf
-  - raw/imork/2202 VUT_Bezp_Případovka Tor_2016.pdf
-  - raw/imork/2203 VUT_Bezp_Případovka Ransomware_2024.pdf
-  - raw/imork/2204 VUT_Bezp_Případovka Payment_2022.pdf
-  - raw/imork/2206 VUT_Bezp_Případovka Mobilní bezpečnost-2021.pdf
-  - raw/imork/2207 VUT_Bezp_Případovka Audio Hack-2022.pdf
+tags: [imork, pripadove-studie, hacking, ransomware, ehealth, tor]
+sources: [raw/imork/2104 VUT_Bezp_Případovka Správa login_2020.pdf, raw/imork/2105 VUT_Bezp_Případovka eHealth_2021.pdf, raw/imork/2106 VUT_Bezp_Případovka Nemocnice-2025.pdf, raw/imork/2109 VUT_Bezp Případovka Krádež dat_2020.pdf, raw/imork/2201 VUT_Bezp Případovka Řízený hacking_2018.pdf, raw/imork/2202 VUT_Bezp_Případovka Tor_2016.pdf, raw/imork/2203 VUT_Bezp_Případovka Ransomware_2024.pdf, raw/imork/2204 VUT_Bezp_Případovka Payment_2022.pdf, raw/imork/2206 VUT_Bezp_Případovka Mobilní bezpečnost-2021.pdf, raw/imork/2207 VUT_Bezp_Případovka Audio Hack-2022.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Případové studie — ImorK

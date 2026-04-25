@@ -1,11 +1,11 @@
 ---
-title: "Kniha — Úvod do matematické ekonomie (Mezník)"
+title: Kniha — *Úvod do matematické ekonomie pro ekonomy*
 course: imek
 type: summary
-tags: [kniha, mezník, uvod-do-matematicke-ekonomie, mikroekonomie, makroekonomie]
+tags: [imek, kniha, meznik, uvod-do-matematicke-ekonomie, mikroekonomie, makroekonomie]
 sources: [raw/imek/kniha_scanned/]
 created: 2026-04-22
-updated: 2026-04-22
+updated: '2026-04-25'
 ---
 
 # Kniha — *Úvod do matematické ekonomie pro ekonomy*

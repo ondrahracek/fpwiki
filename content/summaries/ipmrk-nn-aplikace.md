@@ -1,11 +1,11 @@
 ---
-title: "IpmrK — Neuronové sítě (aplikace)"
+title: Umělé neuronové sítě — aplikace a ANFIS
 course: ipmrk
 type: summary
 tags: [ipmrk, neuronove-site, anfis, scoring, predikce, deep-learning]
 sources: [raw/ipmrk/nn-aplikace.md]
 created: 2026-04-10
-updated: 2026-04-10
+updated: '2026-04-25'
 ---
 
 # Umělé neuronové sítě — aplikace a ANFIS

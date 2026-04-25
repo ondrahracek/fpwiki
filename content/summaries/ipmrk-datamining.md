@@ -1,11 +1,11 @@
 ---
-title: "Datamining — techniky a nástroje"
+title: Datamining — techniky a nástroje
 course: ipmrk
 type: summary
-tags: [ipmrk, datamining, crisp-dm, link-analyza, klastrovani, kmeans, rozhodovaci-stromy, apriori, witness-miner, matlab]
+tags: [ipmrk, datamining, crisp-dm, link-analyza, klastrovani, rozhodovaci-stromy, apriori, witness-miner]
 sources: [raw/ipmrk/datamining-online.md]
 created: 2026-04-16
-updated: 2026-04-16
+updated: '2026-04-25'
 ---
 
 # Datamining — techniky a nástroje

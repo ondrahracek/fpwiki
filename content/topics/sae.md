@@ -1,11 +1,11 @@
 ---
-title: "SAE — Security Awareness and Education"
+title: SAE — Budování bezpečnostního povědomí
 courses: [imork]
 type: topic
-tags: [sae, bezpecnostni-povedomi, skoleni, nist, kyberneticka-hygiena]
+tags: [imork, sae, bezpecnostni-povedomi, skoleni, nist, kyberneticka-hygiena]
 sources: [raw/imork/2002 VUT_Bezp SAE-2025.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # SAE — Budování bezpečnostního povědomí

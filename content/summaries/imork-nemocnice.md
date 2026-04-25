@@ -1,13 +1,11 @@
 ---
-title: "ImorK — Případovka: Útoky na nemocnice"
+title: 'Případovka: Kybernetické útoky na české nemocnice'
 course: imork
 type: summary
-tags: [ransomware, zdravotnictvi, nemocnice, ryuk, kriticka-infrastruktura, nukib]
-sources:
-  - raw/imork/2106 VUT_Bezp_Případovka Nemocnice-2025.pdf
-  - raw/imork/2106 VUT_Bezp_Případovka Nemocnice-2020.pdf
+tags: [imork, ransomware, zdravotnictvi, nemocnice, ryuk, kriticka-infrastruktura, nukib]
+sources: [raw/imork/2106 VUT_Bezp_Případovka Nemocnice-2025.pdf, raw/imork/2106 VUT_Bezp_Případovka Nemocnice-2020.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Případovka: Kybernetické útoky na české nemocnice

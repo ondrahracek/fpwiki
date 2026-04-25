@@ -1,11 +1,11 @@
 ---
-title: "Poptávka, nabídka a tržní rovnováha"
+title: Poptávka, nabídka a tržní rovnováha
 course: imek
 type: topic
-tags: [poptavka, nabidka, rovnovaha, multiplikator, zdaneni, prebytek]
+tags: [imek, poptavka, nabidka, rovnovaha, multiplikator, zdaneni, prebytek]
 sources: [raw/imek/kniha_scanned/, raw/imek/KS_prvni_blok.pdf]
 created: 2026-04-22
-updated: 2026-04-22
+updated: '2026-04-25'
 ---
 
 <!-- updated: 2026-04-22 — sekce „Zdanění trhu" vyčleněna do [[zdaneni-trhu]] -->

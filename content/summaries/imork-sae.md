@@ -1,11 +1,11 @@
 ---
-title: "ImorK — SAE (Security Awareness Education)"
+title: ImorK — Budování bezpečnostního povědomí (SAE)
 course: imork
 type: summary
-tags: [sae, bezpecnostni-povedomi, skoleni, nist]
+tags: [imork, sae, bezpecnostni-povedomi, skoleni, nist]
 sources: [raw/imork/2002 VUT_Bezp SAE-2025.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # ImorK — Budování bezpečnostního povědomí (SAE)
@@ -54,7 +54,7 @@ Postupný rozvoj od základního povědomí přes školení a vzdělávání až
 
 ## Matice školení (NIST SP 500-172)
 
-Mapování rolí na požadované úrovně znalostí a dovedností v oblasti [[informacni-bezpecnost|informační bezpečnosti]].
+Mapování rolí na požadované úrovně znalostí a dovedností v oblasti informační bezpečnosti.
 
 ## Rozšíření na dodavatelský řetězec
 
@@ -72,6 +72,6 @@ Dle nové české vyhlášky **409/2025 Sb.** (kybernetická bezpečnost) — po
 - Bezpečnost mobilních zařízení
 - Fyzická bezpečnost
 
-## Certifikace [[isaca|ISACA]]
+## Certifikace ISACA
 
 Relevantní certifikace pro profesionály v oblasti SAE a bezpečnostního řízení (CISM, CISA aj.).

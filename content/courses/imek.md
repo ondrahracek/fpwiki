@@ -1,11 +1,11 @@
 ---
-title: "Matematická ekonomie (ImeK)"
+title: Matematická ekonomie (ImeK)
 course: imek
 type: course
-tags: [matematika, ekonomie, mikroekonomie, makroekonomie, lagrange, derivace, integraly]
+tags: [imek, ekonomie, mikroekonomie, makroekonomie, lagrange, derivace, integraly]
 sources: [raw/imek/Detail předmětu.md, raw/imek/KS_prvni_blok.pdf, raw/imek/KS_druhy_blok.pdf, raw/imek/KS_treti_blok.pdf, raw/imek/kniha_scanned/]
 created: 2026-04-20
-updated: 2026-04-22
+updated: '2026-04-25'
 ---
 
 # Matematická ekonomie (ImeK)

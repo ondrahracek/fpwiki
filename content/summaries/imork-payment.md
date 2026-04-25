@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Bezpečnost plateb"
+title: Bezpečnost plateb
 course: imork
 type: summary
-tags: [platby, pci-dss, nfc, tokenizace, emv, mobilni-platby]
+tags: [imork, platby, pci-dss, nfc, tokenizace, emv, mobilni-platby]
 sources: [raw/imork/2204 VUT_Bezp_Případovka Payment_2022.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Bezpečnost plateb

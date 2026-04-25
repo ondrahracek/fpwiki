@@ -1,11 +1,11 @@
 ---
-title: "Optimalizace"
+title: Optimalizace
 course: ipmrk
 type: topic
-tags: [ipmrk, optimalizace, ucelova-funkce, minimum, maximum, matlab, fmincon, fminsearch, linprog, intlinprog, ga, omezeni]
+tags: [ipmrk, optimalizace, ucelova-funkce, matlab, fmincon, linprog, ga, omezeni]
 sources: [raw/ipmrk/kniha.md, raw/ipmrk/optimalizace-online.md]
 created: 2026-04-16
-updated: 2026-04-16
+updated: '2026-04-25'
 ---
 
 # Optimalizace

@@ -1,13 +1,11 @@
 ---
-title: "Řízení rizik"
+title: Řízení rizik
 courses: [imork]
 type: topic
-tags: [rizeni-rizik, iso-31000, iso-27005, nist, hodnoceni-rizik]
-sources:
-  - raw/imork/2003 VUT_Bezp Risk Mngmt-2021.pdf
-  - raw/imork/2001 VUT_Bezp Managerská 2022.pdf
+tags: [imork, rizeni-rizik, iso-31000, iso-27005, nist, hodnoceni-rizik]
+sources: [raw/imork/2003 VUT_Bezp Risk Mngmt-2021.pdf, raw/imork/2001 VUT_Bezp Managerská 2022.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Řízení rizik

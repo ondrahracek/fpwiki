@@ -1,11 +1,11 @@
 ---
-title: "ANFIS"
+title: ANFIS — Adaptive Neuro-Fuzzy Inference System
 courses: [ipmrk]
 type: topic
-tags: [anfis, fuzzy, neuronove-site, hybridni-system]
+tags: [ipmrk, anfis, fuzzy, neuronove-site, hybridni-system]
 sources: [raw/ipmrk/nn-aplikace.md]
 created: 2026-04-10
-updated: 2026-04-11
+updated: '2026-04-25'
 ---
 
 # ANFIS — Adaptive Neuro-Fuzzy Inference System

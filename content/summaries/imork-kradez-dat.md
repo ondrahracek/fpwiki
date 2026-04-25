@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Případovka: Krádež dat"
+title: 'Případovka: Ochrana osobních údajů — Krádež dat'
 course: imork
 type: summary
-tags: [ochrana-dat, pii, gdpr, iso-27701, privacy-by-design, iot, botnet]
+tags: [imork, ochrana-dat, pii, gdpr, iso-27701, privacy-by-design, iot, botnet]
 sources: [raw/imork/2109 VUT_Bezp Případovka Krádež dat_2020.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Případovka: Ochrana osobních údajů — Krádež dat

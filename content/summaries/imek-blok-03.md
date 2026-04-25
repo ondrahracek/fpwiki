@@ -1,11 +1,11 @@
 ---
-title: "ImeK — KS 3. blok: Užitečnost a národní důchod"
+title: KS 3. blok — Užitečnost a národní důchod
 course: imek
 type: summary
-tags: [uzitecnost, lagrange, is-lm, gnp, makroekonomika, multiplicatory]
+tags: [imek, uzitecnost, lagrange, is-lm, gnp]
 sources: [raw/imek/KS_treti_blok.pdf]
 created: 2026-04-20
-updated: 2026-04-20
+updated: '2026-04-25'
 ---
 
 # KS 3. blok — Užitečnost a národní důchod

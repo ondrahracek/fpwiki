@@ -1,11 +1,11 @@
 ---
-title: "Zdanění trhu — dopady daně na rovnováhu"
+title: Zdanění trhu — dopady daně na rovnováhu
 course: imek
 type: topic
-tags: [zdaneni, dane, danove-bremeno, posun-krivek, poptavka-nabidka]
-sources: [raw/imek/kniha_scanned/]
+tags: [imek, zdaneni, dane, danove-bremeno, posun-krivek, poptavka-nabidka]
+sources: [raw/imek/kniha_scanned/, raw/imek/KS_prvni_blok.pdf]
 created: 2026-04-22
-updated: 2026-04-22
+updated: '2026-04-25'
 ---
 
 # Zdanění trhu — dopady daně na rovnováhu

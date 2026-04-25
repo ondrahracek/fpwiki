@@ -1,11 +1,11 @@
 ---
-title: "Příjem, náklady, zisk a nabídka firmy"
+title: Příjem, náklady, zisk a nabídka firmy
 course: imek
 type: topic
-tags: [prijem, naklady, zisk, body-zvratu, maximalizace-zisku, nabidka-firmy]
+tags: [imek, prijem, naklady, zisk, body-zvratu, maximalizace-zisku, nabidka-firmy]
 sources: [raw/imek/kniha_scanned/, raw/imek/KS_prvni_blok.pdf]
 created: 2026-04-22
-updated: 2026-04-22
+updated: '2026-04-25'
 ---
 
 # Příjem, náklady, zisk a nabídka firmy

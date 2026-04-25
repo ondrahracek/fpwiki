@@ -1,11 +1,11 @@
 ---
-title: "ImorK — ISMS ve finančním sektoru"
+title: ISMS ve finančním sektoru
 course: imork
 type: summary
-tags: [isms, finance, dora, mica, dlt, blockchain, kryptoaktiva]
+tags: [imork, isms, dora, mica, dlt, blockchain]
 sources: [raw/imork/2005 VUT_Bezp_Finanční sektor_2023.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # ISMS ve finančním sektoru

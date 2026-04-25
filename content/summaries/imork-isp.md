@@ -1,11 +1,11 @@
 ---
-title: "ImorK — ISMS pro ISP"
+title: ISMS pro ISP
 course: imork
 type: summary
-tags: [isms, isp, telekomunikace, ngn, 5g, iso-27011]
+tags: [imork, isms, isp, telekomunikace, ngn, 5g, iso-27011]
 sources: [raw/imork/2011 VUT_Bezp ISP-2020.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # ISMS pro ISP
@@ -29,7 +29,7 @@ Nařízení **EU 2015/2120** — zajištění otevřeného internetu a rovného 
 
 ### ISO/IEC 27011:2020
 
-Rozšíření [[iso-27001|ISO 27001]] pro telekomunikační organizace. Odpovídá doporučení **ITU-T X.1051**.
+Rozšíření ISO 27001 pro telekomunikační organizace. Odpovídá doporučení **ITU-T X.1051**.
 
 ### ITU-T Security Building Blocks
 
