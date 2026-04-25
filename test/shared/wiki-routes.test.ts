@@ -29,6 +29,37 @@ describe('wikiUrl', () => {
     expect(wikiUrl.asset('foo.jpg')).toBe('/wiki-assets/foo.jpg')
     expect(wikiUrl.asset('subdir/bar.png')).toBe('/wiki-assets/subdir/bar.png')
   })
+
+  it('ogImage() returns the canonical PNG path', () => {
+    expect(wikiUrl.ogImage()).toBe('/images/og.png')
+  })
+
+  describe('absolute()', () => {
+    it('returns path unchanged when origin is empty', () => {
+      expect(wikiUrl.absolute('', '/wiki/imek')).toBe('/wiki/imek')
+      expect(wikiUrl.absolute('', '/')).toBe('/')
+    })
+
+    it('joins origin and absolute path', () => {
+      expect(wikiUrl.absolute('https://fpwiki.cz', '/wiki/imek')).toBe(
+        'https://fpwiki.cz/wiki/imek',
+      )
+    })
+
+    it('strips a trailing slash from origin', () => {
+      expect(wikiUrl.absolute('https://fpwiki.cz/', '/wiki/imek')).toBe(
+        'https://fpwiki.cz/wiki/imek',
+      )
+    })
+
+    it('inserts a leading slash on path when missing', () => {
+      expect(wikiUrl.absolute('https://fpwiki.cz', 'wiki/imek')).toBe('https://fpwiki.cz/wiki/imek')
+    })
+
+    it('handles root path', () => {
+      expect(wikiUrl.absolute('https://fpwiki.cz', '/')).toBe('https://fpwiki.cz/')
+    })
+  })
 })
 
 describe('slugFromPath', () => {

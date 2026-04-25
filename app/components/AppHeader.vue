@@ -1,17 +1,21 @@
 <template>
   <header class="sticky top-0 z-20 border-b border-(--ui-border) bg-(--ui-bg)/80 backdrop-blur">
-    <div class="mx-auto flex max-w-screen-xl items-center gap-6 px-6 py-3">
-      <NuxtLink to="/" class="flex items-baseline gap-1.5 text-base font-semibold tracking-tight">
-        <span class="text-(--ui-color-secondary-500)">/</span>
+    <div class="mx-auto flex max-w-screen-xl items-center gap-3 px-4 py-3 sm:gap-6 sm:px-7">
+      <UButton
+        v-if="showMenuTrigger"
+        icon="i-lucide-menu"
+        color="neutral"
+        variant="ghost"
+        class="lg:hidden"
+        aria-label="Otevřít boční panel"
+        @click="mobileSidebarOpen = true"
+      />
+      <NuxtLink to="/" class="flex items-center gap-2 text-base font-semibold tracking-tight">
+        <img src="/icons/icon-cut-512.png" alt="" width="28" height="28" class="size-7" />
         <span class="text-(--ui-text-highlighted)">fpwiki</span>
-        <span
-          class="ml-1 self-center rounded border border-(--ui-border) px-1.5 py-0.5 text-[10px] font-medium tracking-wider text-(--ui-text-muted) uppercase"
-        >
-          student
-        </span>
       </NuxtLink>
 
-      <nav class="flex items-center gap-1 text-sm">
+      <nav class="hidden items-center gap-1 text-sm md:flex">
         <NuxtLink
           v-for="link in nav"
           :key="link.to"
@@ -26,12 +30,14 @@
       <UButton
         color="neutral"
         variant="outline"
-        class="ml-auto max-w-sm flex-1 justify-start"
+        class="ml-auto hidden max-w-sm min-w-0 flex-1 justify-start sm:flex"
         :ui="{ base: 'gap-2' }"
         @click="searchOpen = true"
       >
         <UIcon name="i-lucide-search" class="size-4" />
-        <span class="text-(--ui-text-muted)">Hledat zápisky, předměty…</span>
+        <span class="truncate text-(--ui-text-muted)">
+          Hledat v zápiscích, pojmech a předmětech…
+        </span>
         <span class="ms-auto flex items-center gap-1 text-xs text-(--ui-text-muted)">
           <ClientOnly>
             <UKbd value="meta" />
@@ -42,13 +48,23 @@
           </ClientOnly>
         </span>
       </UButton>
+      <UButton
+        icon="i-lucide-search"
+        color="neutral"
+        variant="ghost"
+        class="ml-auto sm:hidden"
+        aria-label="Hledat"
+        @click="searchOpen = true"
+      />
 
       <ClientOnly>
         <UButton
           :icon="colorMode.value === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'"
           color="neutral"
           variant="ghost"
-          :aria-label="colorMode.value === 'dark' ? 'Světlý režim' : 'Tmavý režim'"
+          :aria-label="
+            colorMode.value === 'dark' ? 'Přepnout na světlý režim' : 'Přepnout na tmavý režim'
+          "
           @click="toggleColorMode"
         />
         <template #fallback>
@@ -64,17 +80,23 @@
 </template>
 
 <script setup lang="ts">
+withDefaults(defineProps<{ showMenuTrigger?: boolean }>(), { showMenuTrigger: false })
+
 const nav = [
   { to: '/', label: 'Domů' },
   { to: '/courses', label: 'Předměty' },
+  { to: '/tags', label: 'Štítky' },
+  { to: '/recent', label: 'Nedávné' },
 ]
+
+const mobileSidebarOpen = useState('sidebar-mobile-open', () => false)
 
 const colorMode = useColorMode()
 const toggleColorMode = () => {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
 }
 
-const searchOpen = ref(false)
+const searchOpen = useState('app-search-open', () => false)
 
 defineShortcuts({
   meta_k: () => {

@@ -11,12 +11,33 @@
  */
 import type { WikiCollectionName } from './types/wiki'
 
+const stripTrailingSlash = (s: string): string => (s.endsWith('/') ? s.slice(0, -1) : s)
+
 export const wikiUrl = {
   home: (): string => '/',
   courses: (): string => '/courses',
   page: (slug: string): string => (slug === 'overview' ? '/' : `/wiki/${slug}`),
   tag: (tag: string): string => `/tag/${encodeURIComponent(tag)}`,
   asset: (filename: string): string => `/wiki-assets/${filename}`,
+
+  /**
+   * Absolutize a site-relative path against the configured origin.
+   * `origin` comes from `useRuntimeConfig().public.siteUrl`. When empty,
+   * returns the path unchanged — acceptable for dev; production must
+   * configure NUXT_PUBLIC_SITE_URL.
+   */
+  absolute: (origin: string, path: string): string => {
+    if (!origin) return path
+    return `${stripTrailingSlash(origin)}${path.startsWith('/') ? path : `/${path}`}`
+  },
+
+  /**
+   * Canonical OG/Twitter card image. PNG for cross-crawler compatibility
+   * (LinkedIn unfurls are unreliable on WebP). To bust crawler + CDN
+   * caches on update, bump the filename (e.g. og-v2.png) — single place
+   * to change.
+   */
+  ogImage: (): string => '/images/og.png',
 }
 
 /**

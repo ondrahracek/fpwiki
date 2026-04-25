@@ -6,6 +6,11 @@ const courseField = z.union([z.string(), z.array(z.string())])
 
 const baseFrontmatter = z.object({
   title: z.string(),
+  // Optional 1-2 sentence summary used for <meta name="description">,
+  // og:description, twitter:description. Aim for 120-160 chars for SERP fit;
+  // hard-capped at 300. Pages without one fall back to the site default in
+  // app/composables/usePageSeo.ts.
+  description: z.string().max(300).optional(),
   course: courseField.optional(),
   courses: courseField.optional(),
   tags: z.array(z.string()).default([]),

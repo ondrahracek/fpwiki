@@ -140,7 +140,7 @@ When customizing a Nuxt UI component globally, override via `app.config.ts`. For
 
 ## Deploy
 
-**Firebase App Hosting** via the Nitro `firebase_app_hosting` preset (auto-detected; no `firebase.json` needed). Region `europe-west3` (Frankfurt). Backend config in `apphosting.yaml`.
+**Firebase App Hosting** via the Nitro `firebase_app_hosting` preset (auto-detected; no `firebase.json` needed). Region `europe-west4` (Eemshaven). Backend config in `apphosting.yaml`. Public origin: `https://fpwiki.cz` (set as `NUXT_PUBLIC_SITE_URL` in `apphosting.yaml`; the App Hosting default URL `https://fpwiki--fpwiki-cz.europe-west4.hosted.app` is also reachable but every page's `<link rel="canonical">` points at fpwiki.cz).
 
 Deploy is git-push triggered: a push to the configured branch builds via Cloud Build, serves on Cloud Run, with the CDN in front of prerendered output.
 
@@ -231,6 +231,7 @@ These have all caused real bugs in this repo. Each one was hard to spot because 
 8. **`vue-router/volar` plugin warnings during typecheck are noise.** With `experimental.typedPages: false` (current setting), `vue-tsc` still tries to load the typed-router volar plugin and prints `ERR_PACKAGE_PATH_NOT_EXPORTED` stderr noise — exit code is still 0. Don't chase it.
 9. **`nuxt.options.content` mutations only persist if you mutate, not replace.** Replacing the whole `content.build.markdown.remarkPlugins` object can break, since other modules may have already mutated it. Always merge into the existing object (see `modules/wiki-slug-index/index.ts`).
 10. **Don't trust `path?.split('/').pop()` improvisations.** They were the original cause of the URL-divergence bug. Use `slugFromPath` (handles `/-prefix`, `.md`/`.mdx` extension, `#fragment`, trailing slashes, null/undefined uniformly).
+11. **`useAsyncData` traps `null` results across SPA navigation in dev.** Dynamic-slug routes (`/wiki/:slug`, `/tag/:slug`) opt out of payload memoization with `import.meta.dev ? { getCachedData: () => undefined } : undefined`. When the dev server briefly fails (e.g. stale `.nuxt` rebuild — see Pitfall #5), the asyncData function can resolve to `null`; Nuxt's payload memoizes that under the route's key, and every subsequent soft-nav back to the same slug renders 404 until a hard refresh. Production prerender is structurally immune — each route gets its own `_payload.json` — so the gate is dev-only and zero-cost-in-production. New dynamic-slug pages should follow the same pattern.
 
 ## Deferred / non-goals
 

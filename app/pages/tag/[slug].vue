@@ -1,8 +1,11 @@
 <template>
-  <UContainer class="py-10">
-    <header class="mb-6">
+  <div>
+    <Breadcrumb tag-mode :slug="slug" />
+    <header class="mt-4 mb-6">
       <p class="text-sm text-(--ui-text-muted)">Štítek</p>
-      <h1 class="mt-1 flex items-center gap-3 text-3xl font-semibold tracking-tight">
+      <h1
+        class="mt-1 flex items-center gap-3 text-[38px] leading-[1.1] font-semibold tracking-[-0.03em]"
+      >
         <TagPill :tag="slug" :count="items.length" />
       </h1>
     </header>
@@ -15,40 +18,54 @@
         >
           <div class="flex items-center justify-between gap-3">
             <span class="text-base font-medium">{{ p.title }}</span>
-            <UBadge size="sm" color="neutral" variant="soft">{{ p.collection }}</UBadge>
+            <UBadge size="sm" color="neutral" variant="soft">
+              {{ collectionLabel(p.collection) }}
+            </UBadge>
           </div>
         </NuxtLink>
       </li>
     </ul>
-    <p v-else class="text-(--ui-text-muted)">Žádné zápisky se štítkem #{{ slug }}.</p>
-  </UContainer>
+    <p v-else class="text-(--ui-text-muted)">Ke štítku #{{ slug }} tu zatím nic není.</p>
+  </div>
 </template>
 
 <script setup lang="ts">
 import type { WikiCollectionName } from '#shared/types/wiki'
-import { pathFor } from '#shared/wiki-routes'
+import { pathFor, wikiUrl } from '#shared/wiki-routes'
+import { collectionLabel } from '~/utils/labels'
+
+definePageMeta({ layout: 'sidebar' })
 
 const route = useRoute()
 const slug = computed(() => String(route.params.slug))
 
-const { data: pages } = await useAsyncData(`tag-${slug.value}`, async () => {
-  const collections: WikiCollectionName[] = ['courses', 'topics', 'summaries', 'outputs']
-  const all = await Promise.all(
-    collections.map(async (name) => {
-      const found = await queryCollection(name).all()
-      return found
-        .filter((p) => (p.tags ?? []).includes(slug.value))
-        .map((p) => ({
-          path: pathFor({ path: p.path ?? undefined, collection: name }),
-          title: p.title,
-          collection: name,
-        }))
-    }),
-  )
-  return all.flat()
-})
+// Dev-only cache opt-out — see app/pages/wiki/[slug].vue for rationale.
+const { data: pages } = await useAsyncData(
+  `tag-${slug.value}`,
+  async () => {
+    const collections: WikiCollectionName[] = ['courses', 'topics', 'summaries', 'outputs']
+    const all = await Promise.all(
+      collections.map(async (name) => {
+        const found = await queryCollection(name).all()
+        return found
+          .filter((p) => (p.tags ?? []).includes(slug.value))
+          .map((p) => ({
+            path: pathFor({ path: p.path ?? undefined, collection: name }),
+            title: p.title,
+            collection: name,
+          }))
+      }),
+    )
+    return all.flat()
+  },
+  import.meta.dev ? { getCachedData: () => undefined } : undefined,
+)
 
 const items = computed(() => pages.value ?? [])
 
-useSeoMeta({ title: () => `#${slug.value} — fpwiki` })
+usePageSeo({
+  title: () => `#${slug.value}`,
+  description: () => `Všechny stránky se štítkem #${slug.value} na fpwiki.`,
+  path: () => wikiUrl.tag(slug.value),
+})
 </script>

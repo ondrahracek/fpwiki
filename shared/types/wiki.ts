@@ -22,6 +22,42 @@ export interface WikiSlugIndex {
   slugs: Record<string, string>
   /** Full entries for richer lookups (search, breadcrumbs). */
   entries: WikiSlugIndexEntry[]
+  /**
+   * One-line descriptions per slug, parsed from `content/_index.md` (synced
+   * from `fp-vut-obsidian/index.md`). Format upstream: `- [[slug|Title]] — desc`.
+   * Pages not present in `_index.md` (or when the file is absent) get no entry.
+   */
+  descriptions: Record<string, string>
+  /**
+   * Inbound `[[wikilink]]` count per slug. `![[…]]` image embeds excluded.
+   * Self-edges excluded. Used by stats counter and "Nejvíce propojené" surfaces.
+   */
+  inboundLinks: Record<string, number>
+  /** Total `[[wikilink]]` edges across the corpus (sum of inboundLinks). */
+  totalLinkCount: number
+}
+
+export interface WikiBacklinkRef {
+  /** Slug of the page that links to the target. */
+  slug: string
+  /** Pre-computed wiki URL of the source page (built via wikiUrl.page). */
+  path: string
+  /** Source page title (frontmatter `title`, falls back to slug). */
+  title: string
+  /**
+   * NFC-normalized plaintext snippet (~120 chars) around the matched wikilink,
+   * with the matched term wrapped in `<<…>>` markers. Renderer turns the
+   * markers into <mark>; never inject as HTML.
+   */
+  snippet: string
+}
+
+export interface WikiBacklinksMap {
+  /**
+   * Target slug → backlinks. Capped per target and ordered deterministically
+   * (by source slug) so prerendered output is stable across builds.
+   */
+  byTarget: Record<string, WikiBacklinkRef[]>
 }
 
 export interface WikiSearchSection {

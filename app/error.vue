@@ -17,13 +17,13 @@ import type { NuxtError } from '#app'
 const props = defineProps<{ error: NuxtError }>()
 
 const heading = computed(() => {
-  if (props.error.statusCode === 404) return 'Stránka nenalezena'
+  if (props.error.statusCode === 404) return 'Stránka se nenašla'
   return 'Něco se pokazilo'
 })
 
 const subheading = computed(() => {
-  if (props.error.statusCode === 404) return 'Hledaný zápisek se zde nenachází.'
-  return props.error.message || 'Zkuste to prosím znovu.'
+  if (props.error.statusCode === 404) return 'Hledaný materiál tu není nebo byl přesunut.'
+  return props.error.message || 'Zkus stránku obnovit nebo se vrať na úvod.'
 })
 
 const handleClear = () => clearError({ redirect: '/' })

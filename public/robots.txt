@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://fpwiki.cz/sitemap.xml

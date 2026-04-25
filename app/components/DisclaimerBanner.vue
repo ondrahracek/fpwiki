@@ -3,13 +3,17 @@
     v-if="!dismissed"
     color="secondary"
     variant="subtle"
-    title="Neoficiální studentský zdroj"
-    description="fpwiki je AI-generovaná znalostní báze pro studenty FP VUT v Brně. Není provázáno s fakultou. Obsah je ručně ověřen, ale slouží pouze pro samostudium."
+    title="Neoficiální studijní materiály"
+    description="fpwiki není oficiální web ani oficiální materiál FP VUT. Najdeš tu moje zápisky k vybraným předmětům, zpracované s pomocí AI. Obsah nemusí být kompletní ani bezchybný — ber ho jako pomůcku ke studiu."
     :close="{
       color: 'neutral',
       variant: 'link',
     }"
-    @close="dismiss"
+    @update:open="
+      (open: boolean) => {
+        if (!open) dismiss()
+      }
+    "
   />
 </template>
 

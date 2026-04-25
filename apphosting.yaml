@@ -1,6 +1,6 @@
 # Firebase App Hosting backend config.
 # Region is set on the App Hosting backend in the Firebase Console
-# (target: europe-west3). NOT in this file.
+# (target: europe-west4). NOT in this file.
 #
 # Nitro auto-detects this environment via the `firebase_app_hosting` preset —
 # no firebase.json needed.
@@ -13,4 +13,11 @@ runConfig:
   concurrency: 80
   timeoutSeconds: 60
 
-env: []
+env:
+  # Site origin baked into prerendered HTML (canonical, og:url, og:image,
+  # sitemap). Required at BUILD because every route is prerendered.
+  - variable: NUXT_PUBLIC_SITE_URL
+    value: https://fpwiki.cz
+    availability:
+      - BUILD
+      - RUNTIME

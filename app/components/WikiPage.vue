@@ -1,11 +1,28 @@
 <template>
-  <article class="mx-auto max-w-3xl px-6 py-10">
-    <header class="mb-8 border-b border-(--ui-border) pb-6">
+  <article>
+    <!-- Card-style header for course pages. Topics/summaries/outputs use a
+         lighter inline header below — the design's "card hero" pattern is
+         specifically for course-overview surfaces. -->
+    <header v-if="isCourse" class="course-hero mb-8 rounded-xl border p-6 sm:p-8" :style="hueVars">
       <div class="mb-3 flex flex-wrap items-center gap-2 text-xs">
-        <UBadge color="neutral" variant="soft">{{ typeLabel }}</UBadge>
+        <CoursePill :slug="primaryCourse ?? ''" big />
+        <span class="text-(--ui-text-muted)">
+          Magistr · {{ zapiskuLabel }}<span v-if="firstTag"> · #{{ firstTag }}</span>
+        </span>
+      </div>
+      <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">{{ page.title }}</h1>
+      <p class="mt-2 text-sm text-(--ui-text-toned)">
+        <span v-if="updatedDisplay">Aktualizováno {{ updatedDisplay }} · </span>
+        AI-generováno z přednášek a literatury · ručně ověřeno
+      </p>
+    </header>
+
+    <header v-else class="mb-6 border-b border-(--ui-border) pb-5">
+      <div class="mb-3 flex flex-wrap items-center gap-2 text-xs">
+        <UBadge color="neutral" variant="soft">{{ typeLabelText }}</UBadge>
         <CoursePill v-for="c in courses" :key="c" :slug="c" />
         <span v-if="updatedDisplay" class="text-(--ui-text-muted)">
-          aktualizováno {{ updatedDisplay }}
+          upraveno {{ updatedDisplay }}
         </span>
       </div>
       <h1 class="text-3xl font-semibold tracking-tight">{{ page.title }}</h1>
@@ -14,7 +31,26 @@
       </div>
     </header>
 
-    <div class="prose prose-paper dark:prose-invert max-w-none">
+    <!-- Témata section (course pages only): curated topic list with 1-line
+         descriptions sourced from _index.md, links to each topic. -->
+    <section v-if="isCourse && courseTopics.length" class="mb-10">
+      <div class="mb-3 flex items-baseline gap-2">
+        <h2 class="text-lg font-semibold">Témata</h2>
+        <span class="text-xs text-(--ui-text-muted)">{{ courseTopics.length }} položek</span>
+      </div>
+      <ul class="space-y-2">
+        <li v-for="t in courseTopics" :key="t.slug">
+          <TopicListItem
+            :path="t.path"
+            :title="t.title"
+            :description="t.description"
+            icon="i-lucide-file-text"
+          />
+        </li>
+      </ul>
+    </section>
+
+    <div class="prose">
       <ContentRenderer :value="page" />
     </div>
   </article>
@@ -23,11 +59,14 @@
 <script setup lang="ts">
 /**
  * Type-switch render component. New page-types are added HERE, not by adding
- * new routes. Currently course/topic/summary/output/overview share this
- * baseline layout — swap behavior via `typeLabel` and (later) per-type slots.
+ * new routes. Course pages get a richer card-style hero (with action bar);
+ * topics/summaries/outputs get the inline header.
  */
 import type { WikiPageType } from '#shared/types/wiki'
+import { pathFor } from '#shared/wiki-routes'
 import { resolveCourses, toISODate } from '~/utils/frontmatter'
+import { typeLabel } from '~/utils/labels'
+import { identityVars } from '~/plugins/tag-colors'
 
 const props = defineProps<{
   page: {
@@ -43,16 +82,74 @@ const props = defineProps<{
   }
 }>()
 
-const TYPE_LABELS: Record<WikiPageType, string> = {
-  course: 'Předmět',
-  topic: 'Téma',
-  summary: 'Shrnutí',
-  output: 'Výstup',
-  overview: 'Přehled',
-}
-
-const typeLabel = computed(() => TYPE_LABELS[props.page.type ?? 'topic'] ?? 'Zápisek')
+const typeLabelText = computed(() => typeLabel(props.page.type ?? 'topic'))
 const courses = computed(() => resolveCourses(props.page))
 const tags = computed(() => props.page.tags ?? [])
 const updatedDisplay = computed(() => toISODate(props.page.updated))
+
+const isCourse = computed(() => props.page.type === 'course')
+const primaryCourse = computed(() => courses.value[0])
+const firstTag = computed(() => props.page.tags?.[0])
+
+const stats = useCourseStats(() => primaryCourse.value ?? '')
+
+function pluralize(n: number): string {
+  if (n === 1) return '1 zápisek'
+  if (n >= 2 && n <= 4) return `${n} zápisky`
+  return `${n} zápisků`
+}
+
+const zapiskuLabel = computed(() => pluralize(stats.value.zapisku))
+
+// Hero tint follows the course slug, so it matches the <CoursePill> on top
+// of it. Independent of `tags[0]`, which can drift if content is re-ordered.
+const hueVars = computed(() => identityVars(primaryCourse.value ?? ''))
+
+// Topics for this course — curated list shown above the prose body. Sourced
+// from the topics collection where (course || courses) includes the current
+// course slug. 1-line descriptions come from the slug-index (which parses
+// _index.md upstream).
+const { descriptionFor } = useWikiSlugIndex()
+
+// Dev-only cache opt-out — see app/pages/wiki/[slug].vue for rationale.
+const { data: courseTopicsData } = useAsyncData(
+  () => `course-topics-${primaryCourse.value ?? ''}`,
+  async () => {
+    const slug = primaryCourse.value
+    if (!slug || !isCourse.value) return []
+    const topics = await queryCollection('topics').all()
+    return topics.filter((t) => resolveCourses(t).includes(slug))
+  },
+  {
+    default: () => [],
+    watch: [() => primaryCourse.value, () => isCourse.value],
+    ...(import.meta.dev ? { getCachedData: () => undefined } : {}),
+  },
+)
+
+const courseTopics = computed(() => {
+  const list = courseTopicsData.value ?? []
+  return list.map((t) => {
+    const slug = (t.stem ?? '').split('/').pop() ?? ''
+    return {
+      slug,
+      title: t.title,
+      description: descriptionFor(slug),
+      path: pathFor({ path: t.path ?? undefined, collection: 'topics' }),
+    }
+  })
+})
 </script>
+
+<style>
+.course-hero {
+  background: var(--id-bg);
+  border-color: color-mix(in oklab, var(--id-dot) 30%, transparent);
+}
+.dark .course-hero {
+  /* Same hue but flipped for dark theme — translucent tint over base bg
+     instead of the light pastel, keeping the title legible. */
+  background: color-mix(in oklab, var(--id-dot) 18%, transparent);
+  border-color: color-mix(in oklab, var(--id-dot) 50%, transparent);
+}
+</style>

@@ -1,63 +1,98 @@
 <template>
-  <UContainer class="py-10">
+  <UContainer class="py-10 [--ui-container:1080px]">
     <DisclaimerBanner class="mb-8" />
 
     <section class="py-12 text-center sm:text-left">
-      <h1 class="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-        Znalostní báze
-        <span class="block text-(--ui-color-secondary-500)">pro Fakultu podnikatelskou.</span>
+      <h1
+        class="text-4xl font-semibold tracking-tight sm:max-w-[900px] sm:text-[60px] sm:leading-[1.02] sm:tracking-[-0.04em]"
+      >
+        Zápisky k vybraným
+        <span
+          class="block text-(--color-fp-red-500) supports-[background-clip:text]:bg-clip-text supports-[background-clip:text]:text-transparent"
+          style="background-image: var(--gradient-fp)"
+        >
+          předmětům na FP VUT.
+        </span>
       </h1>
-      <p class="mt-4 max-w-2xl text-(--ui-text-toned)">
-        Souhrn přednášek, vypracované okruhy, taháky a pojmy z magisterského studia — propojené jako
-        v Obsidianu. Připraveno pomocí AI, ručně ověřeno, čteš zdarma.
+      <p class="mt-4 max-w-[600px] font-serif text-[19px] leading-[1.55] text-(--ui-text-toned)">
+        Moje zápisky, shrnutí, pojmy a okruhy k vybraným předmětům. Vznikají s pomocí AI z
+        dostupných podkladů a jsou upravené tak, aby se v nich dalo rychle hledat a opakovat si
+        látku.
       </p>
-      <div class="mt-6 flex flex-wrap gap-2">
+      <div class="mt-6 flex flex-wrap items-center gap-2">
         <UButton to="/courses" color="primary" trailing-icon="i-lucide-arrow-right">
           Procházet předměty
+        </UButton>
+        <UButton color="neutral" variant="outline" icon="i-lucide-search" @click="openSearch">
+          Hledat
+          <ClientOnly>
+            <UKbd value="meta" class="ml-1" />
+            <UKbd value="K" />
+            <template #fallback>
+              <span class="ml-1 font-mono text-[10px]">⌘ K</span>
+            </template>
+          </ClientOnly>
         </UButton>
       </div>
     </section>
 
-    <section v-if="overview?.body" class="prose prose-paper dark:prose-invert max-w-none py-6">
-      <ContentRenderer :value="overview" />
-    </section>
+    <HomeStatsBar />
 
     <section class="grid gap-8 py-10 md:grid-cols-3">
       <div>
-        <h3 class="mb-3 text-sm font-semibold tracking-wider text-(--ui-text-muted) uppercase">
-          Předměty
-        </h3>
+        <div class="mb-3 flex items-center justify-between">
+          <h3 class="section-label">Předměty</h3>
+          <NuxtLink
+            :to="wikiUrl.courses()"
+            class="text-xs text-(--ui-text-muted) hover:text-(--ui-text-highlighted)"
+          >
+            Vše →
+          </NuxtLink>
+        </div>
         <ul class="space-y-2">
           <li v-for="c in courseList" :key="c.slug">
-            <NuxtLink
-              :to="wikiUrl.page(c.slug)"
-              class="flex items-center gap-3 rounded p-2 hover:bg-(--ui-bg-elevated)"
+            <div
+              class="relative flex items-center gap-3 rounded p-2 transition-colors hover:bg-(--ui-bg-elevated)"
             >
-              <CoursePill :slug="c.slug" :accent="c.firstTag" />
+              <NuxtLink
+                :to="wikiUrl.page(c.slug)"
+                :aria-label="c.title"
+                class="absolute inset-0 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-(--ui-color-primary-500)"
+              />
+              <CoursePill class="relative" :slug="c.slug" />
               <span class="truncate text-sm">{{ c.title }}</span>
-            </NuxtLink>
+            </div>
           </li>
         </ul>
       </div>
 
       <div>
-        <h3 class="mb-3 text-sm font-semibold tracking-wider text-(--ui-text-muted) uppercase">
-          Nedávno upraveno
-        </h3>
-        <ul class="space-y-2">
+        <div class="mb-3 flex items-center justify-between">
+          <h3 class="section-label">Poslední úpravy</h3>
+          <NuxtLink
+            to="/recent"
+            class="text-xs text-(--ui-text-muted) hover:text-(--ui-text-highlighted)"
+          >
+            Vše →
+          </NuxtLink>
+        </div>
+        <ul class="space-y-1">
           <li v-for="r in recent" :key="r.path">
-            <NuxtLink :to="r.path" class="block rounded p-2 hover:bg-(--ui-bg-elevated)">
-              <div class="text-sm font-medium">{{ r.title }}</div>
-              <div class="text-xs text-(--ui-text-muted)">{{ r.updated }}</div>
-            </NuxtLink>
+            <RecentRow :path="r.path" :title="r.title" :updated="r.updated" :page="r.raw" />
           </li>
         </ul>
       </div>
 
       <div>
-        <h3 class="mb-3 text-sm font-semibold tracking-wider text-(--ui-text-muted) uppercase">
-          Štítky
-        </h3>
+        <div class="mb-3 flex items-center justify-between">
+          <h3 class="section-label">Témata</h3>
+          <NuxtLink
+            to="/tags"
+            class="text-xs text-(--ui-text-muted) hover:text-(--ui-text-highlighted)"
+          >
+            Vše →
+          </NuxtLink>
+        </div>
         <div class="flex flex-wrap gap-2">
           <TagPill v-for="t in tagList" :key="t.tag" :tag="t.tag" :count="t.count" />
         </div>
@@ -70,37 +105,47 @@
 import { resolveCourses, toISODate } from '~/utils/frontmatter'
 import { pathFor, slugFromPath, wikiUrl } from '#shared/wiki-routes'
 
-useSeoMeta({
-  title: 'fpwiki — studentská znalostní báze FP VUT',
-  ogTitle: 'fpwiki',
+usePageSeo({
+  title: 'fpwiki — zápisky k vybraným předmětům FP VUT',
+  description:
+    'Moje zápisky, shrnutí, pojmy a okruhy k vybraným magisterským předmětům na FP VUT. Vyhledávání a propojené stránky.',
+  path: '/',
+  appendSiteName: false,
 })
 
-const { data: overview } = await useAsyncData('home-overview', () =>
-  queryCollection('overview').first(),
+const searchOpen = useState('app-search-open', () => false)
+const openSearch = () => {
+  searchOpen.value = true
+}
+
+// Dev-only cache opt-out — see app/pages/wiki/[slug].vue for rationale.
+const { data: courses } = await useAsyncData(
+  'home-courses',
+  () => queryCollection('courses').order('title', 'ASC').all(),
+  import.meta.dev ? { getCachedData: () => undefined } : undefined,
 )
 
-const { data: courses } = await useAsyncData('home-courses', () =>
-  queryCollection('courses').order('title', 'ASC').all(),
+const { data: recentPages } = await useAsyncData(
+  'home-recent',
+  async () => {
+    const all = await Promise.all([
+      queryCollection('topics').order('updated', 'DESC').all(),
+      queryCollection('summaries').order('updated', 'DESC').all(),
+      queryCollection('outputs').order('updated', 'DESC').all(),
+    ])
+    return all
+      .flat()
+      .sort((a, b) => String(b.updated ?? '').localeCompare(String(a.updated ?? '')))
+      .slice(0, 6)
+  },
+  import.meta.dev ? { getCachedData: () => undefined } : undefined,
 )
-
-const { data: recentPages } = await useAsyncData('home-recent', async () => {
-  const all = await Promise.all([
-    queryCollection('topics').order('updated', 'DESC').all(),
-    queryCollection('summaries').order('updated', 'DESC').all(),
-    queryCollection('outputs').order('updated', 'DESC').all(),
-  ])
-  return all
-    .flat()
-    .sort((a, b) => String(b.updated ?? '').localeCompare(String(a.updated ?? '')))
-    .slice(0, 6)
-})
 
 const courseList = computed(
   () =>
     courses.value?.map((c) => ({
       slug: resolveCourses(c)[0] ?? slugFromPath(c.path),
       title: c.title,
-      firstTag: c.tags?.[0] ?? 'ekonomie',
     })) ?? [],
 )
 
@@ -110,6 +155,10 @@ const recent = computed(
       path: pathFor({ path: p.path ?? undefined }),
       title: p.title,
       updated: toISODate(p.updated) ?? '',
+      raw: { course: p.course, courses: p.courses } as {
+        course?: string | string[]
+        courses?: string | string[]
+      },
     })) ?? [],
 )
 
