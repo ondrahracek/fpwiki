@@ -42,6 +42,25 @@
       </div>
     </header>
 
+    <!-- Témata section (course pages only): curated topic list with 1-line
+         descriptions sourced from _index.md, links to each topic. -->
+    <section v-if="isCourse && courseTopics.length" class="mb-10">
+      <div class="mb-3 flex items-baseline gap-2">
+        <h2 class="text-lg font-semibold">Témata</h2>
+        <span class="text-xs text-(--ui-text-muted)">{{ courseTopics.length }} položek</span>
+      </div>
+      <ul class="space-y-2">
+        <li v-for="t in courseTopics" :key="t.slug">
+          <TopicListItem
+            :path="t.path"
+            :title="t.title"
+            :description="t.description"
+            icon="i-lucide-file-text"
+          />
+        </li>
+      </ul>
+    </section>
+
     <div class="prose prose-paper dark:prose-invert max-w-none">
       <ContentRenderer :value="page" />
     </div>
@@ -55,6 +74,7 @@
  * topics/summaries/outputs get the inline header.
  */
 import type { WikiPageType } from '#shared/types/wiki'
+import { pathFor } from '#shared/wiki-routes'
 import { resolveCourses, toISODate } from '~/utils/frontmatter'
 import { typeLabel } from '~/utils/labels'
 import { courseHueVars } from '~/utils/course-hue'
@@ -95,4 +115,37 @@ const zapiskuLabel = computed(() => pluralize(stats.value.zapisku))
 const hueVars = computed(() => courseHueVars(firstTag.value))
 const hueBg = computed(() => hueVars.value['--course-hue-bg'])
 const hueDot = computed(() => hueVars.value['--course-hue-dot'])
+
+// Topics for this course — curated list shown above the prose body. Sourced
+// from the topics collection where (course || courses) includes the current
+// course slug. 1-line descriptions come from the slug-index (which parses
+// _index.md upstream).
+const { descriptionFor } = useWikiSlugIndex()
+
+const { data: courseTopicsData } = useAsyncData(
+  () => `course-topics-${primaryCourse.value ?? ''}`,
+  async () => {
+    const slug = primaryCourse.value
+    if (!slug || !isCourse.value) return []
+    const topics = await queryCollection('topics').all()
+    return topics.filter((t) => resolveCourses(t).includes(slug))
+  },
+  {
+    default: () => [],
+    watch: [() => primaryCourse.value, () => isCourse.value],
+  },
+)
+
+const courseTopics = computed(() => {
+  const list = courseTopicsData.value ?? []
+  return list.map((t) => {
+    const slug = (t.stem ?? '').split('/').pop() ?? ''
+    return {
+      slug,
+      title: t.title,
+      description: descriptionFor(slug),
+      path: pathFor({ path: t.path ?? undefined, collection: 'topics' }),
+    }
+  })
+})
 </script>
