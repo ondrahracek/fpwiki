@@ -39,7 +39,14 @@ export default defineNuxtModule({
 
     // Cached so addTemplate's getContents (called multiple times during build)
     // doesn't re-walk the filesystem.
-    let cached: WikiSlugIndex = { files: [], slugs: {}, entries: [] }
+    let cached: WikiSlugIndex = {
+      files: [],
+      slugs: {},
+      entries: [],
+      descriptions: {},
+      inboundLinks: {},
+      totalLinkCount: 0,
+    }
 
     const regenerate = async () => {
       cached = await buildWikiSlugIndex(nuxt.options.rootDir)
@@ -117,7 +124,9 @@ export default defineNuxtModule({
       }
     }
 
-    // Re-generate when content files change in dev.
+    // Re-generate when content files change in dev. `_index.md` is the
+    // descriptions catalog (synced from fp-vut-obsidian), so changes to it
+    // also invalidate the cache.
     nuxt.hook('builder:watch', async (_event, path) => {
       if (path.includes('content') && path.endsWith('.md')) {
         await regenerate()

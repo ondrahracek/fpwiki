@@ -22,6 +22,19 @@ export interface WikiSlugIndex {
   slugs: Record<string, string>
   /** Full entries for richer lookups (search, breadcrumbs). */
   entries: WikiSlugIndexEntry[]
+  /**
+   * One-line descriptions per slug, parsed from `content/_index.md` (synced
+   * from `fp-vut-obsidian/index.md`). Format upstream: `- [[slug|Title]] — desc`.
+   * Pages not present in `_index.md` (or when the file is absent) get no entry.
+   */
+  descriptions: Record<string, string>
+  /**
+   * Inbound `[[wikilink]]` count per slug. `![[…]]` image embeds excluded.
+   * Self-edges excluded. Used by stats counter and "Nejvíce propojené" surfaces.
+   */
+  inboundLinks: Record<string, number>
+  /** Total `[[wikilink]]` edges across the corpus (sum of inboundLinks). */
+  totalLinkCount: number
 }
 
 export interface WikiSearchSection {

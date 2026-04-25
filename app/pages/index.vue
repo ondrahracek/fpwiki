@@ -29,11 +29,21 @@
       </div>
     </section>
 
+    <HomeStatsBar />
+
     <section class="grid gap-8 py-10 md:grid-cols-3">
       <div>
-        <h3 class="mb-3 text-sm font-semibold tracking-wider text-(--ui-text-muted) uppercase">
-          Předměty
-        </h3>
+        <div class="mb-3 flex items-center justify-between">
+          <h3 class="text-sm font-semibold tracking-wider text-(--ui-text-muted) uppercase">
+            Předměty
+          </h3>
+          <NuxtLink
+            :to="wikiUrl.courses()"
+            class="text-xs text-(--ui-text-muted) hover:text-(--ui-text-highlighted)"
+          >
+            Vše →
+          </NuxtLink>
+        </div>
         <ul class="space-y-2">
           <li v-for="c in courseList" :key="c.slug">
             <NuxtLink
@@ -48,23 +58,36 @@
       </div>
 
       <div>
-        <h3 class="mb-3 text-sm font-semibold tracking-wider text-(--ui-text-muted) uppercase">
-          Poslední úpravy
-        </h3>
-        <ul class="space-y-2">
+        <div class="mb-3 flex items-center justify-between">
+          <h3 class="text-sm font-semibold tracking-wider text-(--ui-text-muted) uppercase">
+            Poslední úpravy
+          </h3>
+          <NuxtLink
+            to="/recent"
+            class="text-xs text-(--ui-text-muted) hover:text-(--ui-text-highlighted)"
+          >
+            Vše →
+          </NuxtLink>
+        </div>
+        <ul class="space-y-1">
           <li v-for="r in recent" :key="r.path">
-            <NuxtLink :to="r.path" class="block rounded p-2 hover:bg-(--ui-bg-elevated)">
-              <div class="text-sm font-medium">{{ r.title }}</div>
-              <div class="text-xs text-(--ui-text-muted)">{{ r.updated }}</div>
-            </NuxtLink>
+            <RecentRow :path="r.path" :title="r.title" :updated="r.updated" :page="r.raw" />
           </li>
         </ul>
       </div>
 
       <div>
-        <h3 class="mb-3 text-sm font-semibold tracking-wider text-(--ui-text-muted) uppercase">
-          Témata
-        </h3>
+        <div class="mb-3 flex items-center justify-between">
+          <h3 class="text-sm font-semibold tracking-wider text-(--ui-text-muted) uppercase">
+            Témata
+          </h3>
+          <NuxtLink
+            to="/tags"
+            class="text-xs text-(--ui-text-muted) hover:text-(--ui-text-highlighted)"
+          >
+            Vše →
+          </NuxtLink>
+        </div>
         <div class="flex flex-wrap gap-2">
           <TagPill v-for="t in tagList" :key="t.tag" :tag="t.tag" :count="t.count" />
         </div>
@@ -120,6 +143,10 @@ const recent = computed(
       path: pathFor({ path: p.path ?? undefined }),
       title: p.title,
       updated: toISODate(p.updated) ?? '',
+      raw: { course: p.course, courses: p.courses } as {
+        course?: string | string[]
+        courses?: string | string[]
+      },
     })) ?? [],
 )
 

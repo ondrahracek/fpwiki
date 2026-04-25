@@ -2,30 +2,20 @@
   <UContainer class="py-10">
     <header class="mb-8">
       <h1 class="text-3xl font-semibold tracking-tight">Předměty</h1>
-      <p class="mt-2 text-(--ui-text-toned)">
-        Předměty, ke kterým jsou na fpwiki dostupné zápisky a zpracované materiály.
+      <p class="mt-2 text-sm text-(--ui-text-muted)">
+        {{ totalCoursesText }} <span aria-hidden="true">·</span> {{ totalZapiskuText }} celkem
       </p>
     </header>
 
     <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <li v-for="c in items" :key="c.slug">
-        <NuxtLink
-          :to="wikiUrl.page(c.slug)"
-          class="block rounded-lg border border-l-4 border-(--ui-border) bg-(--ui-bg-elevated) p-5 transition-colors hover:border-(--ui-color-primary-300)"
-          :style="{ borderLeftColor: c.hueVars['--course-hue-dot'], ...c.hueVars }"
-        >
-          <div class="mb-2 flex items-center justify-between">
-            <CoursePill :slug="c.slug" :accent="c.firstTag" big />
-            <span v-if="c.updatedShort" class="text-xs text-(--ui-text-muted)">
-              upraveno {{ c.updatedShort }}
-            </span>
-          </div>
-          <h2 class="text-base font-semibold">{{ c.title }}</h2>
-          <!-- TODO(course-meta): show garant + courseName once schema fields populated -->
-          <div v-if="c.tags.length" class="mt-3 flex flex-wrap gap-1.5">
-            <TagPill v-for="t in c.tags" :key="t" :tag="t" />
-          </div>
-        </NuxtLink>
+        <CourseCard
+          :slug="c.slug"
+          :title="c.title"
+          :first-tag="c.firstTag"
+          :tags="c.tags"
+          :updated-short="c.updatedShort"
+        />
       </li>
     </ul>
   </UContainer>
@@ -33,14 +23,28 @@
 
 <script setup lang="ts">
 import { resolveCourses } from '~/utils/frontmatter'
-import { slugFromPath, wikiUrl } from '#shared/wiki-routes'
-import { courseHueVars } from '~/utils/course-hue'
+import { slugFromPath } from '#shared/wiki-routes'
 import { shortDate } from '~/utils/format-date'
 
 useSeoMeta({ title: 'Předměty — fpwiki' })
 
 const { data: courses } = await useAsyncData('courses-list', () =>
   queryCollection('courses').order('title', 'ASC').all(),
+)
+
+const stats = useTotalStats()
+
+function pluralize(n: number, one: string, few: string, many: string): string {
+  if (n === 1) return `${n} ${one}`
+  if (n >= 2 && n <= 4) return `${n} ${few}`
+  return `${n} ${many}`
+}
+
+const totalCoursesText = computed(() =>
+  pluralize(stats.value.courses, 'předmět', 'předměty', 'předmětů'),
+)
+const totalZapiskuText = computed(() =>
+  pluralize(stats.value.zapisku, 'zápisek', 'zápisky', 'zápisků'),
 )
 
 const items = computed(
@@ -53,7 +57,6 @@ const items = computed(
         firstTag,
         tags: c.tags ?? [],
         updatedShort: shortDate(c.updated),
-        hueVars: courseHueVars(firstTag),
       }
     }) ?? [],
 )
