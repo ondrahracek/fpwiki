@@ -1,6 +1,34 @@
 <template>
-  <article class="mx-auto max-w-3xl px-6 py-10">
-    <header class="mb-8 border-b border-(--ui-border) pb-6">
+  <article class="max-w-3xl">
+    <!-- Card-style header for course pages. Topics/summaries/outputs use a
+         lighter inline header below — the design's "card hero" pattern is
+         specifically for course-overview surfaces. -->
+    <header
+      v-if="isCourse"
+      class="mb-8 rounded-xl border p-6 sm:p-8"
+      :style="{ borderColor: hueDot, background: hueBg, ...hueVars }"
+    >
+      <div class="mb-3 flex flex-wrap items-center gap-2 text-xs">
+        <CoursePill :slug="primaryCourse ?? ''" big />
+        <span class="text-(--ui-text-muted)">
+          Magistr · {{ zapiskuLabel }}<span v-if="firstTag"> · #{{ firstTag }}</span>
+        </span>
+      </div>
+      <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">{{ page.title }}</h1>
+      <p class="mt-2 text-sm text-(--ui-text-toned)">
+        <span v-if="updatedDisplay">Aktualizováno {{ updatedDisplay }} · </span>
+        AI-generováno z přednášek a literatury · ručně ověřeno
+      </p>
+      <div class="mt-5">
+        <WikiActionBar
+          :slug="primaryCourse ?? ''"
+          is-course
+          :has-detail-predmetu="stats.hasDetailPredmetu"
+        />
+      </div>
+    </header>
+
+    <header v-else class="mb-6 border-b border-(--ui-border) pb-5">
       <div class="mb-3 flex flex-wrap items-center gap-2 text-xs">
         <UBadge color="neutral" variant="soft">{{ typeLabelText }}</UBadge>
         <CoursePill v-for="c in courses" :key="c" :slug="c" />
@@ -23,12 +51,13 @@
 <script setup lang="ts">
 /**
  * Type-switch render component. New page-types are added HERE, not by adding
- * new routes. Currently course/topic/summary/output/overview share this
- * baseline layout — swap behavior via `typeLabel` and (later) per-type slots.
+ * new routes. Course pages get a richer card-style hero (with action bar);
+ * topics/summaries/outputs get the inline header.
  */
 import type { WikiPageType } from '#shared/types/wiki'
 import { resolveCourses, toISODate } from '~/utils/frontmatter'
 import { typeLabel } from '~/utils/labels'
+import { courseHueVars } from '~/utils/course-hue'
 
 const props = defineProps<{
   page: {
@@ -48,4 +77,22 @@ const typeLabelText = computed(() => typeLabel(props.page.type ?? 'topic'))
 const courses = computed(() => resolveCourses(props.page))
 const tags = computed(() => props.page.tags ?? [])
 const updatedDisplay = computed(() => toISODate(props.page.updated))
+
+const isCourse = computed(() => props.page.type === 'course')
+const primaryCourse = computed(() => courses.value[0])
+const firstTag = computed(() => props.page.tags?.[0])
+
+const stats = useCourseStats(() => primaryCourse.value ?? '')
+
+function pluralize(n: number): string {
+  if (n === 1) return '1 zápisek'
+  if (n >= 2 && n <= 4) return `${n} zápisky`
+  return `${n} zápisků`
+}
+
+const zapiskuLabel = computed(() => pluralize(stats.value.zapisku))
+
+const hueVars = computed(() => courseHueVars(firstTag.value))
+const hueBg = computed(() => hueVars.value['--course-hue-bg'])
+const hueDot = computed(() => hueVars.value['--course-hue-dot'])
 </script>

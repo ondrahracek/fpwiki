@@ -34,7 +34,7 @@ const items = computed<Crumb[]>(() => {
 
   if (props.collection === 'courses') {
     out.push({ label: 'Předměty', to: wikiUrl.courses() })
-  } else if (props.collection) {
+  } else if (props.collection && props.collection !== 'overview') {
     const label = collectionPluralLabel(props.collection)
     if (label) out.push({ label })
   }
