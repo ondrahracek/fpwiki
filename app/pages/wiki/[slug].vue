@@ -1,7 +1,8 @@
 <template>
   <div>
     <ReadingProgress />
-    <WikiPage v-if="page" :page="page" />
+    <Breadcrumb v-if="page" :collection="found?.collection" :title="page.title" :slug="slug" />
+    <WikiPage v-if="page" :page="page" class="mt-2" />
     <UContainer v-else class="py-24 text-center">
       <p class="text-sm font-medium text-(--ui-text-muted)">404</p>
       <h1 class="mt-2 text-2xl font-semibold">Stránka se nenašla</h1>
@@ -17,6 +18,8 @@
 <script setup lang="ts">
 import type { WikiCollectionName } from '#shared/types/wiki'
 
+definePageMeta({ layout: 'sidebar' })
+
 const route = useRoute()
 const slug = computed(() => String(route.params.slug))
 
@@ -28,20 +31,22 @@ const slug = computed(() => String(route.params.slug))
 // otherwise a transient null result (e.g. during a stale .nuxt rebuild) gets
 // trapped under the route's key and every soft-nav back to this slug renders
 // 404 until hard refresh. Production prerender is immune (per-route payloads).
-const { data: page } = await useAsyncData(
+const { data: found } = await useAsyncData(
   `wiki-${slug.value}`,
   async () => {
     const collections: WikiCollectionName[] = ['courses', 'topics', 'summaries', 'outputs']
     for (const name of collections) {
-      const found = await queryCollection(name).where('stem', 'LIKE', `%/${slug.value}`).first()
-      if (found) return found
-      const direct = await queryCollection(name).where('stem', '=', slug.value).first()
-      if (direct) return direct
+      const direct = await queryCollection(name).where('stem', 'LIKE', `%/${slug.value}`).first()
+      if (direct) return { page: direct, collection: name }
+      const bare = await queryCollection(name).where('stem', '=', slug.value).first()
+      if (bare) return { page: bare, collection: name }
     }
     return null
   },
   import.meta.dev ? { getCachedData: () => undefined } : undefined,
 )
+
+const page = computed(() => found.value?.page ?? null)
 
 if (!page.value) {
   // Soft 404 — render not-found block instead of throwing, so prerender still emits.

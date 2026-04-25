@@ -1,6 +1,7 @@
 <template>
-  <UContainer class="py-10">
-    <header class="mb-6">
+  <div>
+    <Breadcrumb tag-mode :slug="slug" />
+    <header class="mt-4 mb-6">
       <p class="text-sm text-(--ui-text-muted)">Štítek</p>
       <h1 class="mt-1 flex items-center gap-3 text-3xl font-semibold tracking-tight">
         <TagPill :tag="slug" :count="items.length" />
@@ -23,13 +24,15 @@
       </li>
     </ul>
     <p v-else class="text-(--ui-text-muted)">Ke štítku #{{ slug }} tu zatím nic není.</p>
-  </UContainer>
+  </div>
 </template>
 
 <script setup lang="ts">
 import type { WikiCollectionName } from '#shared/types/wiki'
 import { pathFor } from '#shared/wiki-routes'
 import { collectionLabel } from '~/utils/labels'
+
+definePageMeta({ layout: 'sidebar' })
 
 const route = useRoute()
 const slug = computed(() => String(route.params.slug))
