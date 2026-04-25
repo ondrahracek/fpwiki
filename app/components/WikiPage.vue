@@ -5,7 +5,7 @@
         <UBadge color="neutral" variant="soft">{{ typeLabel }}</UBadge>
         <CoursePill v-for="c in courses" :key="c" :slug="c" />
         <span v-if="updatedDisplay" class="text-(--ui-text-muted)">
-          aktualizováno {{ updatedDisplay }}
+          upraveno {{ updatedDisplay }}
         </span>
       </div>
       <h1 class="text-3xl font-semibold tracking-tight">{{ page.title }}</h1>
@@ -51,7 +51,7 @@ const TYPE_LABELS: Record<WikiPageType, string> = {
   overview: 'Přehled',
 }
 
-const typeLabel = computed(() => TYPE_LABELS[props.page.type ?? 'topic'] ?? 'Zápisek')
+const typeLabel = computed(() => TYPE_LABELS[props.page.type ?? 'topic'] ?? 'Materiál')
 const courses = computed(() => resolveCourses(props.page))
 const tags = computed(() => props.page.tags ?? [])
 const updatedDisplay = computed(() => toISODate(props.page.updated))

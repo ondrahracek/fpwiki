@@ -83,10 +83,11 @@ export default defineNuxtConfig({
     head: {
       htmlAttrs: { lang: 'cs' },
       title: 'fpwiki',
+      link: [{ rel: 'icon', type: 'image/png', href: '/icons/icon-withbg-256.png' }],
       meta: [
         {
           name: 'description',
-          content: 'Studentská znalostní báze pro Fakultu podnikatelskou VUT v Brně.',
+          content: 'Neoficiální studijní wiki se zápisky k vybraným předmětům na FP VUT v Brně.',
         },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       ],

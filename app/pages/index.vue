@@ -4,12 +4,13 @@
 
     <section class="py-12 text-center sm:text-left">
       <h1 class="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-        Znalostní báze
-        <span class="block text-(--ui-color-secondary-500)">pro Fakultu podnikatelskou.</span>
+        Zápisky k vybraným
+        <span class="block text-(--ui-color-secondary-500)">předmětům na FP VUT.</span>
       </h1>
       <p class="mt-4 max-w-2xl text-(--ui-text-toned)">
-        Souhrn přednášek, vypracované okruhy, taháky a pojmy z magisterského studia — propojené jako
-        v Obsidianu. Připraveno pomocí AI, ručně ověřeno, čteš zdarma.
+        Moje zápisky, shrnutí, pojmy a okruhy k vybraným předmětům. Vznikají s pomocí AI z
+        dostupných podkladů a jsou upravené tak, aby se v nich dalo rychle hledat a opakovat si
+        látku.
       </p>
       <div class="mt-6 flex flex-wrap gap-2">
         <UButton to="/courses" color="primary" trailing-icon="i-lucide-arrow-right">
@@ -42,7 +43,7 @@
 
       <div>
         <h3 class="mb-3 text-sm font-semibold tracking-wider text-(--ui-text-muted) uppercase">
-          Nedávno upraveno
+          Poslední úpravy
         </h3>
         <ul class="space-y-2">
           <li v-for="r in recent" :key="r.path">
@@ -56,7 +57,7 @@
 
       <div>
         <h3 class="mb-3 text-sm font-semibold tracking-wider text-(--ui-text-muted) uppercase">
-          Štítky
+          Témata
         </h3>
         <div class="flex flex-wrap gap-2">
           <TagPill v-for="t in tagList" :key="t.tag" :tag="t.tag" :count="t.count" />
@@ -71,7 +72,7 @@ import { resolveCourses, toISODate } from '~/utils/frontmatter'
 import { pathFor, slugFromPath, wikiUrl } from '#shared/wiki-routes'
 
 useSeoMeta({
-  title: 'fpwiki — studentská znalostní báze FP VUT',
+  title: 'fpwiki — zápisky k vybraným předmětům FP VUT',
   ogTitle: 'fpwiki',
 })
 

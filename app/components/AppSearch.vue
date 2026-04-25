@@ -12,7 +12,7 @@
           ref="inputEl"
           v-model="query"
           type="text"
-          placeholder="Hledat zápisky a předměty…"
+          placeholder="Hledat v zápiscích, pojmech a předmětech…"
           class="flex-1 bg-transparent text-sm outline-none placeholder:text-(--ui-text-dimmed)"
           @keydown.escape="close"
         />
@@ -28,9 +28,9 @@
               @click="close"
             >
               <div class="flex items-center gap-2">
-                <UBadge size="sm" color="neutral" variant="soft">{{
-                  hit.section.collection
-                }}</UBadge>
+                <UBadge size="sm" color="neutral" variant="soft">
+                  {{ COLLECTION_LABELS[hit.section.collection] ?? hit.section.collection }}
+                </UBadge>
                 <span class="text-sm font-medium">{{ hit.section.title }}</span>
               </div>
               <p v-if="hit.section.content" class="line-clamp-2 text-xs text-(--ui-text-muted)">
@@ -40,11 +40,9 @@
           </li>
         </ul>
         <div v-else-if="query" class="px-4 py-12 text-center text-sm text-(--ui-text-muted)">
-          Nic nenalezeno pro „{{ query }}"
+          Pro „{{ query }}“ se nic nenašlo.
         </div>
-        <div v-else class="px-4 py-12 text-center text-sm text-(--ui-text-dimmed)">
-          Začněte psát…
-        </div>
+        <div v-else class="px-4 py-12 text-center text-sm text-(--ui-text-dimmed)">Začni psát…</div>
       </div>
     </template>
   </UModal>
@@ -57,8 +55,15 @@
  *   - keep one engine path
  *   - delete the other composable + the switch
  */
-import type { WikiSearchSection } from '#shared/types/wiki'
+import type { WikiCollectionName, WikiSearchSection } from '#shared/types/wiki'
 import { pathFor } from '#shared/wiki-routes'
+
+const COLLECTION_LABELS: Partial<Record<WikiCollectionName, string>> = {
+  courses: 'Předmět',
+  topics: 'Téma',
+  summaries: 'Shrnutí',
+  outputs: 'Výstup',
+}
 
 const model = defineModel<boolean>('open', { default: false })
 

@@ -15,12 +15,14 @@
         >
           <div class="flex items-center justify-between gap-3">
             <span class="text-base font-medium">{{ p.title }}</span>
-            <UBadge size="sm" color="neutral" variant="soft">{{ p.collection }}</UBadge>
+            <UBadge size="sm" color="neutral" variant="soft">
+              {{ COLLECTION_LABELS[p.collection] ?? p.collection }}
+            </UBadge>
           </div>
         </NuxtLink>
       </li>
     </ul>
-    <p v-else class="text-(--ui-text-muted)">Žádné zápisky se štítkem #{{ slug }}.</p>
+    <p v-else class="text-(--ui-text-muted)">Ke štítku #{{ slug }} tu zatím nic není.</p>
   </UContainer>
 </template>
 
@@ -28,25 +30,37 @@
 import type { WikiCollectionName } from '#shared/types/wiki'
 import { pathFor } from '#shared/wiki-routes'
 
+const COLLECTION_LABELS: Partial<Record<WikiCollectionName, string>> = {
+  courses: 'Předmět',
+  topics: 'Téma',
+  summaries: 'Shrnutí',
+  outputs: 'Výstup',
+}
+
 const route = useRoute()
 const slug = computed(() => String(route.params.slug))
 
-const { data: pages } = await useAsyncData(`tag-${slug.value}`, async () => {
-  const collections: WikiCollectionName[] = ['courses', 'topics', 'summaries', 'outputs']
-  const all = await Promise.all(
-    collections.map(async (name) => {
-      const found = await queryCollection(name).all()
-      return found
-        .filter((p) => (p.tags ?? []).includes(slug.value))
-        .map((p) => ({
-          path: pathFor({ path: p.path ?? undefined, collection: name }),
-          title: p.title,
-          collection: name,
-        }))
-    }),
-  )
-  return all.flat()
-})
+// Dev-only cache opt-out — see app/pages/wiki/[slug].vue for rationale.
+const { data: pages } = await useAsyncData(
+  `tag-${slug.value}`,
+  async () => {
+    const collections: WikiCollectionName[] = ['courses', 'topics', 'summaries', 'outputs']
+    const all = await Promise.all(
+      collections.map(async (name) => {
+        const found = await queryCollection(name).all()
+        return found
+          .filter((p) => (p.tags ?? []).includes(slug.value))
+          .map((p) => ({
+            path: pathFor({ path: p.path ?? undefined, collection: name }),
+            title: p.title,
+            collection: name,
+          }))
+      }),
+    )
+    return all.flat()
+  },
+  import.meta.dev ? { getCachedData: () => undefined } : undefined,
+)
 
 const items = computed(() => pages.value ?? [])
 

@@ -3,7 +3,7 @@
     <header class="mb-8">
       <h1 class="text-3xl font-semibold tracking-tight">Předměty</h1>
       <p class="mt-2 text-(--ui-text-toned)">
-        Magisterské předměty na Fakultě podnikatelské VUT v Brně.
+        Předměty, ke kterým jsou na fpwiki dostupné zápisky a zpracované materiály.
       </p>
     </header>
 
