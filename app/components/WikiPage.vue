@@ -3,11 +3,7 @@
     <!-- Card-style header for course pages. Topics/summaries/outputs use a
          lighter inline header below — the design's "card hero" pattern is
          specifically for course-overview surfaces. -->
-    <header
-      v-if="isCourse"
-      class="mb-8 rounded-xl border p-6 sm:p-8"
-      :style="{ borderColor: hueDot, background: hueBg, ...hueVars }"
-    >
+    <header v-if="isCourse" class="course-hero mb-8 rounded-xl border p-6 sm:p-8" :style="hueVars">
       <div class="mb-3 flex flex-wrap items-center gap-2 text-xs">
         <CoursePill :slug="primaryCourse ?? ''" big />
         <span class="text-(--ui-text-muted)">
@@ -113,8 +109,6 @@ function pluralize(n: number): string {
 const zapiskuLabel = computed(() => pluralize(stats.value.zapisku))
 
 const hueVars = computed(() => courseHueVars(firstTag.value))
-const hueBg = computed(() => hueVars.value['--course-hue-bg'])
-const hueDot = computed(() => hueVars.value['--course-hue-dot'])
 
 // Topics for this course — curated list shown above the prose body. Sourced
 // from the topics collection where (course || courses) includes the current
@@ -149,3 +143,16 @@ const courseTopics = computed(() => {
   })
 })
 </script>
+
+<style>
+.course-hero {
+  background: var(--course-hue-bg);
+  border-color: color-mix(in oklab, var(--course-hue-dot) 30%, transparent);
+}
+.dark .course-hero {
+  /* Same hue but flipped for dark theme — translucent tint over base bg
+     instead of the light pastel, keeping the title legible. */
+  background: color-mix(in oklab, var(--course-hue-dot) 18%, transparent);
+  border-color: color-mix(in oklab, var(--course-hue-dot) 50%, transparent);
+}
+</style>
