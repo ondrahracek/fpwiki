@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Mission Critical Networks"
+title: Mission Critical Networks (MCN)
 course: imork
 type: summary
-tags: [mcn, ncpi, dostupnost, spolehlivost, model-hrozeb]
+tags: [imork, mcn, ncpi, dostupnost, spolehlivost, model-hrozeb]
 sources: [raw/imork/2012 VUT_Bezp MCN-2015.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Mission Critical Networks (MCN)
@@ -28,7 +28,7 @@ Fyzická infrastruktura nezbytná pro provoz kritické sítě:
 
 ## Výhody standardizace
 
-- Zvýšení [[dostupnost|dostupnosti]]
+- Zvýšení dostupnosti
 - Agilita nasazení
 - Snížení TCO (Total Cost of Ownership)
 

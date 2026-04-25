@@ -1,11 +1,11 @@
 ---
-title: "ImorK — TOR anonymizační síť"
+title: TOR — The Onion Router
 course: imork
 type: summary
-tags: [tor, anonymizace, sifrovani, darknet, nsa]
+tags: [imork, tor, anonymizace, sifrovani, darknet, nsa]
 sources: [raw/imork/CV 05 VUT_TOR.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # TOR — The Onion Router

@@ -1,13 +1,11 @@
 ---
-title: "BCM — Business Continuity Management"
+title: BCM — Řízení kontinuity činnosti
 courses: [imork]
 type: topic
-tags: [bcm, kontinuita-cinnosti, iso-22301, bia, disaster-recovery]
-sources:
-  - raw/imork/2014 VUT_Bezp BCM-2021.pdf
-  - raw/imork/2013 VUT_Bezp DR-2021.pdf
+tags: [imork, bcm, kontinuita-cinnosti, iso-22301, bia, disaster-recovery]
+sources: [raw/imork/2014 VUT_Bezp BCM-2021.pdf, raw/imork/2013 VUT_Bezp DR-2021.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # BCM — Řízení kontinuity činnosti

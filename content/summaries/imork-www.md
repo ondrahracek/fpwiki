@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Bezpečnost webových služeb"
+title: Bezpečnost webových služeb
 course: imork
 type: summary
-tags: [www, web, owasp, ssl, bezpecnost-aplikaci, ipsec, tls, xml-security, data-diodes]
+tags: [imork, web, owasp, ssl, tls, ipsec, xml-security, data-diodes]
 sources: [raw/imork/2015 VUT_Bezp WWW-2019.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Bezpečnost webových služeb

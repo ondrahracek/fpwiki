@@ -1,11 +1,11 @@
 ---
-title: "Přebytek spotřebitele a výrobce"
+title: Přebytek spotřebitele a výrobce
 course: imek
 type: topic
-tags: [prebytek, spotrebitel, vyrobce, integral, cs, ps, poptavka, nabidka]
+tags: [imek, prebytek, cs, ps, integral, poptavka-nabidka, spotrebitel, vyrobce]
 sources: [raw/imek/kniha_scanned/, raw/imek/KS_prvni_blok.pdf]
 created: 2026-04-22
-updated: 2026-04-22
+updated: '2026-04-25'
 ---
 
 # Přebytek spotřebitele a výrobce

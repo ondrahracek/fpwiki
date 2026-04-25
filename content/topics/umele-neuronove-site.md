@@ -1,11 +1,11 @@
 ---
-title: "Umělé neuronové sítě"
+title: Umělé neuronové sítě
 courses: [ipmrk]
 type: topic
-tags: [neuronove-site, perceptron, backpropagation, deep-learning, klasifikace, predikce]
+tags: [ipmrk, neuronove-site, perceptron, backpropagation, deep-learning, klasifikace, predikce]
 sources: [raw/ipmrk/nn-teorie.md, raw/ipmrk/nn-vypocet.md, raw/ipmrk/nn-aplikace.md, raw/ipmrk/kniha.md]
 created: 2026-04-10
-updated: 2026-04-16
+updated: '2026-04-25'
 ---
 
 # Umělé neuronové sítě

@@ -1,11 +1,11 @@
 ---
-title: "Teorie chaosu"
+title: Teorie chaosu
 courses: [ipmrk]
 type: topic
-tags: [chaos, atraktory, fraktaly, hurst, motyli-efekt, logisticka-funkce, lorenz]
+tags: [ipmrk, chaos, atraktory, fraktaly, hurst, motyli-efekt, logisticka-funkce, lorenz]
 sources: [raw/ipmrk/chaos.md, raw/ipmrk/kniha.md]
 created: 2026-04-10
-updated: 2026-04-16
+updated: '2026-04-25'
 ---
 
 # Teorie chaosu

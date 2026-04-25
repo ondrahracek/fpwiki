@@ -1,11 +1,11 @@
 ---
-title: "Evoluční algoritmy — principy a přehled"
+title: Evoluční algoritmy — principy a přehled
 course: ipmrk
 type: summary
-tags: [ipmrk, evolucni-algoritmy, metaheuristiky, simulated-annealing, tabu-search, aco, pso, differential-evolution, soma, ais, abc, gso]
+tags: [ipmrk, evolucni-algoritmy, metaheuristiky, simulated-annealing, tabu-search, aco, pso, soma]
 sources: [raw/ipmrk/evolucni-algoritmy-online.md]
 created: 2026-04-16
-updated: 2026-04-16
+updated: '2026-04-25'
 ---
 
 # Evoluční algoritmy — principy a přehled

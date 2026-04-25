@@ -1,11 +1,11 @@
 ---
-title: "IS-LM analýza — simultánní rovnováha trhu zboží a peněz"
+title: IS-LM analýza — simultánní rovnováha trhu zboží a peněz
 course: imek
 type: topic
-tags: [is-lm, makroekonomie, trh-zbozi, trh-penez, urokova-mira, investice, narodni-duchod]
-sources: [raw/imek/kniha_scanned/]
+tags: [imek, is-lm, makroekonomie, trh-zbozi, trh-penez, urokova-mira, investice, narodni-duchod]
+sources: [raw/imek/kniha_scanned/, raw/imek/KS_treti_blok.pdf]
 created: 2026-04-22
-updated: 2026-04-22
+updated: '2026-04-25'
 ---
 
 # IS-LM analýza — simultánní rovnováha trhu zboží a peněz

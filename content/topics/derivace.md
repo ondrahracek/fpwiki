@@ -1,11 +1,11 @@
 ---
-title: "Derivace, diferenciál a extrémy 1D"
+title: Derivace, diferenciál a extrémy funkcí jedné proměnné
 course: imek
 type: topic
-tags: [derivace, diferencial, extremy, tangenta, mezni-naklady]
+tags: [imek, derivace, diferencial, extremy, mezni-naklady]
 sources: [raw/imek/KS_prvni_blok.pdf]
 created: 2026-04-20
-updated: 2026-04-20
+updated: '2026-04-25'
 ---
 
 # Derivace, diferenciál a extrémy funkcí jedné proměnné

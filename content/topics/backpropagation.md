@@ -1,11 +1,11 @@
 ---
-title: "Backpropagation"
+title: Backpropagation (zpětné šíření chyby)
 courses: [ipmrk]
 type: topic
-tags: [backpropagation, neuronove-site, uceni, gradient]
+tags: [ipmrk, backpropagation, neuronove-site, uceni]
 sources: [raw/ipmrk/nn-teorie.md, raw/ipmrk/nn-vypocet.md]
 created: 2026-04-10
-updated: 2026-04-10
+updated: '2026-04-25'
 ---
 
 # Backpropagation (zpětné šíření chyby)

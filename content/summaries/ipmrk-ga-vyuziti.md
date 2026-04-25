@@ -1,11 +1,11 @@
 ---
-title: "IpmrK — Genetické algoritmy (využití)"
+title: Genetické algoritmy — praktické aplikace
 course: ipmrk
 type: summary
 tags: [ipmrk, geneticke-algoritmy, optimalizace, tsp, knapsack, klastrovani, predikce]
 sources: [raw/ipmrk/ga-vyuziti.md]
 created: 2026-04-10
-updated: 2026-04-10
+updated: '2026-04-25'
 ---
 
 # Genetické algoritmy — praktické aplikace

@@ -1,11 +1,11 @@
 ---
-title: "Optimalizace spotřebitele — Lagrange, poptávka, minimalizace výdajů"
+title: Optimalizace spotřebitele — Lagrange, poptávka, minimalizace výdajů
 course: imek
 type: topic
-tags: [optimalizace-spotrebitele, lagrange, uzitecnost, poptavka-spotrebitele, minimalizace-vydaju, dualita]
-sources: [raw/imek/kniha_scanned/]
+tags: [imek, optimalizace-spotrebitele, lagrange, uzitecnost, poptavka-spotrebitele, minimalizace-vydaju, dualita]
+sources: [raw/imek/kniha_scanned/, raw/imek/KS_treti_blok.pdf]
 created: 2026-04-22
-updated: 2026-04-22
+updated: '2026-04-25'
 ---
 
 # Optimalizace spotřebitele — Lagrange, poptávka, minimalizace výdajů

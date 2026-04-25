@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Business Continuity Management"
+title: Business Continuity Management (BCM)
 course: imork
 type: summary
-tags: [bcm, kontinuita-cinnosti, iso-22301, bia, pdca, spof, drp, bcmaas, vyhlaska-82-2018]
+tags: [imork, bcm, kontinuita-cinnosti, iso-22301, bia, drp, bcmaas, vyhlaska-82-2018]
 sources: [raw/imork/2014 VUT_Bezp BCM-2021.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Business Continuity Management (BCM)

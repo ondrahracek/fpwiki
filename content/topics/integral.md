@@ -1,11 +1,11 @@
 ---
-title: "Integrál (neurčitý a určitý)"
+title: Integrál
 course: imek
 type: topic
-tags: [integral, neurcity, urcity, primitivni-funkce, tr-z-mr, tc-z-mc]
+tags: [imek, integral, neurcity, urcity, primitivni-funkce, tr-z-mr, tc-z-mc]
 sources: [raw/imek/KS_prvni_blok.pdf]
 created: 2026-04-20
-updated: 2026-04-20
+updated: '2026-04-25'
 ---
 
 # Integrál

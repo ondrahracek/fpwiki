@@ -1,11 +1,11 @@
 ---
-title: "IpmrK — Co studovat ke zkoušce"
+title: IpmrK — Co studovat ke zkoušce
 course: ipmrk
 type: output
-tags: [ipmrk, zkouska, studium, mezery, plan]
+tags: [ipmrk, zkouska, mezery]
 sources: [raw/ipmrk/kniha.md]
 created: 2026-04-16
-updated: 2026-04-16
+updated: '2026-04-25'
 ---
 
 # IpmrK — Co studovat ke zkoušce

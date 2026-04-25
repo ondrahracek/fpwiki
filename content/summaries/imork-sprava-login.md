@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Případovka: Správa přihlašovacích údajů"
+title: 'Případovka: Správa přihlašovacích údajů'
 course: imork
 type: summary
-tags: [autentizace, hesla, privilegovane-ucty, biometrika, nist, isms]
+tags: [imork, autentizace, hesla, privilegovane-ucty, biometrika, nist, isms]
 sources: [raw/imork/2104 VUT_Bezp_Případovka Správa login_2020.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Případovka: Správa přihlašovacích údajů

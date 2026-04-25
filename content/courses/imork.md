@@ -1,11 +1,11 @@
 ---
-title: "Management oborových řešení"
+title: Management oborových řešení (ImorK)
 course: imork
 type: course
-tags: [isms, informacni-bezpecnost, kyberneticka-bezpecnost, oborova-reseni, iso-27000]
+tags: [imork, isms, informacni-bezpecnost, kyberneticka-bezpecnost, oborova-reseni, iso-27000]
 sources: [raw/imork/Detail předmětu.md]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Management oborových řešení (ImorK)

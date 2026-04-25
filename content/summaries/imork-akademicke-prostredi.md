@@ -1,11 +1,11 @@
 ---
-title: "ImorK — ISMS v akademickém prostředí"
+title: ImorK — ISMS v akademickém prostředí
 course: imork
 type: summary
-tags: [isms, univerzity, kampus, wifi, identita]
+tags: [imork, isms, univerzity, kampus, wifi]
 sources: [raw/imork/2004 VUT_Bezp akademici-2021.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # ImorK — ISMS v akademickém prostředí
@@ -49,7 +49,7 @@ Klíčové principy: **AAA** (Authentication, Authorization, Accounting) a centr
 
 - Ochrana informačních aktiv
 - Zajištění kontinuity vzdělávacího procesu
-- Soulad s legislativou (ZKB, [[gdpr|GDPR]])
+- Soulad s legislativou (ZKB, GDPR)
 - Ochrana výzkumných dat a duševního vlastnictví
 
 ## Implementace ISO 27001 + ISO 20000

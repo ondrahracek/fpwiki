@@ -1,11 +1,11 @@
 ---
-title: "ImorK — ISMS ve zdravotnictví"
+title: ISMS ve zdravotnictví
 course: imork
 type: summary
-tags: [isms, zdravotnictvi, hipaa, iso-27799, ehealth, pacs]
+tags: [imork, isms, zdravotnictvi, hipaa, iso-27799, ehealth, pacs]
 sources: [raw/imork/2006 VUT_Bezp zdravotnictví-2022.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # ISMS ve zdravotnictví
@@ -37,9 +37,9 @@ Americký zákon skládající se ze 4 částí:
 3. **Unique Identifiers Rule** — identifikátory subjektů
 4. **Electronic Transaction & Code Sets** — elektronické kódy a transakce
 
-### [[iso-27799|ISO/IEC 27799:2019]]
+### ISO/IEC 27799:2019
 
-Bezpečnost zdravotnických informací — rozšíření [[iso-27001|ISO 27001]] pro zdravotnictví.
+Bezpečnost zdravotnických informací — rozšíření ISO 27001 pro zdravotnictví.
 
 ### ISO/IEC 27789:2021
 

@@ -1,11 +1,11 @@
 ---
-title: "ImorK — ISMS v energetice"
+title: ISMS v energetice
 course: imork
 type: summary
-tags: [isms, energetika, smart-grid, iec-61850, scada, plc]
+tags: [imork, isms, energetika, smart-grid, iec-61850, scada, plc]
 sources: [raw/imork/2007 VUT_Bezp energetika-2023.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # ISMS v energetice
@@ -17,7 +17,7 @@ updated: 2026-04-12
 Současný trend v energetice směřuje k:
 
 - Decentralizované výrobě energie
-- [[smart-grid|Smart Grid]] (chytré sítě)
+- [[imork-smart-grid|Smart Grid]] (chytré sítě)
 - Obnovitelným zdrojům energie
 
 ## Tři klíčové faktory pro IB v energetice
@@ -30,7 +30,7 @@ Současný trend v energetice směřuje k:
 
 ### ISO/IEC TR 27019:2020
 
-Specifická norma pro řízení informační bezpečnosti v energetickém sektoru — rozšíření [[iso-27001|ISO 27001]] pro energetiku.
+Specifická norma pro řízení informační bezpečnosti v energetickém sektoru — rozšíření ISO 27001 pro energetiku.
 
 ### IEC 61850
 
@@ -45,7 +45,7 @@ Pracovní skupina zaměřená na bezpečnost dat v energetických komunikačníc
 Energetický sektor disponuje dvěma propojenými vrstvami:
 
 - **Fyzická infrastruktura** — výrobny, rozvodny, přenosová vedení
-- **Digitální infrastruktura** — [[scada|SCADA]], řídicí systémy, komunikační sítě
+- **Digitální infrastruktura** — SCADA, řídicí systémy, komunikační sítě
 
 ## Automatizační systémy
 
@@ -69,4 +69,4 @@ V energetice se uplatňuje rozšířený model:
 
 ## Penetrační testování
 
-Příklad penetračního testování energetické infrastruktury — ověření odolnosti [[scada|SCADA]] systémů a řídicích jednotek proti kybernetickým útokům.
+Příklad penetračního testování energetické infrastruktury — ověření odolnosti SCADA systémů a řídicích jednotek proti kybernetickým útokům.

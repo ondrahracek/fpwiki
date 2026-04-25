@@ -1,14 +1,11 @@
 ---
-title: "Ochrana dat"
+title: Ochrana dat
 courses: [imork]
 type: topic
-tags: [ochrana-dat, sifrovani, nac, ids, ips, dlp, gdpr]
-sources:
-  - raw/imork/2017 VUT_Ochrana dat-2022.pdf
-  - raw/imork/2015 VUT_Bezp WWW-2019.pdf
-  - raw/imork/2016 VUT_Bezp Email-2022.pdf
+tags: [imork, ochrana-dat, sifrovani, nac, ids, ips, dlp, gdpr]
+sources: [raw/imork/2017 VUT_Ochrana dat-2022.pdf, raw/imork/2015 VUT_Bezp WWW-2019.pdf, raw/imork/2016 VUT_Bezp Email-2022.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Ochrana dat

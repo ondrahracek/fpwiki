@@ -1,11 +1,11 @@
 ---
-title: "Fuzzy logika"
+title: Fuzzy logika
 courses: [ipmrk]
 type: topic
-tags: [fuzzy, funkce-clenstvi, pravidla, inference, defuzzifikace]
+tags: [ipmrk, fuzzy, funkce-clenstvi, pravidla, inference, defuzzifikace]
 sources: [raw/ipmrk/fuzzy-excel.md, raw/ipmrk/fuzzy-matlab.md, raw/ipmrk/kniha.md]
 created: 2026-04-10
-updated: 2026-04-16
+updated: '2026-04-25'
 ---
 
 # Fuzzy logika

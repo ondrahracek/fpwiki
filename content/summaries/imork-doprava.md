@@ -1,18 +1,18 @@
 ---
-title: "ImorK — ISMS v dopravě"
+title: ISMS v dopravě (železnice)
 course: imork
 type: summary
-tags: [isms, doprava, zeleznice, kriticka-infrastruktura, enisa]
+tags: [imork, isms, doprava, zeleznice, kriticka-infrastruktura, enisa]
 sources: [raw/imork/2009 VUT_Bezp Doprava-2022.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # ISMS v dopravě (železnice)
 
 ## Železnice jako kritická infrastruktura
 
-Železniční doprava je součástí [[kriticka-infrastruktura|kritické infrastruktury]] státu. Systém **CIWIN** (Critical Infrastructure Warning Information Network) slouží k výměně informací o hrozbách mezi členskými státy EU.
+Železniční doprava je součástí kritické infrastruktury státu. Systém **CIWIN** (Critical Infrastructure Warning Information Network) slouží k výměně informací o hrozbách mezi členskými státy EU.
 
 ### Třístupňový procesní model KI
 
@@ -31,7 +31,7 @@ Tři úrovně řízení bezpečnosti kritické infrastruktury v železniční do
 
 ## Řízení rizik
 
-Řízení rizik dle [[iso-27005|ISO 27005]] aplikované na železniční prostředí.
+Řízení rizik dle ISO 27005 aplikované na železniční prostředí.
 
 ## 8 základních železničních služeb
 

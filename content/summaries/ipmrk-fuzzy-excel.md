@@ -1,11 +1,11 @@
 ---
-title: "IpmrK — Fuzzy logika (Excel)"
+title: Fuzzy logika — základní princip a implementace v Excelu
 course: ipmrk
 type: summary
 tags: [ipmrk, fuzzy, excel, funkce-clenstvi, pravidla]
 sources: [raw/ipmrk/fuzzy-excel.md]
 created: 2026-04-10
-updated: 2026-04-10
+updated: '2026-04-25'
 ---
 
 # Fuzzy logika — základní princip a implementace v Excelu
@@ -36,4 +36,4 @@ Přednáška pokrývá úplný základ [[fuzzy-logika|fuzzy logiky]]: od motivac
 
 - [[fuzzy-logika|Fuzzy logika]] — hlavní téma
 - [[ipmrk-fuzzy-matlab|Fuzzy logika — MATLAB]] — navazující přednáška o architektuře fuzzy systému
-- [[defuzzifikace|Defuzzifikace]] — převod fuzzy výsledku na konečné rozhodnutí
+- Defuzzifikace — převod fuzzy výsledku na konečné rozhodnutí

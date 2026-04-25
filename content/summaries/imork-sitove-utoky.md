@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Síťové útoky"
+title: Síťové útoky — komplexní přehled
 course: imork
 type: summary
-tags: [sitove-utoky, ddos, spoofing, sniffing, mitm, emotet, ryuk]
+tags: [imork, sitove-utoky, ddos, spoofing, sniffing, mitm, emotet, ryuk]
 sources: [raw/imork/CV 03 VUT_Síťové útoky-2023.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Síťové útoky — komplexní přehled
@@ -54,7 +54,7 @@ Cvičení zaměřené na klasifikaci, techniky a obranu proti síťovým útoků
 - **Packet capture** — zachytávání provozu na síťovém segmentu (Wireshark, tcpdump)
 - Efektivní zejména v nešifrovaných sítích a na sdílených segmentech
 - **Obrana:**
-  - [[sifrovani\|Šifrování]] — SSL/TLS pro webový provoz
+  - Šifrování — SSL/TLS pro webový provoz
   - **VPN** — šifrovaný tunel pro veškerý provoz
   - **SSH** — šifrovaný vzdálený přístup
   - Segmentace sítě (switche místo hubů)

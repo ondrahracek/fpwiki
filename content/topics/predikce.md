@@ -1,11 +1,11 @@
 ---
-title: "Predikce"
+title: Predikce a prognózování
 courses: [ipmrk]
 type: topic
-tags: [predikce, casove-rady, financni-trhy, prognozovani]
+tags: [ipmrk, predikce, casove-rady, prognozovani]
 sources: [raw/ipmrk/nn-aplikace.md, raw/ipmrk/ga-vyuziti.md, raw/ipmrk/chaos.md]
 created: 2026-04-10
-updated: 2026-04-10
+updated: '2026-04-25'
 ---
 
 # Predikce a prognózování

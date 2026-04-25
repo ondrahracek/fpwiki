@@ -1,11 +1,11 @@
 ---
-title: "Funkce více proměnných"
+title: Kalkul funkcí více proměnných
 course: imek
 type: topic
-tags: [parcialni-derivace, diferencial, implicitni-funkce, volne-extremy, indiferencni-krivky]
+tags: [imek, parcialni-derivace, diferencial, implicitni-funkce, volne-extremy, indiferencni-krivky]
 sources: [raw/imek/KS_prvni_blok.pdf]
 created: 2026-04-20
-updated: 2026-04-20
+updated: '2026-04-25'
 ---
 
 # Kalkul funkcí více proměnných

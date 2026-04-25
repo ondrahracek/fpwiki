@@ -1,11 +1,11 @@
 ---
-title: "ImorK — Ransomware case study"
+title: Ransomware — komplexní případová studie
 course: imork
 type: summary
-tags: [ransomware, raas, wannacry, nistir-8374, incident-response, vykupne]
+tags: [imork, ransomware, raas, wannacry, nistir-8374, incident-response, vykupne]
 sources: [raw/imork/CV 06 VUT_Ransomware.pdf]
 created: 2026-04-12
-updated: 2026-04-12
+updated: '2026-04-25'
 ---
 
 # Ransomware — komplexní případová studie
@@ -70,7 +70,7 @@ Založeno na NIST Cybersecurity Framework — 5 pilířů:
 | **Identify** | Inventarizace aktiv, [[rizeni-rizik\|analýza rizik]], mapování procesů |
 | **Protect** | Zálohy (pravidlo 3-2-1), segmentace, školení, [[isms\|bezpečnostní politiky]] |
 | **Detect** | Monitoring, EDR/XDR, analýza anomálií |
-| **Respond** | [[incident-response\|Incident response]] plán, komunikace, forenzní analýza |
+| **Respond** | Incident response plán, komunikace, forenzní analýza |
 | **Recover** | Obnova ze záloh, [[bcm\|kontinuita provozu]], poučení |
 
 ## 9-krokový plán reakce na incident (IR)
