@@ -1,0 +1,79 @@
+@import 'tailwindcss';
+@import '@nuxt/ui';
+@import 'katex/dist/katex.min.css';
+
+@theme static {
+  /* Fonts */
+  --font-sans: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
+  --font-serif: 'Source Serif 4', Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* FP Red ramp */
+  --color-fp-red-50: #fbe7eb;
+  --color-fp-red-100: #f8c8d1;
+  --color-fp-red-200: #f298a7;
+  --color-fp-red-300: #ee687d;
+  --color-fp-red-400: #e93854;
+  --color-fp-red-500: #e4002b;
+  --color-fp-red-600: #c00026;
+  --color-fp-red-700: #9c001f;
+  --color-fp-red-800: #780018;
+  --color-fp-red-900: #540011;
+  --color-fp-red-950: #350009;
+
+  /* FP Purple ramp */
+  --color-fp-purple-50: #f1e8f6;
+  --color-fp-purple-100: #e1cde9;
+  --color-fp-purple-200: #c39bd3;
+  --color-fp-purple-300: #a468bc;
+  --color-fp-purple-400: #8546a6;
+  --color-fp-purple-500: #6b2c91;
+  --color-fp-purple-600: #5b257b;
+  --color-fp-purple-700: #4d1f6a;
+  --color-fp-purple-800: #3a1750;
+  --color-fp-purple-900: #260f35;
+  --color-fp-purple-950: #170820;
+
+  /* Warm "paper" neutral ramp (replaces stone for a creamy feel) */
+  --color-paper-50: #fbfaf7;
+  --color-paper-100: #f3f1ec;
+  --color-paper-200: #e9e6df;
+  --color-paper-300: #d3cec0;
+  --color-paper-400: #9a9384;
+  --color-paper-500: #6c655a;
+  --color-paper-600: #4f4a40;
+  --color-paper-700: #34302a;
+  --color-paper-800: #25221c;
+  --color-paper-900: #16140f;
+  --color-paper-950: #0c0a07;
+
+  /* Highlight (matches prototype) */
+  --color-highlight-light: #fff4a3;
+  --color-highlight-dark: #5e4d12;
+}
+
+/* Wikilink styling — applied by @flowershow/remark-wiki-link */
+.wikilink {
+  color: var(--ui-color-primary-700, #4d1f6a);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, currentColor 30%, transparent);
+  text-underline-offset: 2px;
+  transition: text-decoration-color 120ms ease;
+}
+.wikilink:hover {
+  text-decoration-color: currentColor;
+}
+.wikilink-broken {
+  color: var(--ui-color-secondary-600, #c00026);
+  text-decoration-style: dotted;
+  text-decoration-color: currentColor;
+  cursor: help;
+}
+
+/* Image embeds rendered as <img>; layout-only tweaks (caption styling lives in
+   the WikiImage component if/when we override the prose pipeline). */
+.prose img.wikilink,
+.prose img[alt] {
+  border-radius: 6px;
+  border: 1px solid var(--ui-color-neutral-200, #e9e6df);
+}
