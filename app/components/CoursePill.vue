@@ -11,8 +11,8 @@
 </template>
 
 <script setup lang="ts">
-import type { TagColor } from '~/plugins/tag-colors'
 import { wikiUrl } from '#shared/wiki-routes'
+import { courseHueVars } from '~/utils/course-hue'
 
 const props = withDefaults(
   defineProps<{
@@ -25,14 +25,12 @@ const props = withDefaults(
   { big: false, accent: 'ekonomie' },
 )
 
-const { $tagColor } = useNuxtApp()
-
 const cssVars = computed(() => {
-  const c = $tagColor(props.accent) as TagColor
+  const v = courseHueVars(props.accent)
   return {
-    '--course-bg': c.bg,
-    '--course-fg': c.fg,
-    '--course-dot': c.dot,
+    '--course-bg': v['--course-hue-bg'],
+    '--course-fg': v['--course-hue-fg'],
+    '--course-dot': v['--course-hue-dot'],
   } as Record<string, string>
 })
 </script>

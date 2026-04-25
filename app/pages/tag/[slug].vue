@@ -16,7 +16,7 @@
           <div class="flex items-center justify-between gap-3">
             <span class="text-base font-medium">{{ p.title }}</span>
             <UBadge size="sm" color="neutral" variant="soft">
-              {{ COLLECTION_LABELS[p.collection] ?? p.collection }}
+              {{ collectionLabel(p.collection) }}
             </UBadge>
           </div>
         </NuxtLink>
@@ -29,13 +29,7 @@
 <script setup lang="ts">
 import type { WikiCollectionName } from '#shared/types/wiki'
 import { pathFor } from '#shared/wiki-routes'
-
-const COLLECTION_LABELS: Partial<Record<WikiCollectionName, string>> = {
-  courses: 'Předmět',
-  topics: 'Téma',
-  summaries: 'Shrnutí',
-  outputs: 'Výstup',
-}
+import { collectionLabel } from '~/utils/labels'
 
 const route = useRoute()
 const slug = computed(() => String(route.params.slug))

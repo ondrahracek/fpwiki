@@ -7,16 +7,17 @@
       </p>
     </header>
 
-    <ul class="grid gap-4 sm:grid-cols-2">
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <li v-for="c in items" :key="c.slug">
         <NuxtLink
           :to="wikiUrl.page(c.slug)"
-          class="block rounded-lg border border-(--ui-border) bg-(--ui-bg-elevated) p-5 transition-colors hover:border-(--ui-color-primary-300)"
+          class="block rounded-lg border border-l-4 border-(--ui-border) bg-(--ui-bg-elevated) p-5 transition-colors hover:border-(--ui-color-primary-300)"
+          :style="{ borderLeftColor: c.hueVars['--course-hue-dot'], ...c.hueVars }"
         >
           <div class="mb-2 flex items-center justify-between">
             <CoursePill :slug="c.slug" :accent="c.firstTag" big />
-            <span v-if="c.updated" class="text-xs text-(--ui-text-muted)">
-              {{ c.updated }}
+            <span v-if="c.updatedShort" class="text-xs text-(--ui-text-muted)">
+              upraveno {{ c.updatedShort }}
             </span>
           </div>
           <h2 class="text-base font-semibold">{{ c.title }}</h2>
@@ -31,8 +32,10 @@
 </template>
 
 <script setup lang="ts">
-import { resolveCourses, toISODate } from '~/utils/frontmatter'
+import { resolveCourses } from '~/utils/frontmatter'
 import { slugFromPath, wikiUrl } from '#shared/wiki-routes'
+import { courseHueVars } from '~/utils/course-hue'
+import { shortDate } from '~/utils/format-date'
 
 useSeoMeta({ title: 'Předměty — fpwiki' })
 
@@ -42,12 +45,16 @@ const { data: courses } = await useAsyncData('courses-list', () =>
 
 const items = computed(
   () =>
-    courses.value?.map((c) => ({
-      slug: resolveCourses(c)[0] ?? slugFromPath(c.path),
-      title: c.title,
-      firstTag: c.tags?.[0] ?? 'ekonomie',
-      tags: c.tags ?? [],
-      updated: toISODate(c.updated),
-    })) ?? [],
+    courses.value?.map((c) => {
+      const firstTag = c.tags?.[0] ?? 'ekonomie'
+      return {
+        slug: resolveCourses(c)[0] ?? slugFromPath(c.path),
+        title: c.title,
+        firstTag,
+        tags: c.tags ?? [],
+        updatedShort: shortDate(c.updated),
+        hueVars: courseHueVars(firstTag),
+      }
+    }) ?? [],
 )
 </script>

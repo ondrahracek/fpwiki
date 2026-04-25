@@ -12,15 +12,21 @@
         dostupných podkladů a jsou upravené tak, aby se v nich dalo rychle hledat a opakovat si
         látku.
       </p>
-      <div class="mt-6 flex flex-wrap gap-2">
+      <div class="mt-6 flex flex-wrap items-center gap-2">
         <UButton to="/courses" color="primary" trailing-icon="i-lucide-arrow-right">
           Procházet předměty
         </UButton>
+        <UButton color="neutral" variant="outline" icon="i-lucide-search" @click="emitOpenSearch">
+          Hledat
+          <ClientOnly>
+            <UKbd value="meta" class="ml-1" />
+            <UKbd value="K" />
+            <template #fallback>
+              <span class="ml-1 font-mono text-[10px]">⌘ K</span>
+            </template>
+          </ClientOnly>
+        </UButton>
       </div>
-    </section>
-
-    <section v-if="overview?.body" class="prose prose-paper dark:prose-invert max-w-none py-6">
-      <ContentRenderer :value="overview" />
     </section>
 
     <section class="grid gap-8 py-10 md:grid-cols-3">
@@ -76,9 +82,12 @@ useSeoMeta({
   ogTitle: 'fpwiki',
 })
 
-const { data: overview } = await useAsyncData('home-overview', () =>
-  queryCollection('overview').first(),
-)
+// The hero CTA dispatches the same ⌘K shortcut the header binds; AppHeader
+// owns the modal state. Programmatic key event keeps SRP — pages don't reach
+// into header state.
+const emitOpenSearch = () => {
+  window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))
+}
 
 const { data: courses } = await useAsyncData('home-courses', () =>
   queryCollection('courses').order('title', 'ASC').all(),

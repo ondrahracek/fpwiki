@@ -29,7 +29,7 @@
             >
               <div class="flex items-center gap-2">
                 <UBadge size="sm" color="neutral" variant="soft">
-                  {{ COLLECTION_LABELS[hit.section.collection] ?? hit.section.collection }}
+                  {{ collectionLabel(hit.section.collection) }}
                 </UBadge>
                 <span class="text-sm font-medium">{{ hit.section.title }}</span>
               </div>
@@ -55,15 +55,9 @@
  *   - keep one engine path
  *   - delete the other composable + the switch
  */
-import type { WikiCollectionName, WikiSearchSection } from '#shared/types/wiki'
+import type { WikiSearchSection } from '#shared/types/wiki'
 import { pathFor } from '#shared/wiki-routes'
-
-const COLLECTION_LABELS: Partial<Record<WikiCollectionName, string>> = {
-  courses: 'Předmět',
-  topics: 'Téma',
-  summaries: 'Shrnutí',
-  outputs: 'Výstup',
-}
+import { collectionLabel } from '~/utils/labels'
 
 const model = defineModel<boolean>('open', { default: false })
 

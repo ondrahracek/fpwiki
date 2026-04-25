@@ -2,7 +2,7 @@
   <article class="mx-auto max-w-3xl px-6 py-10">
     <header class="mb-8 border-b border-(--ui-border) pb-6">
       <div class="mb-3 flex flex-wrap items-center gap-2 text-xs">
-        <UBadge color="neutral" variant="soft">{{ typeLabel }}</UBadge>
+        <UBadge color="neutral" variant="soft">{{ typeLabelText }}</UBadge>
         <CoursePill v-for="c in courses" :key="c" :slug="c" />
         <span v-if="updatedDisplay" class="text-(--ui-text-muted)">
           upraveno {{ updatedDisplay }}
@@ -28,6 +28,7 @@
  */
 import type { WikiPageType } from '#shared/types/wiki'
 import { resolveCourses, toISODate } from '~/utils/frontmatter'
+import { typeLabel } from '~/utils/labels'
 
 const props = defineProps<{
   page: {
@@ -43,15 +44,7 @@ const props = defineProps<{
   }
 }>()
 
-const TYPE_LABELS: Record<WikiPageType, string> = {
-  course: 'Předmět',
-  topic: 'Téma',
-  summary: 'Shrnutí',
-  output: 'Výstup',
-  overview: 'Přehled',
-}
-
-const typeLabel = computed(() => TYPE_LABELS[props.page.type ?? 'topic'] ?? 'Materiál')
+const typeLabelText = computed(() => typeLabel(props.page.type ?? 'topic'))
 const courses = computed(() => resolveCourses(props.page))
 const tags = computed(() => props.page.tags ?? [])
 const updatedDisplay = computed(() => toISODate(props.page.updated))
