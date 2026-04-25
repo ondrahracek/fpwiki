@@ -4,7 +4,7 @@
     <header class="mt-4 mb-6">
       <div class="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 class="text-3xl font-semibold tracking-tight">Předměty</h1>
+          <h1 class="text-[38px] leading-[1.1] font-semibold tracking-[-0.03em]">Předměty</h1>
           <p class="mt-2 text-sm text-(--ui-text-muted)">
             {{ totalCoursesText }} <span aria-hidden="true">·</span> {{ totalZapiskuText }} celkem
           </p>
@@ -30,7 +30,10 @@
       </div>
     </header>
 
-    <ul v-if="view === 'grid'" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+    <ul
+      v-if="view === 'grid'"
+      class="grid [grid-template-columns:repeat(auto-fill,minmax(260px,360px))] gap-3"
+    >
       <li v-for="c in items" :key="c.slug">
         <CourseCard
           :slug="c.slug"
@@ -38,6 +41,7 @@
           :first-tag="c.firstTag"
           :tags="c.tags"
           :updated-short="c.updatedShort"
+          :featured="c.featured"
         />
       </li>
     </ul>
@@ -76,7 +80,11 @@ import { courseHueVars } from '~/utils/course-hue'
 
 definePageMeta({ layout: 'sidebar' })
 
-useSeoMeta({ title: 'Předměty — fpwiki' })
+usePageSeo({
+  title: 'Předměty',
+  description: 'Seznam magisterských předmětů na FP VUT s mými zápisky a propojenými tématy.',
+  path: '/courses',
+})
 
 const view = useCookie<'grid' | 'list'>('fp-courses-view', {
   default: () => 'grid',
@@ -132,6 +140,7 @@ const items = computed(() => {
       updatedShort: shortDate(c.updated),
       zapiskuLabel: pluralize(count, 'zápisek', 'zápisky', 'zápisků'),
       dotColor: courseHueVars(firstTag)['--course-hue-dot'],
+      featured: c.featured ?? false,
     }
   })
 })

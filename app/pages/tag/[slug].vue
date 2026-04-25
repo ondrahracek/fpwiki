@@ -3,7 +3,9 @@
     <Breadcrumb tag-mode :slug="slug" />
     <header class="mt-4 mb-6">
       <p class="text-sm text-(--ui-text-muted)">Štítek</p>
-      <h1 class="mt-1 flex items-center gap-3 text-3xl font-semibold tracking-tight">
+      <h1
+        class="mt-1 flex items-center gap-3 text-[38px] leading-[1.1] font-semibold tracking-[-0.03em]"
+      >
         <TagPill :tag="slug" :count="items.length" />
       </h1>
     </header>
@@ -29,7 +31,7 @@
 
 <script setup lang="ts">
 import type { WikiCollectionName } from '#shared/types/wiki'
-import { pathFor } from '#shared/wiki-routes'
+import { pathFor, wikiUrl } from '#shared/wiki-routes'
 import { collectionLabel } from '~/utils/labels'
 
 definePageMeta({ layout: 'sidebar' })
@@ -56,5 +58,9 @@ const { data: pages } = await useAsyncData(`tag-${slug.value}`, async () => {
 
 const items = computed(() => pages.value ?? [])
 
-useSeoMeta({ title: () => `#${slug.value} — fpwiki` })
+usePageSeo({
+  title: () => `#${slug.value}`,
+  description: () => `Všechny stránky se štítkem #${slug.value} na fpwiki.`,
+  path: () => wikiUrl.tag(slug.value),
+})
 </script>

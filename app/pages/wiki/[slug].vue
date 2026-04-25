@@ -17,6 +17,8 @@
 
 <script setup lang="ts">
 import type { WikiCollectionName } from '#shared/types/wiki'
+import { wikiUrl } from '#shared/wiki-routes'
+import { toISODate } from '~/utils/frontmatter'
 
 definePageMeta({ layout: 'sidebar' })
 
@@ -42,9 +44,16 @@ const page = computed(() => found.value?.page ?? null)
 if (!page.value) {
   // Soft 404 — render not-found block instead of throwing, so prerender still emits.
   setResponseStatus(404)
+  // Don't let crawlers index the not-found body under this slug.
+  useSeoMeta({ robots: 'noindex, follow' })
 }
 
-useSeoMeta({
-  title: () => (page.value ? `${page.value.title} — fpwiki` : 'Nenalezeno — fpwiki'),
+usePageSeo({
+  title: () => page.value?.title ?? 'Nenalezeno',
+  description: () => (page.value as { description?: string } | null)?.description,
+  path: () => wikiUrl.page(slug.value),
+  type: 'article',
+  publishedTime: () => toISODate(page.value?.created) ?? undefined,
+  modifiedTime: () => toISODate(page.value?.updated) ?? undefined,
 })
 </script>

@@ -1,9 +1,7 @@
 <template>
   <nav class="space-y-8 text-sm">
     <section>
-      <h2 class="mb-2 text-xs font-semibold tracking-wider text-(--ui-text-muted) uppercase">
-        Štítky
-      </h2>
+      <h2 class="section-label mb-2">Štítky</h2>
       <ul class="space-y-1">
         <li>
           <NuxtLink
@@ -32,16 +30,12 @@
     </section>
 
     <section>
-      <h2 class="mb-2 text-xs font-semibold tracking-wider text-(--ui-text-muted) uppercase">
-        Studium
-      </h2>
+      <h2 class="section-label mb-2">Studium</h2>
       <div class="rounded px-2 py-1 font-medium text-(--ui-text-highlighted)">Magistr</div>
     </section>
 
     <section>
-      <h2 class="mb-2 text-xs font-semibold tracking-wider text-(--ui-text-muted) uppercase">
-        O bázi
-      </h2>
+      <h2 class="section-label mb-2">O bázi</h2>
       <ul class="space-y-1">
         <li>
           <NuxtLink

@@ -1,9 +1,9 @@
 <template>
   <ClientOnly>
-    <div class="pointer-events-none fixed inset-x-0 top-0 z-30 h-1 bg-(--ui-color-primary-500)/20">
+    <div class="pointer-events-none fixed inset-x-0 top-0 z-30 h-1 bg-(--ui-border)">
       <div
-        class="h-full bg-(--ui-color-primary-500) transition-[width] duration-150 ease-out"
-        :style="{ width: progress + '%' }"
+        class="h-full transition-[width] duration-150 ease-out"
+        :style="{ width: progress + '%', backgroundImage: 'var(--gradient-fp)' }"
       />
     </div>
     <template #fallback>

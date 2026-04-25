@@ -140,7 +140,7 @@ When customizing a Nuxt UI component globally, override via `app.config.ts`. For
 
 ## Deploy
 
-**Firebase App Hosting** via the Nitro `firebase_app_hosting` preset (auto-detected; no `firebase.json` needed). Region `europe-west3` (Frankfurt). Backend config in `apphosting.yaml`.
+**Firebase App Hosting** via the Nitro `firebase_app_hosting` preset (auto-detected; no `firebase.json` needed). Region `europe-west4` (Eemshaven). Backend config in `apphosting.yaml`. Public origin: `https://fpwiki.cz` (set as `NUXT_PUBLIC_SITE_URL` in `apphosting.yaml`; the App Hosting default URL `https://fpwiki--fpwiki-cz.europe-west4.hosted.app` is also reachable but every page's `<link rel="canonical">` points at fpwiki.cz).
 
 Deploy is git-push triggered: a push to the configured branch builds via Cloud Build, serves on Cloud Run, with the CDN in front of prerendered output.
 

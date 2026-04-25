@@ -1,5 +1,5 @@
 <template>
-  <article class="max-w-3xl">
+  <article>
     <!-- Card-style header for course pages. Topics/summaries/outputs use a
          lighter inline header below — the design's "card hero" pattern is
          specifically for course-overview surfaces. -->
@@ -57,7 +57,7 @@
       </ul>
     </section>
 
-    <div class="prose prose-paper dark:prose-invert max-w-none">
+    <div class="prose">
       <ContentRenderer :value="page" />
     </div>
   </article>

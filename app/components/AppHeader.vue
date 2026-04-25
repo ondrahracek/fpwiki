@@ -1,6 +1,6 @@
 <template>
   <header class="sticky top-0 z-20 border-b border-(--ui-border) bg-(--ui-bg)/80 backdrop-blur">
-    <div class="mx-auto flex max-w-screen-xl items-center gap-3 px-4 py-3 sm:gap-6 sm:px-6">
+    <div class="mx-auto flex max-w-screen-xl items-center gap-3 px-4 py-3 sm:gap-6 sm:px-7">
       <UButton
         v-if="showMenuTrigger"
         icon="i-lucide-menu"
@@ -30,7 +30,7 @@
       <UButton
         color="neutral"
         variant="outline"
-        class="ml-auto hidden max-w-sm flex-1 justify-start sm:flex"
+        class="ml-auto hidden max-w-sm min-w-0 flex-1 justify-start sm:flex"
         :ui="{ base: 'gap-2' }"
         @click="searchOpen = true"
       >

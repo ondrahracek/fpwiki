@@ -1,17 +1,17 @@
 <template>
-  <section class="border-y border-dashed border-(--ui-border) py-6">
+  <section class="border-t border-dashed border-(--ui-border) pt-5">
     <div class="flex flex-wrap gap-y-4">
       <div
         v-for="s in items"
         :key="s.label"
         class="border-dashed border-(--ui-border) px-6 not-first:border-l first:pl-0"
       >
-        <div class="text-2xl font-semibold tracking-tight text-(--ui-text-highlighted)">
+        <div
+          class="text-[26px] font-semibold tracking-[-0.025em] text-(--ui-text-highlighted) tabular-nums"
+        >
           {{ formatNumber(s.value) }}
         </div>
-        <div class="mt-1 text-xs tracking-wider text-(--ui-text-muted) uppercase">
-          {{ s.label }}
-        </div>
+        <div class="mt-1 text-xs text-(--ui-text-muted)">{{ s.label }}</div>
       </div>
     </div>
   </section>

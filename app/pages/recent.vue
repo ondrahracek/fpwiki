@@ -2,7 +2,7 @@
   <div>
     <Breadcrumb collection="overview" title="Nedávné" />
     <header class="mt-4 mb-6">
-      <h1 class="text-3xl font-semibold tracking-tight">Nedávné</h1>
+      <h1 class="text-[38px] leading-[1.1] font-semibold tracking-[-0.03em]">Nedávné</h1>
       <p class="mt-2 text-sm text-(--ui-text-muted)">
         {{ pluralize(items.length, 'zápisek', 'zápisky', 'zápisků') }} seřazených od nejnovějšího.
       </p>
@@ -22,7 +22,11 @@ import { pathFor } from '#shared/wiki-routes'
 import { toISODate } from '~/utils/frontmatter'
 
 definePageMeta({ layout: 'sidebar' })
-useSeoMeta({ title: 'Nedávné — fpwiki' })
+usePageSeo({
+  title: 'Nedávné',
+  description: 'Nedávno upravené zápisky a témata na fpwiki.',
+  path: '/recent',
+})
 
 const { data: pages } = await useAsyncData('recent-list', async () => {
   const all = await Promise.all([

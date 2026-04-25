@@ -1,9 +1,7 @@
 <template>
   <nav class="space-y-6 text-sm">
     <section>
-      <h2 class="mb-2 text-xs font-semibold tracking-wider text-(--ui-text-muted) uppercase">
-        Štítky
-      </h2>
+      <h2 class="section-label mb-2">Štítky</h2>
       <ul class="space-y-1">
         <li>
           <NuxtLink

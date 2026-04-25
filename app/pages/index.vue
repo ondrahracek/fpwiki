@@ -1,13 +1,20 @@
 <template>
-  <UContainer class="py-10">
+  <UContainer class="py-10 [--ui-container:1080px]">
     <DisclaimerBanner class="mb-8" />
 
     <section class="py-12 text-center sm:text-left">
-      <h1 class="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
+      <h1
+        class="text-4xl font-semibold tracking-tight sm:max-w-[900px] sm:text-[60px] sm:leading-[1.02] sm:tracking-[-0.04em]"
+      >
         Zápisky k vybraným
-        <span class="block text-(--ui-color-secondary-500)">předmětům na FP VUT.</span>
+        <span
+          class="block text-(--color-fp-red-500) supports-[background-clip:text]:bg-clip-text supports-[background-clip:text]:text-transparent"
+          style="background-image: var(--gradient-fp)"
+        >
+          předmětům na FP VUT.
+        </span>
       </h1>
-      <p class="mt-4 max-w-2xl text-(--ui-text-toned)">
+      <p class="mt-4 max-w-[600px] font-serif text-[19px] leading-[1.55] text-(--ui-text-toned)">
         Moje zápisky, shrnutí, pojmy a okruhy k vybraným předmětům. Vznikají s pomocí AI z
         dostupných podkladů a jsou upravené tak, aby se v nich dalo rychle hledat a opakovat si
         látku.
@@ -34,9 +41,7 @@
     <section class="grid gap-8 py-10 md:grid-cols-3">
       <div>
         <div class="mb-3 flex items-center justify-between">
-          <h3 class="text-sm font-semibold tracking-wider text-(--ui-text-muted) uppercase">
-            Předměty
-          </h3>
+          <h3 class="section-label">Předměty</h3>
           <NuxtLink
             :to="wikiUrl.courses()"
             class="text-xs text-(--ui-text-muted) hover:text-(--ui-text-highlighted)"
@@ -63,9 +68,7 @@
 
       <div>
         <div class="mb-3 flex items-center justify-between">
-          <h3 class="text-sm font-semibold tracking-wider text-(--ui-text-muted) uppercase">
-            Poslední úpravy
-          </h3>
+          <h3 class="section-label">Poslední úpravy</h3>
           <NuxtLink
             to="/recent"
             class="text-xs text-(--ui-text-muted) hover:text-(--ui-text-highlighted)"
@@ -82,9 +85,7 @@
 
       <div>
         <div class="mb-3 flex items-center justify-between">
-          <h3 class="text-sm font-semibold tracking-wider text-(--ui-text-muted) uppercase">
-            Témata
-          </h3>
+          <h3 class="section-label">Témata</h3>
           <NuxtLink
             to="/tags"
             class="text-xs text-(--ui-text-muted) hover:text-(--ui-text-highlighted)"
@@ -104,9 +105,12 @@
 import { resolveCourses, toISODate } from '~/utils/frontmatter'
 import { pathFor, slugFromPath, wikiUrl } from '#shared/wiki-routes'
 
-useSeoMeta({
+usePageSeo({
   title: 'fpwiki — zápisky k vybraným předmětům FP VUT',
-  ogTitle: 'fpwiki',
+  description:
+    'Moje zápisky, shrnutí, pojmy a okruhy k vybraným magisterským předmětům na FP VUT. Vyhledávání a propojené stránky.',
+  path: '/',
+  appendSiteName: false,
 })
 
 const searchOpen = useState('app-search-open', () => false)

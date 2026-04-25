@@ -2,7 +2,7 @@
   <div>
     <Breadcrumb collection="overview" title="Štítky" />
     <header class="mt-4 mb-6">
-      <h1 class="text-3xl font-semibold tracking-tight">Štítky</h1>
+      <h1 class="text-[38px] leading-[1.1] font-semibold tracking-[-0.03em]">Štítky</h1>
       <p class="mt-2 text-sm text-(--ui-text-muted)">
         {{ tagOptions.length }} štítků seřazených dle počtu výskytů.
       </p>
@@ -17,7 +17,11 @@
 
 <script setup lang="ts">
 definePageMeta({ layout: 'sidebar' })
-useSeoMeta({ title: 'Štítky — fpwiki' })
+usePageSeo({
+  title: 'Štítky',
+  description: 'Štítky napříč všemi zápisky — projděte si témata.',
+  path: '/tags',
+})
 
 const { data: tagCounts } = await useAsyncData('tags-page', async () => {
   const all = await Promise.all([

@@ -74,5 +74,10 @@
 </template>
 
 <script setup lang="ts">
-useSeoMeta({ title: 'Jak vzniká obsah — fpwiki' })
+usePageSeo({
+  title: 'Jak vzniká obsah',
+  description:
+    'Jak vznikají materiály na fpwiki — workflow zápisků, použití AI, ruční ověření a hranice odpovědnosti.',
+  path: '/about/jak-vznika-obsah',
+})
 </script>

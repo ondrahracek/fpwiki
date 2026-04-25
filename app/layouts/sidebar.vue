@@ -2,7 +2,7 @@
   <div class="flex min-h-screen flex-col bg-(--ui-bg)">
     <AppHeader show-menu-trigger />
     <main class="flex-1">
-      <UContainer class="py-6 lg:py-10">
+      <UContainer class="py-6 lg:py-10" :class="containerWidthClass">
         <div class="lg:grid lg:grid-cols-[260px_1fr] lg:gap-10">
           <aside class="hidden lg:block">
             <div class="sticky top-20">
@@ -50,4 +50,10 @@ const sidebarComponent = computed(() => {
   if (path === '/recent') return CoursesSidebar
   return CoursesSidebar
 })
+
+// Per-page wrap width via the --ui-container CSS variable that UContainer reads.
+// `/courses` → 1100px, others on this layout → default 80rem.
+const containerWidthClass = computed(() =>
+  route.path === '/courses' ? '[--ui-container:1100px]' : '',
+)
 </script>

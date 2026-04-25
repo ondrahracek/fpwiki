@@ -9,5 +9,14 @@ export default defineAppConfig({
       secondary: 'fp-red',
       neutral: 'paper',
     },
+    breadcrumb: {
+      // Non-active linked crumbs use the project --ui-link token (purple-ink)
+      // so dark mode flips automatically. Default Nuxt UI variant is text-muted.
+      variants: {
+        active: {
+          false: { link: 'text-(--ui-link) hover:text-(--ui-link)/80 font-medium' },
+        },
+      },
+    },
   },
 })

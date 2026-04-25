@@ -34,10 +34,11 @@
   --color-fp-purple-900: #260f35;
   --color-fp-purple-950: #170820;
 
-  /* Warm "paper" neutral ramp (replaces stone for a creamy feel) */
+  /* Warm "paper" neutral ramp (replaces stone for a creamy feel).
+     paper-200 (#e2ddd2) is the spec --rule color and feeds --ui-border. */
   --color-paper-50: #fbfaf7;
   --color-paper-100: #f3f1ec;
-  --color-paper-200: #e9e6df;
+  --color-paper-200: #e2ddd2;
   --color-paper-300: #d3cec0;
   --color-paper-400: #9a9384;
   --color-paper-500: #6c655a;
@@ -52,28 +53,252 @@
   --color-highlight-dark: #5e4d12;
 }
 
-/* Wikilink styling — applied by @flowershow/remark-wiki-link */
+/* Semantic Nuxt UI overrides + project-wide aliases.
+   Lives outside @theme so it overrides the defaults Nuxt UI sets in @layer theme.
+   Components consume these tokens; never hardcode the underlying values. */
+:root,
+.light {
+  --ui-bg: var(--color-paper-50);
+  --ui-link: var(--color-fp-purple-700);
+  --ui-link-hover-bg: var(--color-fp-purple-50);
+  --ui-rule-soft: var(--color-paper-100);
+}
+.dark {
+  --ui-bg: var(--color-paper-900);
+  --ui-link: var(--color-fp-purple-300);
+  --ui-link-hover-bg: color-mix(in oklab, var(--color-fp-purple-500) 22%, transparent);
+  --ui-rule-soft: var(--color-paper-800);
+}
+:root {
+  --gradient-fp: linear-gradient(
+    90deg,
+    var(--color-fp-red-500) 0%,
+    var(--color-fp-purple-500) 100%
+  );
+}
+
+/* Featured-course card gradient bg (consumed by CourseCard.vue when
+   frontmatter.featured === true). Token-driven; dark mode flips automatically. */
+.course-card-featured {
+  background-image: linear-gradient(
+    180deg,
+    var(--color-fp-purple-50) 0%,
+    var(--color-paper-50) 60%
+  );
+}
+.dark .course-card-featured {
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--color-fp-purple-500) 25%, transparent) 0%,
+    var(--color-paper-900) 60%
+  );
+}
+
+/* Reusable section-heading label (sidebars, home cards, etc.). One rule, many
+   consumers — replaces the repeated `text-xs/sm uppercase tracking-wider` soup. */
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ui-text-muted);
+}
+
+/* Wikilink styling — applied by @flowershow/remark-wiki-link.
+   Uses --ui-link / --ui-link-hover-bg so dark mode flips automatically. */
 .wikilink {
-  color: var(--ui-color-primary-700, #4d1f6a);
+  color: var(--ui-link);
   text-decoration: underline;
-  text-decoration-color: color-mix(in oklab, currentColor 30%, transparent);
-  text-underline-offset: 2px;
-  transition: text-decoration-color 120ms ease;
+  text-decoration-style: dashed;
+  text-decoration-color: color-mix(in oklab, currentColor 50%, transparent);
+  text-underline-offset: 3px;
+  border-radius: 2px;
+  transition:
+    background-color 120ms ease,
+    text-decoration-color 120ms ease;
 }
 .wikilink:hover {
+  background-color: var(--ui-link-hover-bg);
   text-decoration-color: currentColor;
 }
 .wikilink-broken {
-  color: var(--ui-color-secondary-600, #c00026);
+  color: var(--color-paper-400);
   text-decoration-style: dotted;
   text-decoration-color: currentColor;
   cursor: help;
 }
 
-/* Image embeds rendered as <img>; layout-only tweaks (caption styling lives in
-   the WikiImage component if/when we override the prose pipeline). */
-.prose img.wikilink,
-.prose img[alt] {
+/* Prose layer for rendered markdown bodies. Tailwind Typography is not
+   installed; this is the entire prose styling. Token-driven: every concrete
+   value reads from --color-* / --ui-* / --font-* tokens. */
+.prose {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 700px;
+  color: var(--ui-text);
+}
+.prose > :first-child {
+  margin-top: 0;
+}
+.prose > :last-child {
+  margin-bottom: 0;
+}
+
+.prose h1 {
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin: 0 0 16px;
+  color: var(--ui-text-highlighted);
+}
+.prose h2 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin: 36px 0 8px;
+  color: var(--ui-text-highlighted);
+}
+.prose h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 24px 0 4px;
+  color: var(--ui-text-highlighted);
+}
+.prose p {
+  margin: 12px 0;
+}
+.prose ul,
+.prose ol {
+  padding-inline-start: 1.25em;
+  margin: 12px 0;
+}
+.prose ul {
+  list-style: disc;
+}
+.prose ol {
+  list-style: decimal;
+}
+.prose li + li {
+  margin-top: 4px;
+}
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--ui-border);
+  margin: 28px 0;
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  padding: 1px 5px;
+  background: var(--color-paper-100);
+  border: 1px solid var(--ui-rule-soft);
+  border-radius: 4px;
+}
+.prose pre {
+  background: var(--color-paper-100);
+  border: 1px solid var(--ui-rule-soft);
   border-radius: 6px;
-  border: 1px solid var(--ui-color-neutral-200, #e9e6df);
+  padding: 12px 14px;
+  overflow-x: auto;
+  margin: 16px 0;
+  font-size: 0.85em;
+}
+.prose pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: inherit;
+}
+.dark .prose code,
+.dark .prose pre {
+  background: var(--color-paper-800);
+}
+
+.prose blockquote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  border-left: 3px solid var(--color-fp-purple-500);
+  background: var(--color-fp-purple-50);
+  padding: 6px 16px;
+  margin: 16px 0;
+  border-radius: 0 4px 4px 0;
+}
+.dark .prose blockquote {
+  background: color-mix(in oklab, var(--color-fp-purple-500) 18%, transparent);
+}
+
+.prose .lede {
+  font-family: var(--font-serif);
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--ui-text-toned);
+  margin: 0 0 20px;
+}
+
+.prose .callout {
+  background: var(--color-fp-purple-50);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 14px;
+  margin: 16px 0;
+}
+.dark .prose .callout {
+  background: color-mix(in oklab, var(--color-fp-purple-500) 18%, transparent);
+}
+
+.prose mark,
+.prose .highlight {
+  background: var(--color-highlight-light);
+  padding: 0 2px;
+  border-radius: 2px;
+}
+.dark .prose mark,
+.dark .prose .highlight {
+  background: var(--color-highlight-dark);
+  color: var(--ui-text-highlighted);
+}
+
+.prose a {
+  color: var(--ui-link);
+}
+.prose a.wikilink {
+  color: var(--ui-link);
+}
+/* @nuxt/content auto-wraps headings in self-link anchors; keep them inheriting
+   the heading color so the purple link color doesn't bleed into headings. */
+.prose :is(h1, h2, h3, h4, h5, h6) a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.prose table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 16px 0;
+  font-size: 0.95em;
+}
+.prose th,
+.prose td {
+  border: 1px solid var(--ui-border);
+  padding: 6px 10px;
+  text-align: left;
+}
+.prose th {
+  background: var(--color-paper-100);
+  font-weight: 600;
+}
+.dark .prose th {
+  background: var(--color-paper-800);
+}
+
+/* Image embeds rendered as <img>; layout-only tweaks. */
+.prose img {
+  border-radius: 6px;
+  border: 1px solid var(--ui-border);
+  margin: 16px 0;
+  max-width: 100%;
+  height: auto;
 }

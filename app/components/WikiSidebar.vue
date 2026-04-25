@@ -11,9 +11,7 @@
     </section>
 
     <section>
-      <h2 class="mb-2 text-xs font-semibold tracking-wider text-(--ui-text-muted) uppercase">
-        Předměty
-      </h2>
+      <h2 class="section-label mb-2">Předměty</h2>
       <ul class="space-y-1">
         <li v-for="c in courseOptions" :key="c.slug">
           <NuxtLink

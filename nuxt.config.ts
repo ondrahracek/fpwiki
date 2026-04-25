@@ -35,6 +35,29 @@ export default defineNuxtConfig({
     classSuffix: '',
   },
 
+  // Pin font weights/styles. @nuxt/fonts auto-detection only requests styles
+  // it sees in CSS, so the italic Source Serif 4 used by blockquotes won't be
+  // emitted unless we force it with `global: true`.
+  fonts: {
+    families: [
+      { name: 'Inter', provider: 'google', weights: [400, 500, 600, 700], styles: ['normal'] },
+      {
+        name: 'Source Serif 4',
+        provider: 'google',
+        weights: [400, 500, 600],
+        styles: ['normal'],
+      },
+      {
+        name: 'Source Serif 4',
+        provider: 'google',
+        weights: [400],
+        styles: ['italic'],
+        global: true,
+      },
+      { name: 'JetBrains Mono', provider: 'google', weights: [400, 500], styles: ['normal'] },
+    ],
+  },
+
   content: {
     build: {
       markdown: {
@@ -71,7 +94,19 @@ export default defineNuxtConfig({
     prerender: {
       crawlLinks: true,
       failOnError: false,
-      routes: ['/', '/courses'],
+      // /sitemap.xml is a server route; explicit listing forces prerender
+      // even though crawlLinks won't reach it from any <NuxtLink>.
+      routes: ['/', '/courses', '/sitemap.xml'],
+    },
+  },
+
+  runtimeConfig: {
+    public: {
+      // Absolute origin of the deployed site (no trailing slash). Used to
+      // absolutize og:image, og:url, canonical, and sitemap entries. Set via
+      // NUXT_PUBLIC_SITE_URL in apphosting.yaml. Empty string = relative URLs
+      // (acceptable for local dev; production must set this).
+      siteUrl: '',
     },
   },
 
