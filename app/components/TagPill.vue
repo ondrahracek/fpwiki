@@ -10,36 +10,25 @@
 </template>
 
 <script setup lang="ts">
-import type { TagColor } from '~/plugins/tag-colors'
 import { wikiUrl } from '#shared/wiki-routes'
+import { identityVars } from '~/plugins/tag-colors'
 
 const props = defineProps<{
   tag: string
   count?: number
 }>()
 
-const { $tagColor } = useNuxtApp()
-
-// Expose both the light-mode (bg) and dark-mode (fg-derived) tints as CSS
-// custom properties; the .tag-pill stylesheet picks the right one per theme.
-const cssVars = computed(() => {
-  const c = $tagColor(props.tag) as TagColor
-  return {
-    '--tag-bg': c.bg,
-    '--tag-fg': c.fg,
-    '--tag-dot': c.dot,
-  } as Record<string, string>
-})
+const cssVars = computed(() => identityVars(props.tag))
 </script>
 
 <style>
 .tag-pill {
-  background: var(--tag-bg);
-  color: var(--tag-fg);
+  background: var(--id-bg);
+  color: var(--id-fg);
 }
 .dark .tag-pill {
-  /* Keep the same hue but invert lightness — dim background, bright text. */
-  background: color-mix(in oklab, var(--tag-fg) 22%, transparent);
-  color: var(--tag-dot);
+  /* Same hue, inverted lightness — dim background, bright text. */
+  background: color-mix(in oklab, var(--id-fg) 22%, transparent);
+  color: var(--id-dot);
 }
 </style>

@@ -15,13 +15,6 @@
         <span v-if="updatedDisplay">Aktualizováno {{ updatedDisplay }} · </span>
         AI-generováno z přednášek a literatury · ručně ověřeno
       </p>
-      <div class="mt-5">
-        <WikiActionBar
-          :slug="primaryCourse ?? ''"
-          is-course
-          :has-detail-predmetu="stats.hasDetailPredmetu"
-        />
-      </div>
     </header>
 
     <header v-else class="mb-6 border-b border-(--ui-border) pb-5">
@@ -73,7 +66,7 @@ import type { WikiPageType } from '#shared/types/wiki'
 import { pathFor } from '#shared/wiki-routes'
 import { resolveCourses, toISODate } from '~/utils/frontmatter'
 import { typeLabel } from '~/utils/labels'
-import { courseHueVars } from '~/utils/course-hue'
+import { identityVars } from '~/plugins/tag-colors'
 
 const props = defineProps<{
   page: {
@@ -108,7 +101,9 @@ function pluralize(n: number): string {
 
 const zapiskuLabel = computed(() => pluralize(stats.value.zapisku))
 
-const hueVars = computed(() => courseHueVars(firstTag.value))
+// Hero tint follows the course slug, so it matches the <CoursePill> on top
+// of it. Independent of `tags[0]`, which can drift if content is re-ordered.
+const hueVars = computed(() => identityVars(primaryCourse.value ?? ''))
 
 // Topics for this course — curated list shown above the prose body. Sourced
 // from the topics collection where (course || courses) includes the current
@@ -116,6 +111,7 @@ const hueVars = computed(() => courseHueVars(firstTag.value))
 // _index.md upstream).
 const { descriptionFor } = useWikiSlugIndex()
 
+// Dev-only cache opt-out — see app/pages/wiki/[slug].vue for rationale.
 const { data: courseTopicsData } = useAsyncData(
   () => `course-topics-${primaryCourse.value ?? ''}`,
   async () => {
@@ -127,6 +123,7 @@ const { data: courseTopicsData } = useAsyncData(
   {
     default: () => [],
     watch: [() => primaryCourse.value, () => isCourse.value],
+    ...(import.meta.dev ? { getCachedData: () => undefined } : {}),
   },
 )
 
@@ -146,13 +143,13 @@ const courseTopics = computed(() => {
 
 <style>
 .course-hero {
-  background: var(--course-hue-bg);
-  border-color: color-mix(in oklab, var(--course-hue-dot) 30%, transparent);
+  background: var(--id-bg);
+  border-color: color-mix(in oklab, var(--id-dot) 30%, transparent);
 }
 .dark .course-hero {
   /* Same hue but flipped for dark theme — translucent tint over base bg
      instead of the light pastel, keeping the title legible. */
-  background: color-mix(in oklab, var(--course-hue-dot) 18%, transparent);
-  border-color: color-mix(in oklab, var(--course-hue-dot) 50%, transparent);
+  background: color-mix(in oklab, var(--id-dot) 18%, transparent);
+  border-color: color-mix(in oklab, var(--id-dot) 50%, transparent);
 }
 </style>

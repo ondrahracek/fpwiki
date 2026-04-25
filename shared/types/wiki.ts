@@ -37,6 +37,29 @@ export interface WikiSlugIndex {
   totalLinkCount: number
 }
 
+export interface WikiBacklinkRef {
+  /** Slug of the page that links to the target. */
+  slug: string
+  /** Pre-computed wiki URL of the source page (built via wikiUrl.page). */
+  path: string
+  /** Source page title (frontmatter `title`, falls back to slug). */
+  title: string
+  /**
+   * NFC-normalized plaintext snippet (~120 chars) around the matched wikilink,
+   * with the matched term wrapped in `<<…>>` markers. Renderer turns the
+   * markers into <mark>; never inject as HTML.
+   */
+  snippet: string
+}
+
+export interface WikiBacklinksMap {
+  /**
+   * Target slug → backlinks. Capped per target and ordered deterministically
+   * (by source slug) so prerendered output is stable across builds.
+   */
+  byTarget: Record<string, WikiBacklinkRef[]>
+}
+
 export interface WikiSearchSection {
   id: string
   title: string

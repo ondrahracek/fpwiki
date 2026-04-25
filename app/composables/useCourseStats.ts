@@ -4,8 +4,6 @@ import { resolveCourses } from '~/utils/frontmatter'
 interface CourseStats {
   /** Total non-overview pages associated with this course (topics + summaries + outputs). */
   zapisku: number
-  /** Whether `<slug>-detail-predmetu` exists in the summaries collection. */
-  hasDetailPredmetu: boolean
   /** Per-collection breakdown for finer surfaces. */
   topics: number
   summaries: number
@@ -31,7 +29,7 @@ export function useCourseStats(courseSlug: MaybeRefOrGetter<string>) {
     async () => {
       const slug = slugRef.value
       if (!slug) {
-        return { zapisku: 0, hasDetailPredmetu: false, topics: 0, summaries: 0, outputs: 0 }
+        return { zapisku: 0, topics: 0, summaries: 0, outputs: 0 }
       }
 
       const collections: WikiCollectionName[] = ['topics', 'summaries', 'outputs']
@@ -43,8 +41,6 @@ export function useCourseStats(courseSlug: MaybeRefOrGetter<string>) {
         outputs: 0,
       }
 
-      let hasDetailPredmetu = false
-
       await Promise.all(
         collections.map(async (name) => {
           const all = await queryCollection(name).all()
@@ -52,9 +48,6 @@ export function useCourseStats(courseSlug: MaybeRefOrGetter<string>) {
             const courses = resolveCourses(p)
             if (courses.includes(slug)) {
               counts[name]++
-              if (name === 'summaries' && p.stem?.endsWith(`${slug}-detail-predmetu`)) {
-                hasDetailPredmetu = true
-              }
             }
           }
         }),
@@ -62,7 +55,6 @@ export function useCourseStats(courseSlug: MaybeRefOrGetter<string>) {
 
       return {
         zapisku: counts.topics + counts.summaries + counts.outputs,
-        hasDetailPredmetu,
         topics: counts.topics,
         summaries: counts.summaries,
         outputs: counts.outputs,
@@ -71,12 +63,13 @@ export function useCourseStats(courseSlug: MaybeRefOrGetter<string>) {
     {
       default: () => ({
         zapisku: 0,
-        hasDetailPredmetu: false,
         topics: 0,
         summaries: 0,
         outputs: 0,
       }),
       watch: [slugRef],
+      // Dev-only cache opt-out — see app/pages/wiki/[slug].vue for rationale.
+      ...(import.meta.dev ? { getCachedData: () => undefined } : {}),
     },
   )
 

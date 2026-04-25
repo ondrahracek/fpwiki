@@ -1,6 +1,7 @@
 <template>
   <ClientOnly>
-    <div class="pointer-events-none fixed inset-x-0 top-0 z-30 h-1 bg-(--ui-border)">
+    <!-- z-50 so it sits above AppHeader (z-20 sticky + backdrop-blur stacking context). -->
+    <div class="pointer-events-none fixed inset-x-0 top-0 z-50 h-1 bg-(--ui-border)">
       <div
         class="h-full transition-[width] duration-150 ease-out"
         :style="{ width: progress + '%', backgroundImage: 'var(--gradient-fp)' }"
@@ -13,21 +14,8 @@
 </template>
 
 <script setup lang="ts">
-const progress = ref(0)
-
-const onScroll = () => {
-  const max = document.documentElement.scrollHeight - window.innerHeight
-  progress.value = max > 0 ? Math.min(100, Math.max(0, (window.scrollY / max) * 100)) : 0
-}
-
-onMounted(() => {
-  onScroll()
-  window.addEventListener('scroll', onScroll, { passive: true })
-  window.addEventListener('resize', onScroll, { passive: true })
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', onScroll)
-  window.removeEventListener('resize', onScroll)
-})
+// Listener lifecycle and state live in useReadingProgress; this component is
+// only the top-of-page presentation. The rail chip subscribes to the same
+// composable.
+const { progress } = useReadingProgress()
 </script>

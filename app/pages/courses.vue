@@ -38,7 +38,6 @@
         <CourseCard
           :slug="c.slug"
           :title="c.title"
-          :first-tag="c.firstTag"
           :tags="c.tags"
           :updated-short="c.updatedShort"
           :featured="c.featured"
@@ -59,7 +58,7 @@
             class="absolute inset-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-(--ui-color-primary-500)"
           />
           <div class="flex min-w-0 items-center gap-3">
-            <CoursePill class="relative" :slug="c.slug" :accent="c.firstTag" />
+            <CoursePill class="relative" :slug="c.slug" />
             <span class="truncate font-medium">{{ c.title }}</span>
           </div>
           <div class="flex items-center gap-3 text-xs text-(--ui-text-muted)">
@@ -76,7 +75,7 @@
 import { resolveCourses } from '~/utils/frontmatter'
 import { slugFromPath, wikiUrl } from '#shared/wiki-routes'
 import { shortDate } from '~/utils/format-date'
-import { courseHueVars } from '~/utils/course-hue'
+import { identityColor } from '~/plugins/tag-colors'
 
 definePageMeta({ layout: 'sidebar' })
 
@@ -92,23 +91,28 @@ const view = useCookie<'grid' | 'list'>('fp-courses-view', {
   sameSite: 'lax',
 })
 
-const { data: bundle } = await useAsyncData('courses-list', async () => {
-  const [coursesList, topics, summaries, outputs] = await Promise.all([
-    queryCollection('courses').order('title', 'ASC').all(),
-    queryCollection('topics').all(),
-    queryCollection('summaries').all(),
-    queryCollection('outputs').all(),
-  ])
-  const counts = new Map<string, number>()
-  for (const list of [topics, summaries, outputs]) {
-    for (const p of list) {
-      for (const slug of resolveCourses(p)) {
-        counts.set(slug, (counts.get(slug) ?? 0) + 1)
+// Dev-only cache opt-out — see app/pages/wiki/[slug].vue for rationale.
+const { data: bundle } = await useAsyncData(
+  'courses-list',
+  async () => {
+    const [coursesList, topics, summaries, outputs] = await Promise.all([
+      queryCollection('courses').order('title', 'ASC').all(),
+      queryCollection('topics').all(),
+      queryCollection('summaries').all(),
+      queryCollection('outputs').all(),
+    ])
+    const counts = new Map<string, number>()
+    for (const list of [topics, summaries, outputs]) {
+      for (const p of list) {
+        for (const slug of resolveCourses(p)) {
+          counts.set(slug, (counts.get(slug) ?? 0) + 1)
+        }
       }
     }
-  }
-  return { courses: coursesList, counts: Object.fromEntries(counts) }
-})
+    return { courses: coursesList, counts: Object.fromEntries(counts) }
+  },
+  import.meta.dev ? { getCachedData: () => undefined } : undefined,
+)
 
 const stats = useTotalStats()
 
@@ -129,17 +133,16 @@ const items = computed(() => {
   const list = bundle.value?.courses ?? []
   const counts = bundle.value?.counts ?? {}
   return list.map((c) => {
-    const firstTag = c.tags?.[0] ?? 'ekonomie'
     const slug = resolveCourses(c)[0] ?? slugFromPath(c.path)
     const count = counts[slug] ?? 0
     return {
       slug,
       title: c.title,
-      firstTag,
       tags: c.tags ?? [],
       updatedShort: shortDate(c.updated),
       zapiskuLabel: pluralize(count, 'zápisek', 'zápisky', 'zápisků'),
-      dotColor: courseHueVars(firstTag)['--course-hue-dot'],
+      // Left border matches the pill on the row — both derived from the slug.
+      dotColor: identityColor(slug).dot,
       featured: c.featured ?? false,
     }
   })

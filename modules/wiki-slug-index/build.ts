@@ -14,12 +14,17 @@ import { existsSync } from 'node:fs'
 import { join, relative } from 'node:path'
 
 import type {
+  WikiBacklinkRef,
+  WikiBacklinksMap,
   WikiCollectionName,
   WikiPageType,
   WikiSlugIndex,
   WikiSlugIndexEntry,
 } from '../../shared/types/wiki'
 import { wikiUrl } from '../../shared/wiki-routes'
+
+const BACKLINKS_PER_TARGET_CAP = 8
+const SNIPPET_RADIUS = 90
 
 const COLLECTION_TO_TYPE: Record<WikiCollectionName, WikiPageType> = {
   overview: 'overview',
@@ -105,8 +110,78 @@ export function parseIndexDescriptions(rawIndexMd: string): Record<string, strin
 }
 
 /**
+ * Single regex for non-embed wikilinks. Reused by both inbound-link counting
+ * and rich backlink extraction so the two cannot drift. The validator script
+ * keeps its own copy because it operates on a different surface (raw fs walk,
+ * error reporting).
+ */
+const WIKILINK_RE = /(?<!!)\[\[([^\]|#]+)(?:[#|][^\]]*)?\]\]/g
+
+interface WikilinkHit {
+  source: string
+  target: string
+  body: string
+  matchStart: number
+  matchEnd: number
+}
+
+function* iterWikilinks(
+  bodies: { slug: string; body: string }[],
+  knownSlugs: Set<string>,
+): Generator<WikilinkHit> {
+  for (const { slug: source, body } of bodies) {
+    const re = new RegExp(WIKILINK_RE.source, 'g')
+    let m: RegExpExecArray | null
+    while ((m = re.exec(body)) !== null) {
+      const target = m[1]!.trim()
+      if (target === source) continue
+      if (!knownSlugs.has(target)) continue
+      yield { source, target, body, matchStart: m.index, matchEnd: m.index + m[0].length }
+    }
+  }
+}
+
+/**
+ * Build a snippet around a wikilink match: ±SNIPPET_RADIUS chars, with the
+ * matched [[…]] wrapped in `<<…>>` markers and any other [[…]] syntax in the
+ * window stripped (alias text kept). NFC-normalized so a Czech grapheme is
+ * never split mid-character. The renderer turns `<<…>>` into <mark> via plain
+ * text interpolation — never v-html.
+ */
+function buildSnippet(
+  body: string,
+  matchStart: number,
+  matchEnd: number,
+  displayed: string,
+): string {
+  const sliceStart = Math.max(0, matchStart - SNIPPET_RADIUS)
+  const sliceEnd = Math.min(body.length, matchEnd + SNIPPET_RADIUS)
+  const before = body.slice(sliceStart, matchStart)
+  const after = body.slice(matchEnd, sliceEnd)
+
+  // Strip remaining [[…]] / ![[…]] in the surrounding window, keeping alias
+  // text where present (`[[slug|alias]]` → `alias`, `[[slug]]` → `slug`).
+  const stripWikilinks = (s: string): string =>
+    s.replace(
+      /!?\[\[([^\]|#]+)(?:#[^\]|]+)?(?:\|([^\]]+))?\]\]/g,
+      (_, slug: string, alias?: string) => (alias ?? slug).trim(),
+    )
+
+  const left = stripWikilinks(before)
+  const right = stripWikilinks(after)
+  const middle = `<<${displayed}>>`
+  const ellipsisLeft = sliceStart > 0 ? '… ' : ''
+  const ellipsisRight = sliceEnd < body.length ? ' …' : ''
+
+  const raw = `${ellipsisLeft}${left}${middle}${right}${ellipsisRight}`
+  return raw.replace(/\s+/g, ' ').trim().normalize('NFC')
+}
+
+/**
  * Count inbound [[wikilinks]] per slug across all body texts. `![[…]]` image
- * embeds and self-edges are excluded.
+ * embeds and self-edges are excluded. Counts EVERY occurrence (a single source
+ * page that links to the same target three times contributes 3) so totals
+ * stay comparable across reindexes.
  */
 export function countInboundLinks(
   bodies: { slug: string; body: string }[],
@@ -114,22 +189,69 @@ export function countInboundLinks(
 ): { inboundLinks: Record<string, number>; totalLinkCount: number } {
   const inboundLinks: Record<string, number> = {}
   let totalLinkCount = 0
-  // Match [[…]] but not ![[…]]. Lookbehind keeps it tight.
-  const linkRe = /(?<!!)\[\[([^\]|#]+)(?:[#|][^\]]*)?\]\]/g
-  for (const { slug: source, body } of bodies) {
-    let m: RegExpExecArray | null
-    while ((m = linkRe.exec(body)) !== null) {
-      const target = m[1]!.trim()
-      if (target === source) continue
-      if (!knownSlugs.has(target)) continue
-      inboundLinks[target] = (inboundLinks[target] ?? 0) + 1
-      totalLinkCount++
-    }
+  for (const hit of iterWikilinks(bodies, knownSlugs)) {
+    inboundLinks[hit.target] = (inboundLinks[hit.target] ?? 0) + 1
+    totalLinkCount++
   }
   return { inboundLinks, totalLinkCount }
 }
 
-export async function buildWikiSlugIndex(rootDir: string): Promise<WikiSlugIndex> {
+/**
+ * Extract per-target backlinks for the right-rail UI. Multiple links from
+ * the same source are deduped (first match wins for the snippet); results are
+ * sorted by source slug ascending so prerendered output is deterministic;
+ * capped at BACKLINKS_PER_TARGET_CAP per target.
+ */
+export function extractBacklinks(
+  bodies: { slug: string; body: string }[],
+  entries: WikiSlugIndexEntry[],
+): WikiBacklinksMap {
+  const titleBySlug = new Map<string, string>()
+  const knownSlugs = new Set<string>()
+  for (const e of entries) {
+    knownSlugs.add(e.slug)
+    titleBySlug.set(e.slug, e.title)
+  }
+
+  const acc = new Map<string, Map<string, WikiBacklinkRef>>()
+
+  for (const hit of iterWikilinks(bodies, knownSlugs)) {
+    let bucket = acc.get(hit.target)
+    if (!bucket) {
+      bucket = new Map<string, WikiBacklinkRef>()
+      acc.set(hit.target, bucket)
+    }
+    if (bucket.has(hit.source)) continue
+    bucket.set(hit.source, {
+      slug: hit.source,
+      path: wikiUrl.page(hit.source),
+      title: titleBySlug.get(hit.source) ?? hit.source,
+      snippet: buildSnippet(hit.body, hit.matchStart, hit.matchEnd, hit.target),
+    })
+  }
+
+  const byTarget: Record<string, WikiBacklinkRef[]> = {}
+  for (const [target, bucket] of acc) {
+    byTarget[target] = [...bucket.values()]
+      .sort((a, b) => (a.slug < b.slug ? -1 : a.slug > b.slug ? 1 : 0))
+      .slice(0, BACKLINKS_PER_TARGET_CAP)
+  }
+  return { byTarget }
+}
+
+interface WalkedCorpus {
+  entries: WikiSlugIndexEntry[]
+  files: string[]
+  bodies: { slug: string; body: string }[]
+  descriptions: Record<string, string>
+}
+
+/**
+ * Walk content/ once and collect everything downstream consumers need.
+ * Private — the public `buildWikiSlugIndex` and `buildWikiBacklinks` derive
+ * their results from this so we never double-walk during a single regenerate.
+ */
+async function walkCorpus(rootDir: string): Promise<WalkedCorpus> {
   const contentDir = join(rootDir, 'content')
   const entries: WikiSlugIndexEntry[] = []
   const files: string[] = []
@@ -166,10 +288,6 @@ export async function buildWikiSlugIndex(rootDir: string): Promise<WikiSlugIndex
     }
   }
 
-  const slugs: Record<string, string> = {}
-  for (const e of entries) slugs[e.slug] = e.path
-
-  // Descriptions: parse _index.md if present at content root.
   const indexPath = join(contentDir, '_index.md')
   let descriptions: Record<string, string> = {}
   if (existsSync(indexPath)) {
@@ -177,11 +295,39 @@ export async function buildWikiSlugIndex(rootDir: string): Promise<WikiSlugIndex
     descriptions = parseIndexDescriptions(rawIndex)
   }
 
-  // Inbound link counts: walk body texts.
+  return { entries, files, bodies, descriptions }
+}
+
+function assembleSlugIndex(corpus: WalkedCorpus): WikiSlugIndex {
+  const { entries, files, bodies, descriptions } = corpus
+  const slugs: Record<string, string> = {}
+  for (const e of entries) slugs[e.slug] = e.path
   const knownSlugs = new Set(entries.map((e) => e.slug))
   const { inboundLinks, totalLinkCount } = countInboundLinks(bodies, knownSlugs)
-
   return { files, slugs, entries, descriptions, inboundLinks, totalLinkCount }
+}
+
+export async function buildWikiSlugIndex(rootDir: string): Promise<WikiSlugIndex> {
+  return assembleSlugIndex(await walkCorpus(rootDir))
+}
+
+export async function buildWikiBacklinks(rootDir: string): Promise<WikiBacklinksMap> {
+  const corpus = await walkCorpus(rootDir)
+  return extractBacklinks(corpus.bodies, corpus.entries)
+}
+
+/**
+ * Build both artefacts from a single corpus walk. Used by the Nuxt module's
+ * regenerate() so the slug index and the backlinks map come from one disk read.
+ */
+export async function buildWikiArtifacts(
+  rootDir: string,
+): Promise<{ index: WikiSlugIndex; backlinks: WikiBacklinksMap }> {
+  const corpus = await walkCorpus(rootDir)
+  return {
+    index: assembleSlugIndex(corpus),
+    backlinks: extractBacklinks(corpus.bodies, corpus.entries),
+  }
 }
 
 export { COLLECTIONS, COLLECTION_TO_TYPE }

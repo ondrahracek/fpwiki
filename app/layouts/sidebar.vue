@@ -52,8 +52,13 @@ const sidebarComponent = computed(() => {
 })
 
 // Per-page wrap width via the --ui-container CSS variable that UContainer reads.
-// `/courses` → 1100px, others on this layout → default 80rem.
-const containerWidthClass = computed(() =>
-  route.path === '/courses' ? '[--ui-container:1100px]' : '',
-)
+//   `/courses`    → 1100px (already tighter for the index)
+//   `/wiki/<slug>`→ 90rem (≈1440px) so the right rail can land at xl: while
+//                   keeping the article column at a comfortable ~820px
+//   others        → default 80rem
+const containerWidthClass = computed(() => {
+  if (route.path === '/courses') return '[--ui-container:1100px]'
+  if (route.path.startsWith('/wiki/')) return '[--ui-container:90rem]'
+  return ''
+})
 </script>

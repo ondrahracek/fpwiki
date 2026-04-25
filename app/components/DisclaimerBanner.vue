@@ -9,7 +9,11 @@
       color: 'neutral',
       variant: 'link',
     }"
-    @close="dismiss"
+    @update:open="
+      (open: boolean) => {
+        if (!open) dismiss()
+      }
+    "
   />
 </template>
 

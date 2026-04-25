@@ -9,7 +9,7 @@
       class="absolute inset-0 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-(--ui-color-primary-500)"
     />
     <div class="mb-2 flex items-start justify-between gap-2">
-      <CoursePill class="relative" :slug="slug" :accent="firstTag" big />
+      <CoursePill class="relative" :slug="slug" big />
       <span v-if="zapiskuLabel" class="shrink-0 font-mono text-[10.5px] text-(--ui-text-muted)">
         {{ zapiskuLabel }}
       </span>
@@ -34,7 +34,6 @@ import { wikiUrl } from '#shared/wiki-routes'
 const props = defineProps<{
   slug: string
   title: string
-  firstTag: string
   tags: string[]
   updatedShort?: string
   featured?: boolean

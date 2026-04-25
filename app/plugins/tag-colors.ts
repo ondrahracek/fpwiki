@@ -1,50 +1,40 @@
 /**
- * Deterministic oklch color map for tag pills. SINGLE SOURCE OF TRUTH for tag
- * presentation — components import via $tagColor (provided by this plugin).
+ * SINGLE SOURCE OF TRUTH for identifier-derived colors. One pure deterministic
+ * function maps any string identifier (course slug, tag, topic slug) to an
+ * oklch hue, normalized for case and Czech diacritics:
  *
- * Hue map mirrors the prototype's TAG_HUE table; unknown tags fall back to a
- * stable hash-derived hue so new tags get a consistent color without code edits.
+ *   identityColor('IMEK') === identityColor('imek') === identityColor('Ímek')
+ *
+ * Hue is FNV-1a over the normalized key, modulo 360. There is no curated
+ * lookup table — the resolver is content-pipeline-agnostic by design (new
+ * courses/tags/topics arrive via git push and must Just Work without code
+ * edits). Hue collisions across unrelated keys are expected and acceptable;
+ * color is decoration, the chip's text is the identifier.
+ *
+ * Components consume this via the `$identityColor` Nuxt plugin provide, or
+ * import `identityVars` to get the three CSS custom properties as a style
+ * object. Do not reimplement.
  */
 import { stripDiacritics } from '~/utils/slug'
 
-export interface TagColor {
+export interface IdentityColor {
   bg: string
   fg: string
   dot: string
 }
 
-const HUES: Record<string, number> = {
-  finance: 220,
-  management: 280,
-  marketing: 350,
-  ekonomie: 170,
-  kvantitativni: 240,
-  it: 130,
-  pravo: 40,
-  strategie: 305,
-  matematika: 200,
-  bezpecnost: 0,
-  optimalizace: 50,
-  predikce: 100,
-  fuzzy: 295,
-  'neuronove-site': 260,
-  chaos: 25,
-}
-
-function hueFor(tag: string): number {
-  const key = stripDiacritics(tag).toLowerCase()
-  if (key in HUES) return HUES[key]!
-  // FNV-1a-ish hash → hue 0..359
+function hueFor(key: string): number {
+  const k = stripDiacritics(key).toLowerCase()
   let h = 2166136261
-  for (let i = 0; i < key.length; i++) {
-    h ^= key.charCodeAt(i)
+  for (let i = 0; i < k.length; i++) {
+    h ^= k.charCodeAt(i)
     h = Math.imul(h, 16777619)
   }
   return Math.abs(h) % 360
 }
 
-export function tagColor(tag: string): TagColor {
-  const h = hueFor(tag)
+export function identityColor(key: string): IdentityColor {
+  const h = hueFor(key)
   return {
     bg: `oklch(0.94 0.04 ${h})`,
     fg: `oklch(0.40 0.13 ${h})`,
@@ -52,8 +42,17 @@ export function tagColor(tag: string): TagColor {
   }
 }
 
+export function identityVars(key: string): Record<string, string> {
+  const c = identityColor(key)
+  return {
+    '--id-bg': c.bg,
+    '--id-fg': c.fg,
+    '--id-dot': c.dot,
+  }
+}
+
 export default defineNuxtPlugin(() => {
   return {
-    provide: { tagColor },
+    provide: { identityColor },
   }
 })

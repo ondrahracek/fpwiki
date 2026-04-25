@@ -28,18 +28,23 @@ usePageSeo({
   path: '/recent',
 })
 
-const { data: pages } = await useAsyncData('recent-list', async () => {
-  const all = await Promise.all([
-    queryCollection('topics').order('updated', 'DESC').all(),
-    queryCollection('summaries').order('updated', 'DESC').all(),
-    queryCollection('outputs').order('updated', 'DESC').all(),
-    queryCollection('courses').order('updated', 'DESC').all(),
-  ])
-  return all
-    .flat()
-    .sort((a, b) => String(b.updated ?? '').localeCompare(String(a.updated ?? '')))
-    .slice(0, 50)
-})
+// Dev-only cache opt-out — see app/pages/wiki/[slug].vue for rationale.
+const { data: pages } = await useAsyncData(
+  'recent-list',
+  async () => {
+    const all = await Promise.all([
+      queryCollection('topics').order('updated', 'DESC').all(),
+      queryCollection('summaries').order('updated', 'DESC').all(),
+      queryCollection('outputs').order('updated', 'DESC').all(),
+      queryCollection('courses').order('updated', 'DESC').all(),
+    ])
+    return all
+      .flat()
+      .sort((a, b) => String(b.updated ?? '').localeCompare(String(a.updated ?? '')))
+      .slice(0, 50)
+  },
+  import.meta.dev ? { getCachedData: () => undefined } : undefined,
+)
 
 const items = computed(
   () =>

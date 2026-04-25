@@ -6,8 +6,8 @@ import {
   useLogger,
   createResolver,
 } from '@nuxt/kit'
-import { buildWikiSlugIndex, COLLECTIONS } from './build'
-import type { WikiSlugIndex } from '../../shared/types/wiki'
+import { buildWikiArtifacts, COLLECTIONS } from './build'
+import type { WikiBacklinksMap, WikiSlugIndex } from '../../shared/types/wiki'
 import { pathFor, wikiUrl, slugFromPath } from '../../shared/wiki-routes'
 
 /**
@@ -39,7 +39,7 @@ export default defineNuxtModule({
 
     // Cached so addTemplate's getContents (called multiple times during build)
     // doesn't re-walk the filesystem.
-    let cached: WikiSlugIndex = {
+    let cachedIndex: WikiSlugIndex = {
       files: [],
       slugs: {},
       entries: [],
@@ -47,13 +47,16 @@ export default defineNuxtModule({
       inboundLinks: {},
       totalLinkCount: 0,
     }
+    let cachedBacklinks: WikiBacklinksMap = { byTarget: {} }
 
     const regenerate = async () => {
-      cached = await buildWikiSlugIndex(nuxt.options.rootDir)
+      const built = await buildWikiArtifacts(nuxt.options.rootDir)
+      cachedIndex = built.index
+      cachedBacklinks = built.backlinks
 
       // Detect duplicate slugs early. Hard error in build, warning in dev.
       const seen = new Map<string, string>()
-      for (const e of cached.entries) {
+      for (const e of cachedIndex.entries) {
         const prev = seen.get(e.slug)
         if (prev && prev !== e.path) {
           const msg = `Duplicate slug "${e.slug}" in collections (${prev} vs ${e.path}). All wiki slugs must be globally unique.`
@@ -64,18 +67,26 @@ export default defineNuxtModule({
       }
 
       logger.info(
-        `wiki slug index: ${cached.entries.length} pages across ${COLLECTIONS.length} collections`,
+        `wiki slug index: ${cachedIndex.entries.length} pages across ${COLLECTIONS.length} collections`,
       )
     }
 
     await regenerate()
 
-    // Emit the build-time artifact. addTemplate handles buildDir resolution
-    // across `prepare`, `build`, and `dev` phases.
+    // Emit the build-time artifacts. addTemplate handles buildDir resolution
+    // across `prepare`, `build`, and `dev` phases. Backlinks live in a SEPARATE
+    // template so they don't inflate the per-page payload that hydrates the
+    // slug index — see app/composables/useBacklinks-friendly comment in
+    // app/components/WikiBacklinksCard.vue for the per-page slice loader.
     addTemplate({
       filename: 'wiki-slug-index.json',
       write: true,
-      getContents: () => JSON.stringify(cached, null, 2),
+      getContents: () => JSON.stringify(cachedIndex, null, 2),
+    })
+    addTemplate({
+      filename: 'wiki-backlinks.json',
+      write: true,
+      getContents: () => JSON.stringify(cachedBacklinks),
     })
 
     // Inject into the remark-wiki-link plugin options. This must run at module
@@ -99,7 +110,7 @@ export default defineNuxtModule({
         ...(typeof entry === 'object' ? entry : {}),
         options: {
           ...existingOptions,
-          files: cached.files,
+          files: cachedIndex.files,
           // v3 API: the plugin calls urlResolver({ filePath, isEmbed, heading }).
           // Route ALL URL construction through shared/wiki-routes for a single
           // contract; never reinvent the path format here.
@@ -117,7 +128,7 @@ export default defineNuxtModule({
             // Prefer the resolved entry (has the correct overview-vs-page flag)
             // and fall back to wikiUrl.page for brand-new files added in dev
             // before the next regenerate() pass.
-            const base = cached.slugs[slug] ?? pathFor({ filePath })
+            const base = cachedIndex.slugs[slug] ?? pathFor({ filePath })
             return heading ? `${base}#${heading}` : base
           },
         },
@@ -130,7 +141,10 @@ export default defineNuxtModule({
     nuxt.hook('builder:watch', async (_event, path) => {
       if (path.includes('content') && path.endsWith('.md')) {
         await regenerate()
-        await updateTemplates({ filter: (t) => t.filename === 'wiki-slug-index.json' })
+        await updateTemplates({
+          filter: (t) =>
+            t.filename === 'wiki-slug-index.json' || t.filename === 'wiki-backlinks.json',
+        })
       }
     })
 

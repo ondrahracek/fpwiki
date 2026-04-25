@@ -23,23 +23,28 @@ usePageSeo({
   path: '/tags',
 })
 
-const { data: tagCounts } = await useAsyncData('tags-page', async () => {
-  const all = await Promise.all([
-    queryCollection('courses').all(),
-    queryCollection('topics').all(),
-    queryCollection('summaries').all(),
-    queryCollection('outputs').all(),
-  ])
-  const counts = new Map<string, number>()
-  for (const list of all) {
-    for (const p of list) {
-      for (const t of p.tags ?? []) counts.set(t, (counts.get(t) ?? 0) + 1)
+// Dev-only cache opt-out — see app/pages/wiki/[slug].vue for rationale.
+const { data: tagCounts } = await useAsyncData(
+  'tags-page',
+  async () => {
+    const all = await Promise.all([
+      queryCollection('courses').all(),
+      queryCollection('topics').all(),
+      queryCollection('summaries').all(),
+      queryCollection('outputs').all(),
+    ])
+    const counts = new Map<string, number>()
+    for (const list of all) {
+      for (const p of list) {
+        for (const t of p.tags ?? []) counts.set(t, (counts.get(t) ?? 0) + 1)
+      }
     }
-  }
-  return Array.from(counts.entries())
-    .map(([tag, count]) => ({ tag, count }))
-    .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag))
-})
+    return Array.from(counts.entries())
+      .map(([tag, count]) => ({ tag, count }))
+      .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag))
+  },
+  import.meta.dev ? { getCachedData: () => undefined } : undefined,
+)
 
 const tagOptions = computed(() => tagCounts.value ?? [])
 </script>

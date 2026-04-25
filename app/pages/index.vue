@@ -59,7 +59,7 @@
                 :aria-label="c.title"
                 class="absolute inset-0 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-(--ui-color-primary-500)"
               />
-              <CoursePill class="relative" :slug="c.slug" :accent="c.firstTag" />
+              <CoursePill class="relative" :slug="c.slug" />
               <span class="truncate text-sm">{{ c.title }}</span>
             </div>
           </li>
@@ -118,28 +118,34 @@ const openSearch = () => {
   searchOpen.value = true
 }
 
-const { data: courses } = await useAsyncData('home-courses', () =>
-  queryCollection('courses').order('title', 'ASC').all(),
+// Dev-only cache opt-out — see app/pages/wiki/[slug].vue for rationale.
+const { data: courses } = await useAsyncData(
+  'home-courses',
+  () => queryCollection('courses').order('title', 'ASC').all(),
+  import.meta.dev ? { getCachedData: () => undefined } : undefined,
 )
 
-const { data: recentPages } = await useAsyncData('home-recent', async () => {
-  const all = await Promise.all([
-    queryCollection('topics').order('updated', 'DESC').all(),
-    queryCollection('summaries').order('updated', 'DESC').all(),
-    queryCollection('outputs').order('updated', 'DESC').all(),
-  ])
-  return all
-    .flat()
-    .sort((a, b) => String(b.updated ?? '').localeCompare(String(a.updated ?? '')))
-    .slice(0, 6)
-})
+const { data: recentPages } = await useAsyncData(
+  'home-recent',
+  async () => {
+    const all = await Promise.all([
+      queryCollection('topics').order('updated', 'DESC').all(),
+      queryCollection('summaries').order('updated', 'DESC').all(),
+      queryCollection('outputs').order('updated', 'DESC').all(),
+    ])
+    return all
+      .flat()
+      .sort((a, b) => String(b.updated ?? '').localeCompare(String(a.updated ?? '')))
+      .slice(0, 6)
+  },
+  import.meta.dev ? { getCachedData: () => undefined } : undefined,
+)
 
 const courseList = computed(
   () =>
     courses.value?.map((c) => ({
       slug: resolveCourses(c)[0] ?? slugFromPath(c.path),
       title: c.title,
-      firstTag: c.tags?.[0] ?? 'ekonomie',
     })) ?? [],
 )
 

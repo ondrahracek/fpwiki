@@ -27,6 +27,8 @@ export function useTotalStats() {
     },
     {
       default: () => ({ courses: 0, topics: 0, summaries: 0, outputs: 0, zapisku: 0 }),
+      // Dev-only cache opt-out — see app/pages/wiki/[slug].vue for rationale.
+      ...(import.meta.dev ? { getCachedData: () => undefined } : {}),
     },
   )
 

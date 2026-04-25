@@ -104,6 +104,20 @@
   color: var(--ui-text-muted);
 }
 
+/* Right-rail backlink snippets render OUTSIDE .prose, so the .prose mark rule
+   below does not apply. This sibling rule handles <mark> in that context using
+   the same highlight tokens for parity with prose. */
+.wiki-backlink-snip mark {
+  background: var(--color-highlight-light);
+  color: inherit;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+.dark .wiki-backlink-snip mark {
+  background: var(--color-highlight-dark);
+  color: var(--color-paper-50);
+}
+
 /* Wikilink styling — applied by @flowershow/remark-wiki-link.
    Uses --ui-link / --ui-link-hover-bg so dark mode flips automatically. */
 .wikilink {
