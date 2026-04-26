@@ -2,6 +2,25 @@
 @import '@nuxt/ui';
 @import 'katex/dist/katex.min.css';
 
+/* Safelist icons used by remark-callouts. These are emitted as raw HTML
+   spans at content-build time (not in any .vue file), so Tailwind's source
+   scanner can't find them on its own. List must stay in sync with
+   modules/remark-callouts/build.ts ICONS map. */
+@source inline("iconify");
+@source inline("i-lucide:info");
+@source inline("i-lucide:triangle-alert");
+@source inline("i-lucide:lightbulb");
+@source inline("i-lucide:flask-conical");
+@source inline("i-lucide:clipboard-list");
+@source inline("i-lucide:pencil");
+@source inline("i-lucide:circle-help");
+@source inline("i-lucide:circle-check");
+@source inline("i-lucide:circle-x");
+@source inline("i-lucide:zap");
+@source inline("i-lucide:bug");
+@source inline("i-lucide:quote");
+@source inline("i-lucide:check-square");
+
 @theme static {
   /* Fonts */
   --font-sans: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
@@ -252,15 +271,126 @@
   margin: 0 0 20px;
 }
 
+/* Callouts. Emitted by modules/remark-callouts as <aside class="callout
+   callout-{type}">. Type-specific accents live in `--callout-accent` /
+   `--callout-bg` / `--callout-bg-dark` custom properties so a single base
+   rule drives all variants. Belt-and-braces `font-style: normal` overrides
+   any cascading from .prose blockquote in case a stray <blockquote.callout>
+   ever appears. */
 .prose .callout {
-  background: var(--color-fp-purple-50);
-  border-radius: 8px;
-  padding: 12px 14px;
-  font-size: 14px;
   margin: 16px 0;
+  padding: 12px 14px;
+  border-left: 3px solid var(--callout-accent, var(--color-fp-purple-500));
+  border-radius: 0 8px 8px 0;
+  background: var(--callout-bg, var(--color-fp-purple-50));
+  font-size: 14px;
+  font-style: normal;
+  font-family: var(--font-sans);
 }
 .dark .prose .callout {
-  background: color-mix(in oklab, var(--color-fp-purple-500) 18%, transparent);
+  background: var(
+    --callout-bg-dark,
+    color-mix(in oklab, var(--color-fp-purple-500) 18%, transparent)
+  );
+}
+.prose .callout > :first-child {
+  margin-top: 0;
+}
+.prose .callout > :last-child {
+  margin-bottom: 0;
+}
+.prose .callout > :where(p, ul, ol, pre, blockquote, table):not(.callout-title) {
+  margin: 8px 0;
+}
+
+/* Title row: icon + heading text on one line. */
+.prose .callout-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-style: normal;
+  margin: 0 0 6px;
+  line-height: 1.4;
+  color: var(--callout-accent, var(--color-fp-purple-700));
+}
+.dark .prose .callout-title {
+  color: color-mix(in oklab, var(--callout-accent, var(--color-fp-purple-300)) 80%, white 20%);
+}
+.prose .callout-icon {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+}
+
+/* Per-type accents — driven by CSS custom props on the wrapper. */
+.prose .callout-info {
+  --callout-accent: var(--color-fp-purple-500);
+  --callout-bg: var(--color-fp-purple-50);
+  --callout-bg-dark: color-mix(in oklab, var(--color-fp-purple-500) 14%, transparent);
+}
+.prose .callout-tip {
+  --callout-accent: oklch(0.62 0.16 145);
+  --callout-bg: color-mix(in oklab, oklch(0.62 0.16 145) 8%, var(--color-paper-50));
+  --callout-bg-dark: color-mix(in oklab, oklch(0.62 0.16 145) 18%, transparent);
+}
+.prose .callout-warning {
+  --callout-accent: var(--color-fp-red-500);
+  --callout-bg: var(--color-fp-red-50);
+  --callout-bg-dark: color-mix(in oklab, var(--color-fp-red-500) 14%, transparent);
+}
+.prose .callout-example {
+  --callout-accent: oklch(0.55 0.16 250);
+  --callout-bg: color-mix(in oklab, oklch(0.55 0.16 250) 8%, var(--color-paper-50));
+  --callout-bg-dark: color-mix(in oklab, oklch(0.55 0.16 250) 18%, transparent);
+}
+.prose .callout-abstract {
+  --callout-accent: var(--color-paper-600);
+  --callout-bg: var(--color-paper-100);
+  --callout-bg-dark: var(--color-paper-800);
+}
+.prose .callout-note {
+  --callout-accent: var(--color-paper-500);
+  --callout-bg: var(--color-paper-100);
+  --callout-bg-dark: var(--color-paper-800);
+}
+.prose .callout-question {
+  --callout-accent: oklch(0.62 0.18 200);
+  --callout-bg: color-mix(in oklab, oklch(0.62 0.18 200) 8%, var(--color-paper-50));
+  --callout-bg-dark: color-mix(in oklab, oklch(0.62 0.18 200) 18%, transparent);
+}
+.prose .callout-success {
+  --callout-accent: oklch(0.62 0.16 145);
+  --callout-bg: color-mix(in oklab, oklch(0.62 0.16 145) 8%, var(--color-paper-50));
+  --callout-bg-dark: color-mix(in oklab, oklch(0.62 0.16 145) 18%, transparent);
+}
+.prose .callout-failure,
+.prose .callout-danger {
+  --callout-accent: var(--color-fp-red-600);
+  --callout-bg: var(--color-fp-red-50);
+  --callout-bg-dark: color-mix(in oklab, var(--color-fp-red-500) 18%, transparent);
+}
+.prose .callout-bug {
+  --callout-accent: oklch(0.55 0.18 30);
+  --callout-bg: color-mix(in oklab, oklch(0.55 0.18 30) 8%, var(--color-paper-50));
+  --callout-bg-dark: color-mix(in oklab, oklch(0.55 0.18 30) 18%, transparent);
+}
+.prose .callout-quote {
+  --callout-accent: var(--color-paper-500);
+  --callout-bg: var(--color-paper-100);
+  --callout-bg-dark: var(--color-paper-800);
+}
+.prose .callout-default {
+  --callout-accent: var(--color-paper-500);
+  --callout-bg: var(--color-paper-100);
+  --callout-bg-dark: var(--color-paper-800);
+}
+
+/* Belt-and-braces: if a stray <blockquote class="callout"> ever ships
+   (e.g. someone bypasses our remark plugin), neutralize the .prose
+   blockquote rule so it doesn't bleed italic + wrong border into us. */
+.prose blockquote.callout {
+  font-style: normal;
 }
 
 .prose mark,

@@ -32,6 +32,10 @@ export default defineNuxtConfig({
     // plugin options (files + urlResolver for @flowershow/remark-wiki-link)
     // before @nuxt/content snapshots them during its own setup.
     '~~/modules/wiki-slug-index',
+    // remark-callouts runs after wiki-slug-index but before @nuxt/content,
+    // so it can prepend its plugin entry into the remarkPlugins map (which
+    // @nuxt/content snapshots during its setup).
+    '~~/modules/remark-callouts',
     '@nuxt/ui',
     '@nuxt/content',
     '@nuxt/eslint',
