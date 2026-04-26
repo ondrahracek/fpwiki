@@ -1,3 +1,5 @@
+import { WIKI_PAGE_COLLECTIONS } from '#shared/types/wiki'
+
 /**
  * Site-wide totals: zápisků (sum of topics+summaries+outputs), předmětů
  * (courses count), témat (topics count), cross-linků (slug-index aggregate).
@@ -11,18 +13,21 @@ export function useTotalStats() {
   const { data } = useAsyncData(
     'total-stats',
     async () => {
-      const [coursesCount, topicsCount, summariesCount, outputsCount] = await Promise.all([
-        queryCollection('courses').count(),
-        queryCollection('topics').count(),
-        queryCollection('summaries').count(),
-        queryCollection('outputs').count(),
-      ])
+      const entries = await Promise.all(
+        WIKI_PAGE_COLLECTIONS.map(
+          async (name) => [name, await queryCollection(name).count()] as const,
+        ),
+      )
+      const counts = Object.fromEntries(entries) as Record<
+        (typeof WIKI_PAGE_COLLECTIONS)[number],
+        number
+      >
       return {
-        courses: coursesCount,
-        topics: topicsCount,
-        summaries: summariesCount,
-        outputs: outputsCount,
-        zapisku: topicsCount + summariesCount + outputsCount,
+        courses: counts.courses,
+        topics: counts.topics,
+        summaries: counts.summaries,
+        outputs: counts.outputs,
+        zapisku: counts.topics + counts.summaries + counts.outputs,
       }
     },
     {

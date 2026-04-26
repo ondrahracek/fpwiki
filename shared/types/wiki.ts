@@ -7,6 +7,19 @@ export type WikiPageType = 'course' | 'topic' | 'summary' | 'output' | 'overview
 
 export type WikiCollectionName = 'overview' | 'courses' | 'topics' | 'summaries' | 'outputs'
 
+/**
+ * All page collections that can carry tags and appear in cross-collection
+ * listings. Single source of truth for the fan-out array — never re-type
+ * `['courses', 'topics', 'summaries', 'outputs']` inline. Adding a new page
+ * collection? Update this and `WikiCollectionName` together.
+ */
+export const WIKI_PAGE_COLLECTIONS = [
+  'courses',
+  'topics',
+  'summaries',
+  'outputs',
+] as const satisfies readonly WikiCollectionName[]
+
 export interface WikiSlugIndexEntry {
   slug: string
   path: string

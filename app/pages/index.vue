@@ -1,8 +1,8 @@
 <template>
   <UContainer class="py-10 [--ui-container:1080px]">
-    <DisclaimerBanner class="mb-8" />
+    <DisclaimerBanner class="mb-4 sm:mb-6" />
 
-    <section class="py-12 text-center sm:text-left">
+    <section class="py-16 text-center sm:py-24 sm:text-left">
       <h1
         class="text-4xl font-semibold tracking-tight sm:max-w-[900px] sm:text-[60px] sm:leading-[1.02] sm:tracking-[-0.04em]"
       >
@@ -14,12 +14,14 @@
           předmětům na FP VUT.
         </span>
       </h1>
-      <p class="mt-4 max-w-[600px] font-serif text-[19px] leading-[1.55] text-(--ui-text-toned)">
+      <p
+        class="mt-6 max-w-[600px] font-serif text-[19px] leading-[1.6] text-(--ui-text-toned) sm:mt-8"
+      >
         Moje zápisky, shrnutí, pojmy a okruhy k vybraným předmětům. Vznikají s pomocí AI z
         dostupných podkladů a jsou upravené tak, aby se v nich dalo rychle hledat a opakovat si
         látku.
       </p>
-      <div class="mt-6 flex flex-wrap items-center gap-2">
+      <div class="mt-8 flex flex-wrap items-center gap-2 sm:mt-10">
         <UButton to="/courses" color="primary" trailing-icon="i-lucide-arrow-right">
           Procházet předměty
         </UButton>
@@ -141,6 +143,8 @@ const { data: recentPages } = await useAsyncData(
   import.meta.dev ? { getCachedData: () => undefined } : undefined,
 )
 
+const { data: tagCounts } = await useTagCounts()
+
 const courseList = computed(
   () =>
     courses.value?.map((c) => ({
@@ -162,15 +166,5 @@ const recent = computed(
     })) ?? [],
 )
 
-const tagList = computed(() => {
-  const counts = new Map<string, number>()
-  for (const list of [courses.value ?? []]) {
-    for (const page of list) {
-      for (const t of page.tags ?? []) counts.set(t, (counts.get(t) ?? 0) + 1)
-    }
-  }
-  return Array.from(counts.entries())
-    .map(([tag, count]) => ({ tag, count }))
-    .sort((a, b) => b.count - a.count)
-})
+const tagList = computed(() => (tagCounts.value ?? []).slice(0, 12))
 </script>

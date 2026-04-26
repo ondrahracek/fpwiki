@@ -85,35 +85,9 @@ const activeTag = computed(() => {
   return ''
 })
 
-// Top tags by total page count across all collections.
-// Dev-only cache opt-out — see app/pages/wiki/[slug].vue for rationale.
-const { data: tagCounts } = await useAsyncData(
-  'sidebar-tag-counts',
-  async () => {
-    const all = await Promise.all([
-      queryCollection('courses').all(),
-      queryCollection('topics').all(),
-      queryCollection('summaries').all(),
-      queryCollection('outputs').all(),
-    ])
-    const counts = new Map<string, number>()
-    for (const list of all) {
-      for (const p of list) {
-        for (const t of p.tags ?? []) counts.set(t, (counts.get(t) ?? 0) + 1)
-      }
-    }
-    return Array.from(counts.entries())
-      .map(([tag, count]) => ({ tag, count }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 12)
-  },
-  import.meta.dev ? { getCachedData: () => undefined } : undefined,
-)
+const { data: tagCounts } = await useTagCounts()
 
 const tagOptions = computed(() =>
-  (tagCounts.value ?? []).map((t) => ({
-    ...t,
-    dot: $identityColor(t.tag).dot,
-  })),
+  (tagCounts.value ?? []).slice(0, 12).map((t) => ({ ...t, dot: $identityColor(t.tag).dot })),
 )
 </script>
