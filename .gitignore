@@ -125,6 +125,17 @@ desktop.ini
 $RECYCLE.BIN/
 
 # -----------------------------------------------------------------------------
+# Wiki content. content/ and public/wiki-assets/ are NOT tracked in fpwiki —
+# they are fetched at build time by scripts/fetch-content.ts from the
+# ondrahracek/fpwiki-content repo at the SHA pinned in content-ref.txt.
+# .cache/content/<sha>/ holds the SHA-keyed extracted tarball cache.
+# See CONTRIBUTING.md for the full model.
+# -----------------------------------------------------------------------------
+/content/
+/public/wiki-assets/
+/.cache/content/
+
+# -----------------------------------------------------------------------------
 # Misc local scratch
 # -----------------------------------------------------------------------------
 *.log

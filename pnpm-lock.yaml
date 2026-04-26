@@ -90,6 +90,9 @@ importers:
       prettier-plugin-tailwindcss:
         specifier: ^0.6.11
         version: 0.6.14(prettier@3.8.3)
+      tar:
+        specifier: ^7.5.13
+        version: 7.5.13
       tsx:
         specifier: ^4.20.0
         version: 4.21.0

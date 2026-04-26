@@ -4,22 +4,31 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-**fpwiki** is a Czech-language, read-only wiki for students of Fakulta podnikatelská VUT v Brně. It renders course summaries, topic explainers, and cross-referenced notes from a curated content corpus authored in a separate Obsidian-based repo (`fp-vut-obsidian`).
+**fpwiki** is a Czech-language, read-only wiki for students of Fakulta podnikatelská VUT v Brně. It renders course summaries, topic explainers, and cross-referenced notes from a curated content corpus.
 
 This repo is the **web app only** — data, rendering, server, and client all live here. There is no database, no headless CMS, no companion service.
 
 ## Source of truth: the content pipeline
 
-Content lives in `content/` and `public/wiki-assets/`. **Both are populated by an automated push from the `fp-vut-obsidian` content repo** — never edit them by hand here, and never commit local changes to them.
+Content lives in `content/` and `public/wiki-assets/`. **Both are .gitignored and populated at build time by [`scripts/fetch-content.ts`](scripts/fetch-content.ts) from the public [fpwiki-content](https://github.com/ondrahracek/fpwiki-content) repo, at the SHA pinned in [`content-ref.txt`](content-ref.txt).** Never edit them by hand — they're rewritten on every `pnpm install` / `pnpm dev` / `pnpm build`. To change content, open an issue against fpwiki.
 
 - `content/overview.md` — singleton root page
 - `content/courses/*.md` — one page per course (currently: imek, imork, ipmrk)
 - `content/topics/*.md` — cross-cutting concept pages
 - `content/summaries/*.md` — per-source summaries (one per ingested PDF/markdown)
 - `content/outputs/*.md` — saved query outputs
-- `public/wiki-assets/*` — images referenced from content via `![[]]` embeds (mirrored from the source repo's `raw/assets/`)
+- `public/wiki-assets/*` — images referenced from content via `![[]]` embeds
 
-The push workflow lives in the source repo and is **out of scope here**. Treat `content/` and `public/wiki-assets/` as inputs that arrive via git push.
+The fetch script:
+
+- Reads the 40-char SHA from `content-ref.txt`.
+- Downloads `https://codeload.github.com/ondrahracek/fpwiki-content/tar.gz/<sha>` (cached by SHA in `.cache/content/<sha>/`).
+- Mirrors the extracted tree into `content/` and `public/wiki-assets/`.
+- Wired into `predev`, `prebuild`, `pregenerate`, `prepreview`, and `postinstall` lifecycle hooks. Cache hit = milliseconds.
+
+`content-ref.txt` is updated by an automated bot whenever new content is published upstream. **Never edit `content-ref.txt` by hand in PRs** unless you are intentionally pinning the build to a specific historical content version.
+
+For local-dev power-user overrides (`FPWIKI_CONTENT_REF`, `FPWIKI_CONTENT_LOCAL`, `FPWIKI_CONTENT_FORCE`, `FPWIKI_CONTENT_REPO`, `FPWIKI_SKIP_FETCH`), see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Routing
 
@@ -32,7 +41,7 @@ Four user-facing routes, all prerendered by default:
 | `/wiki/:slug` | Any single content page, regardless of folder                    |
 | `/tag/:slug`  | Pages filtered by tag                                            |
 
-**Slug uniqueness is global across all content collections.** Wikilinks in source markdown use Obsidian's "shortest path" form (`[[anfis]]`, no folder prefix), so two content files cannot share a filename even across different folders. `pnpm content:validate` enforces this.
+**Slug uniqueness is global across all content collections.** Wikilinks in source markdown use the "shortest path" form (`[[anfis]]`, no folder prefix), so two content files cannot share a filename even across different folders. `pnpm content:validate` enforces this.
 
 Internal links resolve `[[slug]]` → `/wiki/<slug>` regardless of which collection the target lives in. Page-type variation (course vs. topic vs. summary vs. output) is handled by `app/components/WikiPage.vue` switching on `frontmatter.type`, **not by adding new routes**.
 
@@ -232,7 +241,9 @@ These have all caused real bugs in this repo. Each one was hard to spot because 
 9. **`nuxt.options.content` mutations only persist if you mutate, not replace.** Replacing the whole `content.build.markdown.remarkPlugins` object can break, since other modules may have already mutated it. Always merge into the existing object (see `modules/wiki-slug-index/index.ts`).
 10. **Don't trust `path?.split('/').pop()` improvisations.** They were the original cause of the URL-divergence bug. Use `slugFromPath` (handles `/-prefix`, `.md`/`.mdx` extension, `#fragment`, trailing slashes, null/undefined uniformly).
 11. **`useAsyncData` traps `null` results across SPA navigation in dev.** Dynamic-slug routes (`/wiki/:slug`, `/tag/:slug`) opt out of payload memoization with `import.meta.dev ? { getCachedData: () => undefined } : undefined`. When the dev server briefly fails (e.g. stale `.nuxt` rebuild — see Pitfall #5), the asyncData function can resolve to `null`; Nuxt's payload memoizes that under the route's key, and every subsequent soft-nav back to the same slug renders 404 until a hard refresh. Production prerender is structurally immune — each route gets its own `_payload.json` — so the gate is dev-only and zero-cost-in-production. New dynamic-slug pages should follow the same pattern.
-12. **Implicit grid tracks expand to content min-width — `min-w-0` on the leaf doesn't help.** Writing `<section class="grid gap-8 md:grid-cols-3">` with no `grid-cols-1` for mobile leaves the implicit single track at `grid-auto-columns: auto`, which sizes to the **max of children's min-content widths**. A long unbreakable child (e.g. a `truncate` span without all the right ancestors set up) then stretches the track past the viewport, and every layer between (the row, the `<ul>`, the column `<div>`, and the section header with `justify-between`) inherits that width — pushing "Vše →" links off the right edge on iPhone-class widths and producing a page-wide horizontal scrollbar. Two cooperating fixes are required and BOTH matter: (a) make the track explicit with `grid-cols-1 md:grid-cols-3` so mobile gets `repeat(1, minmax(0, 1fr))` instead of auto sizing; (b) on every flex chain inside, pair `truncate` with `min-w-0 flex-1` on the shrinking child and `shrink-0` on the static sibling — Tailwind's `truncate` is just `overflow:hidden; text-overflow:ellipsis; white-space:nowrap` and does **not** add `min-width: 0`, while flex items default to `min-width: auto`. Canonical pattern: `RecentRow.vue`. For `inline-flex` chips like `TagPill`, also add `max-w-full` plus inner `[overflow-wrap:anywhere]` since the pill can't break its own contents otherwise.
+12. **`content/` is gitignored — it does not exist on a fresh clone until something runs the fetch.** `pnpm install` runs `scripts/fetch-content.ts` via `postinstall`, so the normal flow populates it. But if you ever bypass install (e.g., copy `node_modules/` from elsewhere) or wipe it manually (`rm -rf content/`), `pnpm dev` / `pnpm build` will fail with the empty-content guard in `nuxt.config.ts`. Fix: `pnpm fetch-content`. The guard is intentional — without it, an empty `content/` would silently deploy a blank site to production. Bypass only via `NUXT_CONTENT_ALLOW_EMPTY=1` for genuine bootstrap edge cases.
+13. **`content-ref.txt` is the version pin; do not hand-edit it in PRs.** It's owned by the upstream content bot. A contributor accidentally bumping it changes which content version production deploys. Code review on PRs touching `content-ref.txt` should require explicit confirmation that the bump is intentional. The diff shows up as `chore(content): bump to <sha>` commits from `fpwiki-content-bot` — those are the trusted ones.
+14. **Implicit grid tracks expand to content min-width — `min-w-0` on the leaf doesn't help.** Writing `<section class="grid gap-8 md:grid-cols-3">` with no `grid-cols-1` for mobile leaves the implicit single track at `grid-auto-columns: auto`, which sizes to the **max of children's min-content widths**. A long unbreakable child (e.g. a `truncate` span without all the right ancestors set up) then stretches the track past the viewport, and every layer between (the row, the `<ul>`, the column `<div>`, and the section header with `justify-between`) inherits that width — pushing "Vše →" links off the right edge on iPhone-class widths and producing a page-wide horizontal scrollbar. Two cooperating fixes are required and BOTH matter: (a) make the track explicit with `grid-cols-1 md:grid-cols-3` so mobile gets `repeat(1, minmax(0, 1fr))` instead of auto sizing; (b) on every flex chain inside, pair `truncate` with `min-w-0 flex-1` on the shrinking child and `shrink-0` on the static sibling — Tailwind's `truncate` is just `overflow:hidden; text-overflow:ellipsis; white-space:nowrap` and does **not** add `min-width: 0`, while flex items default to `min-width: auto`. Canonical pattern: `RecentRow.vue`. For `inline-flex` chips like `TagPill`, also add `max-w-full` plus inner `[overflow-wrap:anywhere]` since the pill can't break its own contents otherwise.
 
 ## Deferred / non-goals
 
@@ -240,8 +251,8 @@ These have all caused real bugs in this repo. Each one was hard to spot because 
 - **i18n.** Czech-only forever. Do not add `@nuxtjs/i18n`.
 - **Playwright e2e.** Not in MVP. Revisit when interactive features grow.
 - **Course-metadata fields** (`courseName`, `garant`, `featured`, `examInfo`). Schema accepts them; UI placeholders carry `// TODO(course-meta):` markers; populated in a future content session.
-- **Content editing in-app.** Read-only by design. Edits happen in `fp-vut-obsidian`.
-- **Content sync workflow.** Owned by the source repo.
+- **Content editing in-app.** Read-only by design. Edits happen upstream in the content corpus.
+- **Content sync workflow.** Owned by the upstream content publisher; fpwiki only consumes via `scripts/fetch-content.ts`.
 
 ## Working philosophy
 

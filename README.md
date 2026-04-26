@@ -13,8 +13,11 @@ pnpm install
 pnpm dev          # http://localhost:3000
 ```
 
-Content lives under `content/` and `public/wiki-assets/` and is **synced from
-the `fp-vut-obsidian` repo** — do not edit those folders by hand here.
+Content lives under `content/` and `public/wiki-assets/` and is **fetched at
+build time from the [fpwiki-content](https://github.com/ondrahracek/fpwiki-content)
+repo** at the SHA pinned in [`content-ref.txt`](./content-ref.txt). Both
+directories are .gitignored — do not edit them by hand. See
+[CONTRIBUTING.md](./CONTRIBUTING.md) for the full sync model.
 
 ## Common commands
 

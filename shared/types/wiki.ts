@@ -36,9 +36,10 @@ export interface WikiSlugIndex {
   /** Full entries for richer lookups (search, breadcrumbs). */
   entries: WikiSlugIndexEntry[]
   /**
-   * One-line descriptions per slug, parsed from `content/_index.md` (synced
-   * from `fp-vut-obsidian/index.md`). Format upstream: `- [[slug|Title]] — desc`.
-   * Pages not present in `_index.md` (or when the file is absent) get no entry.
+   * One-line descriptions per slug, parsed from `content/_index.md` (the
+   * descriptions catalog published by the upstream content corpus).
+   * Format: `- [[slug|Title]] — desc`. Pages not present in `_index.md` (or
+   * when the file is absent) get no entry.
    */
   descriptions: Record<string, string>
   /**

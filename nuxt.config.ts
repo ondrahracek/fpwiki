@@ -1,5 +1,27 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { fileURLToPath } from 'node:url'
+import { existsSync, readdirSync } from 'node:fs'
+
+// Empty-content guard. content/ and public/wiki-assets/ are .gitignored and
+// fetched at build time by scripts/fetch-content.ts (see CONTRIBUTING.md).
+// If they're empty when a build/dev command starts, the predev/prebuild hook
+// failed to run and we'd otherwise silently deploy an empty site. Trip loud.
+//
+// Skip during `nuxt prepare` (postinstall) — content may legitimately not yet
+// exist if fetch-content failed soft (e.g., offline first install). The guard
+// only fires for commands that actually render or serve content.
+const _cmd = process.argv[2]
+const _needsContent = ['dev', 'build', 'generate', 'preview', 'start'].includes(_cmd ?? '')
+if (_needsContent && !process.env.NUXT_CONTENT_ALLOW_EMPTY) {
+  const _empty = !existsSync('content') || readdirSync('content').length === 0
+  if (_empty) {
+    throw new Error(
+      '[fpwiki] content/ is empty. Run `pnpm fetch-content` to populate it from ' +
+        'fpwiki-content (see CONTRIBUTING.md). Set NUXT_CONTENT_ALLOW_EMPTY=1 to ' +
+        'bypass this check (not recommended outside CI bootstrap).',
+    )
+  }
+}
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-04-01',
