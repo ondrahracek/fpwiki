@@ -36,6 +36,11 @@ export default defineNuxtConfig({
     // so it can prepend its plugin entry into the remarkPlugins map (which
     // @nuxt/content snapshots during its setup).
     '~~/modules/remark-callouts',
+    // math-display-fix registers a content:file:beforeParse hook that expands
+    // single-line $$…$$ to multi-line block math before remark parses them.
+    // micromark-extension-math rejects $ in the fence info-string, so any
+    // single-line $$content$$ fails as block math and \tag{} errors in KaTeX.
+    '~~/modules/math-display-fix',
     '@nuxt/ui',
     '@nuxt/content',
     '@nuxt/eslint',
