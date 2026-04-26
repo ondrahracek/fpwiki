@@ -159,9 +159,50 @@ export default defineNuxtConfig({
     },
   },
 
-  alias: {
-    '~~': fileURLToPath(new URL('./', import.meta.url)),
-  },
+  alias: ((): Record<string, string> => {
+    // Targeted Windows-only fix for the `nuxt dev` module-not-found bug.
+    //
+    // @nuxt/schema sets the `#build` alias to `withTrailingSlash(buildDir)`
+    // by design. On Windows that trailing slash combines with
+    // @nuxt/nitro-server's `import("#build/dist/server/server.mjs")`
+    // template (in dist/runtime/utils/renderer/build-files.mjs) and
+    // produces a `.nuxt//dist/server/server.mjs` URL that Node 20+'s
+    // Windows ESM resolver cannot find — every dev request 500s with
+    // ERR_MODULE_NOT_FOUND. Linux/Mac normalise the double slash, so the
+    // bug is Windows-only; CI is unaffected.
+    //
+    // Why this fix is dev-only:
+    // - `nuxt dev` externalises these three imports as runtime `file://`
+    //   dynamic imports, so the alias substitution decides the URL Node
+    //   later tries to resolve. This is where the bug fires.
+    // - `nuxt build` (production) bundles them via Rollup at compile
+    //   time. With the targeted alias active, Rollup tries to read the
+    //   files on disk before they exist (ENOENT), breaking the build.
+    //   Without it, the schema default + Rollup's resolution path work
+    //   fine on Windows because production bundling never emits the
+    //   problematic `file://` URL.
+    // - vitest/`@nuxt/test-utils` rely on Vite's virtual-id matcher
+    //   resolving `#build/nuxt.config.mjs` and `#build/root-component.mjs`
+    //   to their virtual entries. Overriding `#build` itself (or any
+    //   ancestor of those paths) breaks 19 of 32 test files. The three
+    //   targeted aliases below do not intersect those virtual ids.
+    //
+    // We canNOT override `#build` itself: it would break test virtuals.
+    // We canNOT apply the targeted aliases in production build: Rollup
+    // tries to read the unyet-emitted files. So gate on `nuxt dev`.
+    //
+    // Forward slashes are required — Vite keeps separators verbatim,
+    // and `fileURLToPath` returns backslashes on Windows which produce
+    // mixed-separator paths downstream consumers mishandle.
+    // See CLAUDE.md pitfall #19.
+    if (process.argv[2] !== 'dev') return {}
+    const buildDir = fileURLToPath(new URL('.nuxt', import.meta.url)).replaceAll('\\', '/')
+    return {
+      '#build/dist/server/server.mjs': `${buildDir}/dist/server/server.mjs`,
+      '#build/dist/server/client.manifest.mjs': `${buildDir}/dist/server/client.manifest.mjs`,
+      '#build/dist/server/client.precomputed.mjs': `${buildDir}/dist/server/client.precomputed.mjs`,
+    }
+  })(),
 
   app: {
     head: {
