@@ -40,7 +40,7 @@
 
     <HomeStatsBar />
 
-    <section class="grid gap-8 py-10 md:grid-cols-3">
+    <section class="grid grid-cols-1 gap-8 py-10 md:grid-cols-3">
       <div>
         <div class="mb-3 flex items-center justify-between">
           <h3 class="section-label">Předměty</h3>
