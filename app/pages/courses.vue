@@ -77,8 +77,6 @@ import { slugFromPath, wikiUrl } from '#shared/wiki-routes'
 import { shortDate } from '~/utils/format-date'
 import { identityColor } from '~/plugins/tag-colors'
 
-definePageMeta({ layout: 'sidebar' })
-
 usePageSeo({
   title: 'Předměty',
   description: 'Seznam magisterských předmětů na FP VUT s mými zápisky a propojenými tématy.',

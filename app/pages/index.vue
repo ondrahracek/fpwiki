@@ -61,8 +61,8 @@
                 :aria-label="c.title"
                 class="absolute inset-0 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-(--ui-color-primary-500)"
               />
-              <CoursePill class="relative" :slug="c.slug" />
-              <span class="truncate text-sm">{{ c.title }}</span>
+              <CoursePill class="relative shrink-0" :slug="c.slug" />
+              <span class="min-w-0 flex-1 truncate text-sm">{{ c.title }}</span>
             </div>
           </li>
         </ul>
@@ -106,6 +106,10 @@
 <script setup lang="ts">
 import { resolveCourses, toISODate } from '~/utils/frontmatter'
 import { pathFor, slugFromPath, wikiUrl } from '#shared/wiki-routes'
+
+// Centred hero design — opt out of the layout's left rail. The mobile slideover
+// stays mounted so the hamburger menu still works on small screens.
+definePageMeta({ noAside: true })
 
 usePageSeo({
   title: 'fpwiki — zápisky k vybraným předmětům FP VUT',

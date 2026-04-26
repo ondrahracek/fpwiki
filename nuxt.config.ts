@@ -95,8 +95,11 @@ export default defineNuxtConfig({
       crawlLinks: true,
       failOnError: false,
       // /sitemap.xml is a server route; explicit listing forces prerender
-      // even though crawlLinks won't reach it from any <NuxtLink>.
-      routes: ['/', '/courses', '/sitemap.xml'],
+      // even though crawlLinks won't reach it from any <NuxtLink>. The other
+      // entries are belt-and-braces against nav regressions — AppPrimaryNav
+      // links to all of them on every page, so crawlLinks would reach them
+      // anyway, but pinning here protects against accidental nav changes.
+      routes: ['/', '/courses', '/tags', '/recent', '/about/jak-vznika-obsah', '/sitemap.xml'],
     },
   },
 

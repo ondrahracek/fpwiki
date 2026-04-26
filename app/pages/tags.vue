@@ -16,7 +16,6 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: 'sidebar' })
 usePageSeo({
   title: 'Štítky',
   description: 'Štítky napříč všemi zápisky — projděte si témata.',

@@ -27,8 +27,6 @@ import { WIKI_PAGE_COLLECTIONS } from '#shared/types/wiki'
 import { wikiUrl } from '#shared/wiki-routes'
 import { toISODate } from '~/utils/frontmatter'
 
-definePageMeta({ layout: 'sidebar' })
-
 const route = useRoute()
 const slug = computed(() => String(route.params.slug))
 

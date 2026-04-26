@@ -33,8 +33,6 @@
 import { wikiUrl } from '#shared/wiki-routes'
 import { collectionLabel } from '~/utils/labels'
 
-definePageMeta({ layout: 'sidebar' })
-
 const route = useRoute()
 const slug = computed(() => String(route.params.slug))
 
