@@ -36,6 +36,11 @@ export default defineNuxtConfig({
     // so it can prepend its plugin entry into the remarkPlugins map (which
     // @nuxt/content snapshots during its setup).
     '~~/modules/remark-callouts',
+    // math-display-fix registers a content:file:beforeParse hook that expands
+    // single-line $$…$$ to multi-line block math before remark parses them.
+    // micromark-extension-math rejects $ in the fence info-string, so any
+    // single-line $$content$$ fails as block math and \tag{} errors in KaTeX.
+    '~~/modules/math-display-fix',
     '@nuxt/ui',
     '@nuxt/content',
     '@nuxt/eslint',
@@ -105,7 +110,22 @@ export default defineNuxtConfig({
           'remark-math': { options: {} },
         },
         rehypePlugins: {
-          'rehype-katex': { options: { output: 'mathml' } },
+          'rehype-katex': {
+            options: {
+              output: 'mathml',
+              // KaTeX's default strict='warn' fires `unicodeTextInMathMode`
+              // for any accented character in math mode — including inside
+              // `\text{...}`, which is the canonical way to embed Czech
+              // labels in equations (e.g. `$$E_{\text{nabídky}}$$`). Czech
+              // content makes this fire dozens of times per build with no
+              // actionable per-equation fix. Silence ONLY this code; keep
+              // every other strict check at 'warn' so real authoring
+              // mistakes (unknown commands, \tag in inline math, etc.)
+              // still surface in build logs.
+              strict: (errorCode: string) =>
+                errorCode === 'unicodeTextInMathMode' ? 'ignore' : 'warn',
+            },
+          },
         },
       },
     },
