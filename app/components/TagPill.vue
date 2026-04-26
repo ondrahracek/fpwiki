@@ -1,10 +1,10 @@
 <template>
   <NuxtLink
     :to="wikiUrl.tag(tag)"
-    class="tag-pill inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[12px] font-medium tracking-[0.02em] transition-opacity hover:opacity-80"
+    class="tag-pill inline-flex max-w-full items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[12px] font-medium tracking-[0.02em] transition-opacity hover:opacity-80"
     :style="cssVars"
   >
-    <span>#{{ tag }}</span>
+    <span class="[overflow-wrap:anywhere]">#{{ tag }}</span>
     <span v-if="count !== undefined" class="text-[10px] opacity-70">{{ count }}</span>
   </NuxtLink>
 </template>

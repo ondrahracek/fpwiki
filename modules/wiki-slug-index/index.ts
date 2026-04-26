@@ -136,8 +136,8 @@ export default defineNuxtModule({
     }
 
     // Re-generate when content files change in dev. `_index.md` is the
-    // descriptions catalog (synced from fp-vut-obsidian), so changes to it
-    // also invalidate the cache.
+    // descriptions catalog from the upstream content corpus, so changes to
+    // it also invalidate the cache.
     nuxt.hook('builder:watch', async (_event, path) => {
       if (path.includes('content') && path.endsWith('.md')) {
         await regenerate()

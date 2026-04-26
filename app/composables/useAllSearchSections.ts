@@ -1,4 +1,4 @@
-import type { WikiCollectionName, WikiSearchSection } from '#shared/types/wiki'
+import { WIKI_PAGE_COLLECTIONS, type WikiSearchSection } from '#shared/types/wiki'
 
 /**
  * Fans out queryCollectionSearchSections() across all 4 page collections in
@@ -12,10 +12,8 @@ export function useAllSearchSections() {
   return useLazyAsyncData<WikiSearchSection[]>(
     'all-search-sections',
     async () => {
-      const collections: WikiCollectionName[] = ['courses', 'topics', 'summaries', 'outputs']
-
       const results = await Promise.all(
-        collections.map(async (name) => {
+        WIKI_PAGE_COLLECTIONS.map(async (name) => {
           const sections = await queryCollectionSearchSections(name)
           return sections.map((s) => ({ ...s, collection: name }) as WikiSearchSection)
         }),

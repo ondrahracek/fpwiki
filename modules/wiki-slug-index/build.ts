@@ -3,8 +3,8 @@
  * imported by tests, scripts, and the runtime module alike. SRP.
  *
  * Beyond the slug → path map (the original purpose), this module also:
- *   - Parses `content/_index.md` (synced from fp-vut-obsidian/index.md) for
- *     one-line descriptions per slug.
+ *   - Parses `content/_index.md` (the descriptions catalog published by the
+ *     upstream content corpus) for one-line descriptions per slug.
  *   - Walks every page body and counts inbound [[wikilinks]] per slug.
  * Both are additive — existing consumers (remark-wiki-link urlResolver, the
  * useWikiSlugIndex composable, search) read the same shape they always did.

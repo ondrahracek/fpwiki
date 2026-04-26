@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative rounded-lg border border-(--ui-border) bg-(--ui-bg-elevated) px-4 py-3.5 transition-[transform,background-color] duration-150 ease-out hover:-translate-y-px hover:bg-(--color-paper-100) motion-reduce:transform-none"
+    class="relative rounded-lg border border-(--ui-border) bg-(--ui-bg-elevated) px-4 py-3.5 transition-[transform,background-color] duration-150 ease-out hover:-translate-y-px hover:bg-(--ui-bg-accented) motion-reduce:transform-none"
     :class="{ 'course-card-featured': featured }"
   >
     <NuxtLink

@@ -7,6 +7,19 @@ export type WikiPageType = 'course' | 'topic' | 'summary' | 'output' | 'overview
 
 export type WikiCollectionName = 'overview' | 'courses' | 'topics' | 'summaries' | 'outputs'
 
+/**
+ * All page collections that can carry tags and appear in cross-collection
+ * listings. Single source of truth for the fan-out array — never re-type
+ * `['courses', 'topics', 'summaries', 'outputs']` inline. Adding a new page
+ * collection? Update this and `WikiCollectionName` together.
+ */
+export const WIKI_PAGE_COLLECTIONS = [
+  'courses',
+  'topics',
+  'summaries',
+  'outputs',
+] as const satisfies readonly WikiCollectionName[]
+
 export interface WikiSlugIndexEntry {
   slug: string
   path: string
@@ -23,9 +36,10 @@ export interface WikiSlugIndex {
   /** Full entries for richer lookups (search, breadcrumbs). */
   entries: WikiSlugIndexEntry[]
   /**
-   * One-line descriptions per slug, parsed from `content/_index.md` (synced
-   * from `fp-vut-obsidian/index.md`). Format upstream: `- [[slug|Title]] — desc`.
-   * Pages not present in `_index.md` (or when the file is absent) get no entry.
+   * One-line descriptions per slug, parsed from `content/_index.md` (the
+   * descriptions catalog published by the upstream content corpus).
+   * Format: `- [[slug|Title]] — desc`. Pages not present in `_index.md` (or
+   * when the file is absent) get no entry.
    */
   descriptions: Record<string, string>
   /**

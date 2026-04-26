@@ -83,6 +83,10 @@
 </template>
 
 <script setup lang="ts">
+// Centred article design — opt out of the layout's left rail. The mobile
+// slideover still mounts so the hamburger menu works on small screens.
+definePageMeta({ noAside: true })
+
 usePageSeo({
   title: 'Jak vzniká fpwiki',
   description:

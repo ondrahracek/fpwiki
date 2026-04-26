@@ -2,7 +2,6 @@
   <header class="sticky top-0 z-20 border-b border-(--ui-border) bg-(--ui-bg)/80 backdrop-blur">
     <div class="mx-auto flex max-w-screen-xl items-center gap-3 px-4 py-3 sm:gap-6 sm:px-7">
       <UButton
-        v-if="showMenuTrigger"
         icon="i-lucide-menu"
         color="neutral"
         variant="ghost"
@@ -80,8 +79,6 @@
 </template>
 
 <script setup lang="ts">
-withDefaults(defineProps<{ showMenuTrigger?: boolean }>(), { showMenuTrigger: false })
-
 const nav = [
   { to: '/', label: 'Domů' },
   { to: '/courses', label: 'Předměty' },
@@ -89,7 +86,7 @@ const nav = [
   { to: '/recent', label: 'Nedávné' },
 ]
 
-const mobileSidebarOpen = useState('sidebar-mobile-open', () => false)
+const mobileSidebarOpen = useMobileNavOpen()
 
 const colorMode = useColorMode()
 const toggleColorMode = () => {

@@ -21,7 +21,6 @@
 import { pathFor } from '#shared/wiki-routes'
 import { toISODate } from '~/utils/frontmatter'
 
-definePageMeta({ layout: 'sidebar' })
 usePageSeo({
   title: 'Nedávné',
   description: 'Nedávno upravené zápisky a témata na fpwiki.',

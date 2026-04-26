@@ -23,11 +23,9 @@
 </template>
 
 <script setup lang="ts">
-import type { WikiCollectionName } from '#shared/types/wiki'
+import { WIKI_PAGE_COLLECTIONS } from '#shared/types/wiki'
 import { wikiUrl } from '#shared/wiki-routes'
 import { toISODate } from '~/utils/frontmatter'
-
-definePageMeta({ layout: 'sidebar' })
 
 const route = useRoute()
 const slug = computed(() => String(route.params.slug))
@@ -43,8 +41,7 @@ const slug = computed(() => String(route.params.slug))
 const { data: found } = await useAsyncData(
   `wiki-${slug.value}`,
   async () => {
-    const collections: WikiCollectionName[] = ['courses', 'topics', 'summaries', 'outputs']
-    for (const name of collections) {
+    for (const name of WIKI_PAGE_COLLECTIONS) {
       const direct = await queryCollection(name).where('stem', 'LIKE', `%/${slug.value}`).first()
       if (direct) return { page: direct, collection: name }
       const bare = await queryCollection(name).where('stem', '=', slug.value).first()

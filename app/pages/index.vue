@@ -1,8 +1,8 @@
 <template>
   <UContainer class="py-10 [--ui-container:1080px]">
-    <DisclaimerBanner class="mb-8" />
+    <DisclaimerBanner class="mb-4 sm:mb-6" />
 
-    <section class="py-12 text-center sm:text-left">
+    <section class="py-16 text-center sm:py-24 sm:text-left">
       <h1
         class="text-4xl font-semibold tracking-tight sm:max-w-[900px] sm:text-[60px] sm:leading-[1.02] sm:tracking-[-0.04em]"
       >
@@ -14,12 +14,14 @@
           předmětům na FP VUT.
         </span>
       </h1>
-      <p class="mt-4 max-w-[600px] font-serif text-[19px] leading-[1.55] text-(--ui-text-toned)">
+      <p
+        class="mt-6 max-w-[600px] font-serif text-[19px] leading-[1.6] text-(--ui-text-toned) sm:mt-8"
+      >
         Moje zápisky, shrnutí, pojmy a okruhy k vybraným předmětům. Vznikají s pomocí AI z
         dostupných podkladů a jsou upravené tak, aby se v nich dalo rychle hledat a opakovat si
         látku.
       </p>
-      <div class="mt-6 flex flex-wrap items-center gap-2">
+      <div class="mt-8 flex flex-wrap items-center gap-2 sm:mt-10">
         <UButton to="/courses" color="primary" trailing-icon="i-lucide-arrow-right">
           Procházet předměty
         </UButton>
@@ -38,7 +40,7 @@
 
     <HomeStatsBar />
 
-    <section class="grid gap-8 py-10 md:grid-cols-3">
+    <section class="grid grid-cols-1 gap-8 py-10 md:grid-cols-3">
       <div>
         <div class="mb-3 flex items-center justify-between">
           <h3 class="section-label">Předměty</h3>
@@ -59,8 +61,8 @@
                 :aria-label="c.title"
                 class="absolute inset-0 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-(--ui-color-primary-500)"
               />
-              <CoursePill class="relative" :slug="c.slug" />
-              <span class="truncate text-sm">{{ c.title }}</span>
+              <CoursePill class="relative shrink-0" :slug="c.slug" />
+              <span class="min-w-0 flex-1 truncate text-sm">{{ c.title }}</span>
             </div>
           </li>
         </ul>
@@ -105,6 +107,10 @@
 import { resolveCourses, toISODate } from '~/utils/frontmatter'
 import { pathFor, slugFromPath, wikiUrl } from '#shared/wiki-routes'
 
+// Centred hero design — opt out of the layout's left rail. The mobile slideover
+// stays mounted so the hamburger menu still works on small screens.
+definePageMeta({ noAside: true })
+
 usePageSeo({
   title: 'fpwiki — zápisky k vybraným předmětům FP VUT',
   description:
@@ -141,6 +147,8 @@ const { data: recentPages } = await useAsyncData(
   import.meta.dev ? { getCachedData: () => undefined } : undefined,
 )
 
+const { data: tagCounts } = await useTagCounts()
+
 const courseList = computed(
   () =>
     courses.value?.map((c) => ({
@@ -162,15 +170,5 @@ const recent = computed(
     })) ?? [],
 )
 
-const tagList = computed(() => {
-  const counts = new Map<string, number>()
-  for (const list of [courses.value ?? []]) {
-    for (const page of list) {
-      for (const t of page.tags ?? []) counts.set(t, (counts.get(t) ?? 0) + 1)
-    }
-  }
-  return Array.from(counts.entries())
-    .map(([tag, count]) => ({ tag, count }))
-    .sort((a, b) => b.count - a.count)
-})
+const tagList = computed(() => (tagCounts.value ?? []).slice(0, 12))
 </script>
