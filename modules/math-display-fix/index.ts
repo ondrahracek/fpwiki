@@ -1,4 +1,5 @@
 import { defineNuxtModule, useLogger } from '@nuxt/kit'
+import type { FileBeforeParseHook } from '@nuxt/content'
 import { expandSingleLineMath } from './build'
 
 /**
@@ -26,7 +27,11 @@ export default defineNuxtModule({
   setup(_options, nuxt) {
     const logger = useLogger('math-display-fix')
 
-    nuxt.hook('content:file:beforeParse', (ctx) => {
+    // @ts-expect-error — `content:file:beforeParse` is registered on
+    // NuxtHooks via @nuxt/content's `declare module '@nuxt/schema'`
+    // augmentation, but it doesn't reliably merge into vue-tsc's program
+    // under our tsconfig. See CLAUDE.md pitfall #17. Runtime is unaffected.
+    nuxt.hook('content:file:beforeParse', (ctx: FileBeforeParseHook) => {
       if (!ctx.file.id?.endsWith('.md')) return
       ctx.file.body = expandSingleLineMath(ctx.file.body as string)
     })
