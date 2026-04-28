@@ -108,6 +108,15 @@ If a hook fails, fix the underlying issue. **Do not use `--no-verify`.**
 Work on `test`, merge to `master` once verified. `master` deploys to
 [fpwiki.cz](https://fpwiki.cz) via Firebase App Hosting on every push.
 
+Branch merges (test↔master) **never conflict on `content-ref.txt`** even
+though the two branches always pin different SHAs. A `merge=ours` driver
+in `.gitattributes` keeps the current branch's value automatically. The
+driver is registered per-clone by `scripts/setup-git.mjs`, chained from
+`postinstall` — so as long as you've run `pnpm install` once, you'll
+never see a conflict on this file. (Rationale: content-ref.txt is owned
+by the upstream content bot, which pushes directly to each branch; it
+must never propagate via human merge. See CLAUDE.md Pitfall #20.)
+
 ## Where to ask questions
 
 Open an issue. Czech or English both fine.
