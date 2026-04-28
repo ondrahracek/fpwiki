@@ -156,6 +156,11 @@ export default defineNuxtConfig({
       // NUXT_PUBLIC_SITE_URL in apphosting.yaml. Empty string = relative URLs
       // (acceptable for local dev; production must set this).
       siteUrl: '',
+      // GA4 Measurement ID (e.g. "G-XXXXXXXXXX"). Empty = analytics disabled.
+      // Production sets NUXT_PUBLIC_GA_ID via App Hosting Backend → Settings →
+      // Environment (console). Forks and local dev leave it empty and the
+      // plugin in app/plugins/gtag.ts no-ops.
+      gaId: '',
     },
   },
 
