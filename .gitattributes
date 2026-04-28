@@ -8,3 +8,11 @@
 *.ico binary
 *.svg text eol=lf
 *.pdf binary
+
+# content-ref.txt is per-branch state, owned by the upstream content bot.
+# Branch merges must NEVER propagate it; each branch keeps its own pin
+# (master tracks fpwiki-content@master, test tracks fpwiki-content@test).
+# The "ours" merge driver is registered per-clone by scripts/setup-git.mjs
+# (chained from package.json `postinstall`). See CLAUDE.md "Pitfalls"
+# for the full rationale.
+/content-ref.txt merge=ours

@@ -18,7 +18,7 @@
     "prepreview": "tsx scripts/fetch-content.ts",
     "generate": "nuxt generate",
     "pregenerate": "tsx scripts/fetch-content.ts",
-    "postinstall": "tsx scripts/fetch-content.ts && nuxt prepare",
+    "postinstall": "node scripts/setup-git.mjs && tsx scripts/fetch-content.ts && nuxt prepare",
     "fetch-content": "tsx scripts/fetch-content.ts",
     "content:refresh": "tsx scripts/fetch-content.ts --force",
     "lint": "eslint .",
