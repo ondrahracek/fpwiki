@@ -21,3 +21,12 @@ env:
     availability:
       - BUILD
       - RUNTIME
+  # Raise V8 heap for the Nitro server-bundle step. Default ~2 GB tips
+  # over once content + prerender output crosses ~150 pages — first hit
+  # was the icink ingest landing on master, which OOM'd the build with
+  # `FATAL ERROR: Ineffective mark-compacts near heap limit`. Cloud Build
+  # workers have 16 GB physical RAM, so 4 GB heap is safe headroom.
+  - variable: NODE_OPTIONS
+    value: --max-old-space-size=4096
+    availability:
+      - BUILD
