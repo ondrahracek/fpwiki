@@ -19,6 +19,7 @@ import { join, relative } from 'node:path'
 import process from 'node:process'
 import { load as loadYaml, JSON_SCHEMA, YAMLException } from 'js-yaml'
 import { graphSpecSchema } from '../modules/remark-graphs/schema'
+import { unescapeWikilinkPipes } from '../modules/remark-wikilink-pipe-unescape/build'
 
 const ROOT = process.cwd()
 const CONTENT = join(ROOT, 'content')
@@ -109,12 +110,18 @@ async function main() {
   // 2 + 3. Wikilinks + image embeds
   // [[slug]] OR [[slug|alias]] OR [[slug#heading]] etc.
   // ![[file.ext]] OR ![[file.ext|caption]]
+  //
+  // Run the same `\|` → `|` rewrite as modules/remark-wikilink-pipe-unescape
+  // applies at content:file:beforeParse — otherwise the validator's view of
+  // wiki-link targets diverges from the renderer's. DRY: shared logic, single
+  // source of truth (the module's build.ts).
   const linkRE = /(!?)\[\[([^\]|#]+)(?:[#|][^\]]*)?\]\]/g
 
   for (const page of pages) {
+    const body = unescapeWikilinkPipes(page.body)
     let m: RegExpExecArray | null
     linkRE.lastIndex = 0
-    while ((m = linkRE.exec(page.body)) !== null) {
+    while ((m = linkRE.exec(body)) !== null) {
       const isEmbed = m[1] === '!'
       const target = m[2]!.trim()
       if (isEmbed) {

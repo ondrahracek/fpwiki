@@ -45,6 +45,13 @@ export default defineNuxtConfig({
     // micromark-extension-math rejects $ in the fence info-string, so any
     // single-line $$content$$ fails as block math and \tag{} errors in KaTeX.
     '~~/modules/math-display-fix',
+    // remark-wikilink-pipe-unescape rewrites `\|` → `|` inside [[wiki-links]]
+    // and ![[embeds]] before remark parses the file. GFM table cells need the
+    // backslash to keep the pipe from splitting the cell, but
+    // @flowershow/remark-wiki-link@3.4.0 consumes the `\` as a literal target
+    // char and produces a broken link. Same beforeParse pattern as
+    // math-display-fix. See CLAUDE.md pitfall #21.
+    '~~/modules/remark-wikilink-pipe-unescape',
     '@nuxt/ui',
     '@nuxt/content',
     '@nuxt/eslint',
