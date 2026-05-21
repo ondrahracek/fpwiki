@@ -37,7 +37,7 @@ jobs:
         run: pnpm test
 
       - name: Content validate
-        run: pnpm content:validate
+        run: pnpm content:validate --strict-wikilinks
 
       - name: Build
         run: pnpm build
