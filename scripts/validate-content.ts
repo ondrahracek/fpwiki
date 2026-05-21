@@ -17,6 +17,8 @@ import { readdir, readFile, stat } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import process from 'node:process'
+import { load as loadYaml, JSON_SCHEMA, YAMLException } from 'js-yaml'
+import { graphSpecSchema } from '../modules/remark-graphs/schema'
 
 const ROOT = process.cwd()
 const CONTENT = join(ROOT, 'content')
@@ -138,6 +140,34 @@ async function main() {
       const v = page.frontmatter[field]
       if (v && !/^\d{4}-\d{2}-\d{2}/.test(v)) {
         warn(`Frontmatter ${field} not ISO in ${page.rel}: ${v}`)
+      }
+    }
+  }
+
+  // 5. Graph fences. The runtime renders these via modules/remark-graphs;
+  // catching invalid YAML / schema violations here means CI fails BEFORE
+  // production ever tries to deploy a broken graph block. Fence regex
+  // tolerates trailing whitespace on the opening line and any line endings.
+  const graphFenceRE = /^[ \t]*```graph[ \t]*\r?\n([\s\S]*?)\r?\n[ \t]*```[ \t]*$/gm
+  for (const page of pages) {
+    let m: RegExpExecArray | null
+    graphFenceRE.lastIndex = 0
+    while ((m = graphFenceRE.exec(page.body)) !== null) {
+      const body = m[1] ?? ''
+      let raw: unknown
+      try {
+        raw = loadYaml(body, { schema: JSON_SCHEMA })
+      } catch (e) {
+        const msg = e instanceof YAMLException ? e.message : String(e)
+        err(`Graph block YAML error in ${page.rel}: ${msg}`)
+        continue
+      }
+      const result = graphSpecSchema.safeParse(raw)
+      if (!result.success) {
+        const issues = result.error.issues
+          .map((iss) => `${iss.path.join('.') || '<root>'}: ${iss.message}`)
+          .join('; ')
+        err(`Graph block schema error in ${page.rel}: ${issues}`)
       }
     }
   }
