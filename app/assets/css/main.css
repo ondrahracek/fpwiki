@@ -446,3 +446,39 @@
   max-width: 100%;
   height: auto;
 }
+
+/* Build-time graph errors emitted by modules/remark-graphs as
+   <aside class="graph-error" role="alert">. The component-side error block
+   (rendered when function-plot throws at runtime) reuses the same class so
+   one CSS rule covers both code paths. */
+.prose .graph-error,
+.graph-error {
+  margin: 16px 0;
+  padding: 12px 14px;
+  border-left: 3px solid var(--color-fp-red-500);
+  border-radius: 0 8px 8px 0;
+  background: var(--color-fp-red-50);
+  color: var(--color-fp-red-900);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-style: normal;
+}
+.dark .prose .graph-error,
+.dark .graph-error {
+  background: color-mix(in oklab, var(--color-fp-red-500) 16%, transparent);
+  color: var(--color-fp-red-100);
+}
+.graph-error > p {
+  margin: 0 0 6px;
+  font-weight: 600;
+}
+.graph-error > pre {
+  margin: 0;
+  font-size: 12px;
+  background: transparent;
+  border: 1px dashed color-mix(in oklab, var(--color-fp-red-500) 40%, transparent);
+  border-radius: 4px;
+  padding: 8px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

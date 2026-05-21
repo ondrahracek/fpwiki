@@ -36,6 +36,10 @@ export default defineNuxtConfig({
     // so it can prepend its plugin entry into the remarkPlugins map (which
     // @nuxt/content snapshots during its setup).
     '~~/modules/remark-callouts',
+    // remark-graphs transforms ```graph fenced code blocks into <graph-mount>
+    // elements at build time. Same module-ordering rule as remark-callouts:
+    // must run before @nuxt/content snapshots the markdown plugin map.
+    '~~/modules/remark-graphs',
     // math-display-fix registers a content:file:beforeParse hook that expands
     // single-line $$…$$ to multi-line block math before remark parses them.
     // micromark-extension-math rejects $ in the fence info-string, so any
