@@ -150,22 +150,23 @@ export default defineNuxtConfig({
     },
   },
 
-  routeRules: {
-    '/**': { prerender: true },
-  },
+  // FPWIKI_ON_DEMAND=1 skips prerendering for a fast local production build.
+  routeRules: process.env.FPWIKI_ON_DEMAND ? {} : { '/**': { prerender: true } },
 
   nitro: {
     preset: process.env.NITRO_PRESET, // auto-detected by Firebase App Hosting
-    prerender: {
-      crawlLinks: true,
-      failOnError: false,
-      // /sitemap.xml is a server route; explicit listing forces prerender
-      // even though crawlLinks won't reach it from any <NuxtLink>. The other
-      // entries are belt-and-braces against nav regressions — AppPrimaryNav
-      // links to all of them on every page, so crawlLinks would reach them
-      // anyway, but pinning here protects against accidental nav changes.
-      routes: ['/', '/courses', '/tags', '/recent', '/about/jak-vznika-obsah', '/sitemap.xml'],
-    },
+    prerender: process.env.FPWIKI_ON_DEMAND
+      ? { crawlLinks: false, routes: [] }
+      : {
+          crawlLinks: true,
+          failOnError: false,
+          // /sitemap.xml is a server route; explicit listing forces prerender
+          // even though crawlLinks won't reach it from any <NuxtLink>. The other
+          // entries are belt-and-braces against nav regressions — AppPrimaryNav
+          // links to all of them on every page, so crawlLinks would reach them
+          // anyway, but pinning here protects against accidental nav changes.
+          routes: ['/', '/courses', '/tags', '/recent', '/about/jak-vznika-obsah', '/sitemap.xml'],
+        },
   },
 
   runtimeConfig: {
