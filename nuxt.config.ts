@@ -103,6 +103,13 @@ export default defineNuxtConfig({
   content: {
     build: {
       markdown: {
+        // Keys match colorMode's html classes; `light` must be set or the MDC
+        // default theme is merged in under it. Untagged and ```text fences are
+        // never highlighted.
+        highlight: {
+          theme: { default: 'github-light', light: 'github-light', dark: 'github-dark' },
+          langs: ['r', 'matlab'],
+        },
         // @nuxt/content v3 plugin shape is `{ instance?, options? }` — passing
         // flat options at this level is silently ignored (see node_modules
         // /@nuxt/content/.../module.mjs `importPlugins`).
