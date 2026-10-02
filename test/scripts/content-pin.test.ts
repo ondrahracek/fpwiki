@@ -34,6 +34,21 @@ describe('resolveChannel', () => {
       expect(resolveChannel({ gitBranch })).toEqual({ channel: 'master', source: 'default' })
     },
   )
+
+  it('defaults to the only pin file present, e.g. a feature branch off test', () => {
+    expect(resolveChannel({ gitBranch: 'feat/x', available: ['test'] })).toEqual({
+      channel: 'test',
+      source: 'default (only content-ref/test.txt exists)',
+    })
+    expect(resolveChannel({ gitBranch: 'feat/x', available: ['test', 'master'] }).channel).toBe(
+      'master',
+    )
+  })
+
+  it('never lets available files override an explicit or branch channel', () => {
+    expect(resolveChannel({ envChannel: 'master', available: ['test'] }).channel).toBe('master')
+    expect(resolveChannel({ gitBranch: 'master', available: ['test'] }).channel).toBe('master')
+  })
 })
 
 describe('pinFile', () => {
