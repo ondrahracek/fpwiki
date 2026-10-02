@@ -30,44 +30,62 @@
       </div>
     </header>
 
-    <ul
-      v-if="view === 'grid'"
-      class="grid [grid-template-columns:repeat(auto-fill,minmax(260px,360px))] gap-3"
-    >
-      <li v-for="c in items" :key="c.slug">
-        <CourseCard
-          :slug="c.slug"
-          :title="c.title"
-          :tags="c.tags"
-          :updated-short="c.updatedShort"
-          :featured="c.featured"
-        />
-      </li>
-    </ul>
+    <nav v-if="showGroupHeaders" class="mb-6 flex flex-wrap gap-2" aria-label="Semestry">
+      <UButton
+        v-for="g in groups"
+        :key="g.key"
+        :to="`#${g.key}`"
+        size="xs"
+        color="neutral"
+        variant="outline"
+      >
+        {{ g.label }}
+      </UButton>
+    </nav>
 
-    <ul v-else class="divide-y divide-(--ui-border) rounded-lg border border-(--ui-border)">
-      <li v-for="c in items" :key="c.slug">
-        <div
-          class="relative flex flex-wrap items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-(--ui-bg-elevated)"
-          :style="{ borderLeftColor: c.dotColor }"
-          style="border-left-width: 3px"
-        >
-          <NuxtLink
-            :to="wikiUrl.page(c.slug)"
-            :aria-label="c.title"
-            class="absolute inset-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-(--ui-color-primary-500)"
+    <section v-for="g in groups" :key="g.key" class="mb-8 last:mb-0">
+      <h2 v-if="showGroupHeaders" :id="g.key" class="section-label mb-3 scroll-mt-20">
+        {{ g.label }}
+      </h2>
+      <ul
+        v-if="view === 'grid'"
+        class="grid [grid-template-columns:repeat(auto-fill,minmax(260px,360px))] gap-3"
+      >
+        <li v-for="c in g.courses" :key="c.slug">
+          <CourseCard
+            :slug="c.slug"
+            :title="c.title"
+            :tags="c.tags"
+            :updated-short="c.updatedShort"
+            :featured="c.featured"
           />
-          <div class="flex min-w-0 items-center gap-3">
-            <CoursePill class="relative" :slug="c.slug" />
-            <span class="truncate font-medium">{{ c.title }}</span>
+        </li>
+      </ul>
+
+      <ul v-else class="divide-y divide-(--ui-border) rounded-lg border border-(--ui-border)">
+        <li v-for="c in g.courses" :key="c.slug">
+          <div
+            class="relative flex flex-wrap items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-(--ui-bg-elevated)"
+            :style="{ borderLeftColor: c.dotColor }"
+            style="border-left-width: 3px"
+          >
+            <NuxtLink
+              :to="wikiUrl.page(c.slug)"
+              :aria-label="c.title"
+              class="absolute inset-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-(--ui-color-primary-500)"
+            />
+            <div class="flex min-w-0 items-center gap-3">
+              <CoursePill class="relative" :slug="c.slug" />
+              <span class="truncate font-medium">{{ c.title }}</span>
+            </div>
+            <div class="flex items-center gap-3 text-xs text-(--ui-text-muted)">
+              <span>{{ c.zapiskuLabel }}</span>
+              <span v-if="c.updatedShort">upraveno {{ c.updatedShort }}</span>
+            </div>
           </div>
-          <div class="flex items-center gap-3 text-xs text-(--ui-text-muted)">
-            <span>{{ c.zapiskuLabel }}</span>
-            <span v-if="c.updatedShort">upraveno {{ c.updatedShort }}</span>
-          </div>
-        </div>
-      </li>
-    </ul>
+        </li>
+      </ul>
+    </section>
   </div>
 </template>
 
@@ -76,6 +94,8 @@ import { resolveCourses } from '~/utils/frontmatter'
 import { slugFromPath, wikiUrl } from '#shared/wiki-routes'
 import { shortDate } from '~/utils/format-date'
 import { identityColor } from '~/plugins/tag-colors'
+import { parseStudyPlacement } from '#shared/study-plan'
+import { groupCoursesBySemester } from '~/utils/semesters'
 
 usePageSeo({
   title: 'Předměty',
@@ -142,7 +162,13 @@ const items = computed(() => {
       // Left border matches the pill on the row — both derived from the slug.
       dotColor: identityColor(slug).dot,
       featured: c.featured ?? false,
+      placement: parseStudyPlacement(c),
     }
   })
 })
+
+// Study-plan order; unplaced courses trail under "Ostatní". Like the sidebar,
+// headers and jump chips appear only once there is more than one group.
+const groups = computed(() => groupCoursesBySemester(items.value))
+const showGroupHeaders = computed(() => groups.value.length > 1)
 </script>

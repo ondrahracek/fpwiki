@@ -9,6 +9,10 @@
  *   3. Image embeds: every ![[file]] resolves to a file in public/wiki-assets/
  *      (HARD FAIL unless --allow-missing-assets is passed).
  *   4. Frontmatter sanity: title required, dates parseable (warn).
+ *   6. Course study-plan placement: degree/studyYear/semester, when present,
+ *      must parse via shared/study-plan.ts (warn). Catches drift between the
+ *      vault lint and this site, which would silently file the course under
+ *      "Ostatní".
  *
  * Source of truth for the slug index is the `modules/wiki-slug-index` build,
  * but for CI we re-derive here so this script has no dependency on `.nuxt/`.
@@ -20,6 +24,7 @@ import process from 'node:process'
 import { load as loadYaml, JSON_SCHEMA, YAMLException } from 'js-yaml'
 import { graphSpecSchema } from '../modules/remark-graphs/schema'
 import { unescapeWikilinkPipes } from '../modules/remark-wikilink-pipe-unescape/build'
+import { parseStudyPlacement, type StudyPlacementFields } from '../shared/study-plan'
 
 const ROOT = process.cwd()
 const CONTENT = join(ROOT, 'content')
@@ -45,13 +50,15 @@ interface Page {
   rel: string
   slug: string
   body: string
+  /** Raw YAML between the `---` fences, for checks that need typed values. */
+  frontmatterBlock: string
   frontmatter: { title?: string; type?: string; created?: string; updated?: string }
 }
 
-function splitFrontmatter(raw: string): { fm: Page['frontmatter']; body: string } {
-  if (!raw.startsWith('---')) return { fm: {}, body: raw }
+function splitFrontmatter(raw: string): { fm: Page['frontmatter']; block: string; body: string } {
+  if (!raw.startsWith('---')) return { fm: {}, block: '', body: raw }
   const end = raw.indexOf('\n---', 3)
-  if (end === -1) return { fm: {}, body: raw }
+  if (end === -1) return { fm: {}, block: '', body: raw }
   const block = raw.slice(3, end)
   const body = raw.slice(end + 4)
   const fm: Page['frontmatter'] = {}
@@ -66,7 +73,7 @@ function splitFrontmatter(raw: string): { fm: Page['frontmatter']; body: string 
     else if (key === 'created') fm.created = value
     else if (key === 'updated') fm.updated = value
   }
-  return { fm, body }
+  return { fm, block, body }
 }
 
 const errors: string[] = []
@@ -94,8 +101,8 @@ async function main() {
     const rel = relative(CONTENT, abs).replace(/\\/g, '/')
     const slug = abs.split(/[\\/]/).pop()!.replace(/\.md$/i, '')
     const raw = await readFile(abs, 'utf8')
-    const { fm, body } = splitFrontmatter(raw)
-    const page = { abs, rel, slug, body, frontmatter: fm }
+    const { fm, block, body } = splitFrontmatter(raw)
+    const page = { abs, rel, slug, body, frontmatterBlock: block, frontmatter: fm }
 
     if (slugMap.has(slug)) {
       err(`Duplicate slug "${slug}" in ${rel} and ${slugMap.get(slug)!.rel}`)
@@ -176,6 +183,27 @@ async function main() {
           .join('; ')
         err(`Graph block schema error in ${page.rel}: ${issues}`)
       }
+    }
+  }
+
+  // 6. Study-plan placement (warn-level). Absent fields are fine (older
+  // content); present but rejected fields mean the vault lint and
+  // shared/study-plan.ts disagree.
+  for (const page of pages) {
+    if (!page.rel.startsWith('courses/')) continue
+    let fields: StudyPlacementFields
+    try {
+      fields = (loadYaml(page.frontmatterBlock, { schema: JSON_SCHEMA }) ??
+        {}) as StudyPlacementFields
+    } catch {
+      continue // YAML errors surface in the Nuxt build itself
+    }
+    const { degree, studyYear, semester } = fields
+    const present = [degree, studyYear, semester].some((v) => v !== undefined)
+    if (present && !parseStudyPlacement(fields)) {
+      warn(
+        `Study-plan placement rejected in ${page.rel}: ${JSON.stringify({ degree, studyYear, semester })} (see shared/study-plan.ts)`,
+      )
     }
   }
 

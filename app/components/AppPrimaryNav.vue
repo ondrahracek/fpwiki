@@ -22,23 +22,35 @@
 
     <section>
       <h2 class="section-label mb-2">Předměty</h2>
-      <ul class="space-y-1">
-        <li v-for="c in courseRows" :key="c.slug">
-          <NuxtLink
-            :to="wikiUrl.page(c.slug)"
-            :class="[
-              'flex items-center justify-between rounded px-2 py-1 hover:bg-(--ui-bg-elevated)',
-              c.isCurrent ? 'bg-(--ui-bg-elevated) font-medium' : '',
-            ]"
-          >
-            <span class="flex items-center gap-2 truncate">
-              <span class="size-2 shrink-0 rounded-full" :style="{ backgroundColor: c.dot }" />
-              <span class="truncate">{{ c.shortTitle }}</span>
-            </span>
-            <span class="text-xs text-(--ui-text-muted)">{{ c.count }}</span>
-          </NuxtLink>
-        </li>
-      </ul>
+      <!-- One semester (or no course placed): flat list, no group headers. -->
+      <NavCourseList v-if="courseGroups.length <= 1" :rows="courseRows" />
+      <div v-else class="space-y-1">
+        <!-- unmount-on-hide=false keeps collapsed links in the prerendered
+             HTML (hidden, not unmounted) so the crawler still reaches them. -->
+        <UCollapsible
+          v-for="g in courseGroups"
+          :key="g.key"
+          :open="openGroups[g.key] ?? false"
+          :unmount-on-hide="false"
+          @update:open="(v: boolean) => (openGroups[g.key] = v)"
+        >
+          <template #default="{ open }">
+            <button
+              type="button"
+              class="flex w-full items-center justify-between gap-2 rounded px-2 py-1 text-xs text-(--ui-text-muted) hover:text-(--ui-text-highlighted)"
+            >
+              <span class="truncate">{{ g.label }}</span>
+              <UIcon
+                name="i-lucide-chevron-down"
+                :class="['size-3.5 shrink-0 transition-transform', open ? '' : '-rotate-90']"
+              />
+            </button>
+          </template>
+          <template #content>
+            <NavCourseList :rows="g.courses" class="mt-1 mb-2" />
+          </template>
+        </UCollapsible>
+      </div>
       <NuxtLink
         :to="wikiUrl.courses()"
         class="mt-2 block text-xs text-(--ui-text-muted) hover:text-(--ui-text-highlighted)"
@@ -118,6 +130,7 @@
 
 <script setup lang="ts">
 import { wikiUrl } from '#shared/wiki-routes'
+import { groupCoursesBySemester, latestSemesterGroup } from '~/utils/semesters'
 
 const route = useRoute()
 const { $identityColor } = useNuxtApp()
@@ -165,8 +178,29 @@ const courseRows = computed(() =>
     count: c.count,
     isCurrent: c.slug === activeCourseSlug.value,
     dot: $identityColor(c.slug).dot,
+    placement: c.placement,
   })),
 )
+
+const courseGroups = computed(() => groupCoursesBySemester(courseRows.value))
+const activeGroupKey = computed(
+  () => courseGroups.value.find((g) => g.courses.some((c) => c.isCurrent))?.key,
+)
+
+// Per-semester open state. useState (not a local ref) because the layout
+// mounts this component twice — desktop aside + mobile slideover — and both
+// must agree; it also travels SSR → client in the payload, so no hydration
+// flip. Default: the active course's semester, else the most advanced one
+// in study-plan order.
+const openGroups = useState<Record<string, boolean>>('nav-semester-open', () => {
+  const key = activeGroupKey.value ?? latestSemesterGroup(courseGroups.value)?.key
+  return key ? { [key]: true } : {}
+})
+
+// Navigating to a course inside a collapsed semester reveals it.
+watch(activeGroupKey, (key) => {
+  if (key) openGroups.value[key] = true
+})
 
 const tagRows = computed(() =>
   (tagCounts.value ?? []).slice(0, 12).map((t) => ({ ...t, dot: $identityColor(t.tag).dot })),

@@ -1,3 +1,4 @@
+import { parseStudyPlacement, type StudyPlacement } from '#shared/study-plan'
 import { resolveCourses } from '~/utils/frontmatter'
 
 export interface CourseWithStats {
@@ -5,6 +6,8 @@ export interface CourseWithStats {
   title: string
   /** zápisků count: topics + summaries + outputs that name this course. */
   count: number
+  /** Validated study-plan position; null when the frontmatter lacks one. */
+  placement: StudyPlacement | null
 }
 
 /**
@@ -43,6 +46,7 @@ export function useCoursesWithStats() {
           slug,
           title: c.title ?? slug,
           count: counts.get(slug) ?? 0,
+          placement: parseStudyPlacement(c),
         }
       })
     },
