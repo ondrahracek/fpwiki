@@ -32,14 +32,14 @@ pnpm dev       # opens dev server at http://localhost:3000
 
 That's it. The first install pulls the content tarball from
 [fpwiki-content](https://github.com/ondrahracek/fpwiki-content) at the SHA
-recorded in `content-ref.txt`, extracts it into `.cache/content/<sha>/`, and
+pinned for your branch in `content-ref/<channel>.txt`, extracts it into `.cache/content/<sha>/`, and
 mirrors it into `content/` and `public/wiki-assets/`. Subsequent `pnpm dev`
 starts hit the cache and finish in milliseconds.
 
 ## How content sync works
 
 ```
-content-ref.txt  -- pinned SHA of the fpwiki-content commit to use
+content-ref/<channel>.txt  -- pinned SHA of the fpwiki-content commit to use
        │
        ▼
 scripts/fetch-content.ts  -- on predev/prebuild/postinstall
@@ -53,11 +53,19 @@ Because `content/` and `public/wiki-assets/` are gitignored, a fpwiki branch
 diff is purely code — no merge conflicts on markdown ever, regardless of when
 content is updated upstream. Reproducibility: any historical fpwiki commit
 can be rebuilt with the exact content that was deployed at that time, just by
-re-running `pnpm fetch-content` against its `content-ref.txt`.
+re-running `pnpm fetch-content` against its pin file.
 
-The `content-ref.txt` file itself is updated by an automated bot whenever new
-content is published upstream. Don't edit it by hand in PRs unless you are
-intentionally pinning the build to a specific historical content version.
+Each branch has its own pin: `content-ref/master.txt` (pins
+`fpwiki-content@master`) and `content-ref/test.txt` (pins
+`fpwiki-content@test`). An automated bot updates a branch's own file whenever
+new content is published upstream. Don't edit them by hand in PRs unless you
+are intentionally pinning the build to a specific historical content version.
+
+Which file a build reads is its **channel**: `FPWIKI_CONTENT_CHANNEL` if set
+(App Hosting sets `master`; CI sets the PR's target branch, else the pushed
+branch), otherwise your checked-out branch when it is `master` or `test`,
+otherwise `master`. So local dev on `test` previews test content, and a
+feature branch previews production content.
 
 ## Working offline
 
@@ -72,7 +80,8 @@ online `pnpm install`, you can `pnpm dev` indefinitely on a plane.
 
 | Var                                     | Effect                                                                                                                                        |
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `FPWIKI_CONTENT_REF=<sha-or-branch>`    | Ignore `content-ref.txt`; fetch this ref. Branches (e.g. `master`) skip the cache and always re-download.                                     |
+| `FPWIKI_CONTENT_CHANNEL=master\|test`   | Read this channel's pin file instead of the one picked from your git branch. Any other value is an error.                                     |
+| `FPWIKI_CONTENT_REF=<sha-or-branch>`    | Ignore the pin file; fetch this ref. Branches (e.g. `master`) skip the cache and always re-download.                                          |
 | `FPWIKI_CONTENT_LOCAL=<dir>`            | Skip download entirely; mirror from this local directory. The directory must contain `content/` and `wiki-assets/` subdirs.                   |
 | `FPWIKI_CONTENT_FORCE=1` (or `--force`) | Re-download even on cache hit.                                                                                                                |
 | `FPWIKI_CONTENT_REPO=<owner/repo>`      | Override the source repo (default: `ondrahracek/fpwiki-content`).                                                                             |
@@ -108,14 +117,12 @@ If a hook fails, fix the underlying issue. **Do not use `--no-verify`.**
 Work on `test`, merge to `master` once verified. `master` deploys to
 [fpwiki.cz](https://fpwiki.cz) via Firebase App Hosting on every push.
 
-Branch merges (test↔master) **never conflict on `content-ref.txt`** even
-though the two branches always pin different SHAs. A `merge=ours` driver
-in `.gitattributes` keeps the current branch's value automatically. The
-driver is registered per-clone by `scripts/setup-git.mjs`, chained from
-`postinstall` — so as long as you've run `pnpm install` once, you'll
-never see a conflict on this file. (Rationale: content-ref.txt is owned
-by the upstream content bot, which pushes directly to each branch; it
-must never propagate via human merge. See CLAUDE.md Pitfall #20.)
+Branch merges (test↔master), whether local or through a GitHub PR, can't
+move production's content pin. Each branch reads only its own pin file
+(`content-ref/master.txt` or `content-ref/test.txt`), and the content bot
+writes only the current branch's file. A merge may carry the other branch's
+file along; nothing reads it. See CLAUDE.md Pitfall #20 for why this
+replaced the old shared `content-ref.txt`.
 
 ## Where to ask questions
 

@@ -2,9 +2,10 @@
 /**
  * Build-time content fetcher.
  *
- * Downloads a tarball of `fpwiki-content` at the SHA recorded in
- * `content-ref.txt`, extracts it into a SHA-keyed cache, and mirrors the
- * extracted tree into this repo's `content/` and `public/wiki-assets/`.
+ * Downloads a tarball of `fpwiki-content` at the SHA pinned for this build's
+ * channel (`content-ref/<channel>.txt`, see scripts/content-pin.ts), extracts
+ * it into a SHA-keyed cache, and mirrors the extracted tree into this repo's
+ * `content/` and `public/wiki-assets/`.
  *
  * The mirrored directories are .gitignored — fpwiki never tracks content in
  * git. Cache hits are network-free (just a copy from .cache); misses fetch
@@ -16,22 +17,26 @@
  *     every `pnpm dev`, `pnpm build`, etc. Cache hit = instant.
  *
  * Env overrides (advanced — see CONTRIBUTING.md):
- *   FPWIKI_CONTENT_REF=<sha-or-branch>  ignore content-ref.txt; fetch this ref
+ *   FPWIKI_CONTENT_CHANNEL=master|test  pin file to read (default: git branch, else master)
+ *   FPWIKI_CONTENT_REF=<sha-or-branch>  ignore the pin file; fetch this ref
  *   FPWIKI_CONTENT_LOCAL=<dir>          mirror from <dir> instead of fetching
  *   FPWIKI_CONTENT_FORCE=1              re-download even on cache hit
  *   FPWIKI_CONTENT_REPO=<owner/repo>    override source repo (default: ondrahracek/fpwiki-content)
  *   FPWIKI_SKIP_FETCH=1                 skip entirely (rely on existing files)
  */
 import { mkdir, readFile, rm, cp, readdir, writeFile, stat } from 'node:fs/promises'
+import { execSync } from 'node:child_process'
 import { existsSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { Readable } from 'node:stream'
 import { pipeline } from 'node:stream/promises'
 import process from 'node:process'
 import * as tar from 'tar'
+import { pinFile, resolveChannel } from './content-pin'
 
 const ROOT = process.cwd()
-const REF_FILE = join(ROOT, 'content-ref.txt')
+// Migration fallback; remove with the branch in pickMode().
+const LEGACY_REF_FILE = 'content-ref.txt'
 const CACHE_ROOT = join(ROOT, '.cache', 'content')
 const CONTENT_DIR = join(ROOT, 'content')
 const ASSETS_DIR = join(ROOT, 'public', 'wiki-assets')
@@ -62,21 +67,28 @@ function repo(): string {
   return process.env.FPWIKI_CONTENT_REPO || DEFAULT_REPO
 }
 
-async function readRef(): Promise<string> {
-  let raw: string
+/** Checked-out branch, or null when detached or outside a git checkout. */
+function gitBranch(): string | null {
   try {
-    raw = await readFile(REF_FILE, 'utf8')
+    const branch = execSync('git rev-parse --abbrev-ref HEAD', {
+      stdio: ['ignore', 'pipe', 'ignore'],
+    })
+      .toString()
+      .trim()
+    return branch && branch !== 'HEAD' ? branch : null
   } catch {
-    die(
-      `content-ref.txt not found at ${REF_FILE}. Run \`pnpm install\` to bootstrap, or create it manually with a 40-char SHA from https://github.com/${repo()}/commits.`,
-    )
+    return null
   }
+}
+
+async function readRef(file: string): Promise<string> {
+  const raw = await readFile(join(ROOT, file), 'utf8')
   // Trim BOM (U+FEFF), all whitespace, all newlines.
   const trimmed = raw.replace(/^\uFEFF/, '').trim()
   if (!SHA_RE.test(trimmed)) {
     const hex = Buffer.from(raw.slice(0, 80)).toString('hex')
     die(
-      `content-ref.txt malformed. Expected 40-char hex SHA. Got ${trimmed.length} chars; first 80 raw bytes (hex): ${hex}`,
+      `${file} malformed. Expected 40-char hex SHA. Got ${trimmed.length} chars; first 80 raw bytes (hex): ${hex}`,
     )
   }
   return trimmed
@@ -95,8 +107,27 @@ async function pickMode(): Promise<Mode> {
     }
     return { kind: 'branch', name: refOverride, source: 'env FPWIKI_CONTENT_REF' }
   }
-  const sha = await readRef()
-  return { kind: 'sha', sha, source: 'content-ref.txt' }
+  let resolution
+  try {
+    resolution = resolveChannel({
+      envChannel: process.env.FPWIKI_CONTENT_CHANNEL,
+      gitBranch: gitBranch(),
+    })
+  } catch (err) {
+    die(err instanceof Error ? err.message : String(err))
+  }
+  const file = pinFile(resolution.channel)
+  const why = `channel ${resolution.channel} from ${resolution.source}`
+  if (existsSync(join(ROOT, file))) {
+    return { kind: 'sha', sha: await readRef(file), source: `${file}, ${why}` }
+  }
+  if (existsSync(join(ROOT, LEGACY_REF_FILE))) {
+    warn(`${file} not found; falling back to legacy ${LEGACY_REF_FILE} (${why}).`)
+    return { kind: 'sha', sha: await readRef(LEGACY_REF_FILE), source: LEGACY_REF_FILE }
+  }
+  die(
+    `${file} not found (${why}). It is written by the content bot; create it manually with a 40-char SHA from https://github.com/${repo()}/commits.`,
+  )
 }
 
 function cacheDir(sha: string): string {

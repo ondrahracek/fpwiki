@@ -13,6 +13,8 @@ jobs:
   ci:
     name: lint • typecheck • test • content:validate • build
     runs-on: ubuntu-latest
+    env:
+      FPWIKI_CONTENT_CHANNEL: ${{ github.base_ref || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
 

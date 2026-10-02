@@ -21,6 +21,11 @@ env:
     availability:
       - BUILD
       - RUNTIME
+  # The build has no .git to infer the branch from.
+  - variable: FPWIKI_CONTENT_CHANNEL
+    value: master
+    availability:
+      - BUILD
   # Raise V8 heap for the Nitro server-bundle step. Default ~2 GB tips
   # over once content + prerender output crosses ~150 pages — first hit
   # was the icink ingest landing on master, which OOM'd the build with
