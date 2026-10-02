@@ -14,7 +14,7 @@ interface CourseStats {
  * Reactive course-level aggregates. Single source of truth for "how many
  * zápisků are there for this course?", reused by:
  *   - /courses card "zápisků" count
- *   - /wiki/:slug meta line "Magistr · N zápisků · #firstTag"
+ *   - /wiki/:slug meta line "<degree> · N zápisků · #firstTag"
  *   - WikiSidebar course list
  *   - HomeStatsBar
  *

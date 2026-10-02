@@ -7,7 +7,7 @@
       <div class="mb-3 flex flex-wrap items-center gap-2 text-xs">
         <CoursePill :slug="primaryCourse ?? ''" big />
         <span class="text-(--ui-text-muted)">
-          Magistr · {{ zapiskuLabel }}<span v-if="firstTag"> · #{{ firstTag }}</span>
+          {{ heroMeta }}<span v-if="firstTag"> · #{{ firstTag }}</span>
         </span>
       </div>
       <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">{{ page.title }}</h1>
@@ -65,7 +65,7 @@
 import type { WikiPageType } from '#shared/types/wiki'
 import { pathFor } from '#shared/wiki-routes'
 import { resolveCourses, toISODate } from '~/utils/frontmatter'
-import { typeLabel } from '~/utils/labels'
+import { degreeLabel, typeLabel } from '~/utils/labels'
 import { identityVars } from '~/plugins/tag-colors'
 
 const props = defineProps<{
@@ -74,6 +74,7 @@ const props = defineProps<{
     type?: WikiPageType
     course?: string | string[]
     courses?: string | string[]
+    degree?: unknown
     tags?: string[]
     sources?: string[]
     updated?: string | Date
@@ -100,6 +101,10 @@ function pluralize(n: number): string {
 }
 
 const zapiskuLabel = computed(() => pluralize(stats.value.zapisku))
+// "Navazující magisterské · 12 zápisků"; the degree is left out when the page lacks one.
+const heroMeta = computed(() =>
+  [degreeLabel(props.page.degree), zapiskuLabel.value].filter(Boolean).join(' · '),
+)
 
 // Hero tint follows the course slug, so it matches the <CoursePill> on top
 // of it. Independent of `tags[0]`, which can drift if content is re-ordered.

@@ -1,4 +1,5 @@
 import { defineCollection, defineContentConfig, z } from '@nuxt/content'
+import { DEGREE_IDS, MAX_STUDY_YEAR, SEMESTERS } from './shared/study-plan'
 
 // Frontmatter `course` may be a string or string[] depending on author
 // preference. Web app normalizes via app/utils/frontmatter.ts::resolveCourses.
@@ -42,6 +43,15 @@ export default defineContentConfig({
         garant: z.string().optional(),
         featured: z.boolean().default(false),
         examInfo: z.string().optional(),
+        // Position in the study plan (values from shared/study-plan.ts).
+        // The per-degree year limit is checked by parseStudyPlacement, not
+        // here. Optional so content predating the fields still builds; such
+        // courses land in the trailing "Ostatní" group. z.number() without
+        // .int(): @nuxt/content stores JSON-schema "integer" as TEXT and
+        // returns strings, while "number" gets an INT column.
+        degree: z.enum(DEGREE_IDS).optional(),
+        studyYear: z.number().min(1).max(MAX_STUDY_YEAR).optional(),
+        semester: z.enum(SEMESTERS).optional(),
       }),
     }),
     topics: defineCollection({

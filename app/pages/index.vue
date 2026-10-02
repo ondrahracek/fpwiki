@@ -51,6 +51,9 @@
             Vše →
           </NuxtLink>
         </div>
+        <p v-if="shownSemesterLabel" class="mb-2 text-xs text-(--ui-text-muted)">
+          {{ shownSemesterLabel }}
+        </p>
         <ul class="space-y-2">
           <li v-for="c in courseList" :key="c.slug">
             <div
@@ -106,6 +109,8 @@
 <script setup lang="ts">
 import { resolveCourses, toISODate } from '~/utils/frontmatter'
 import { pathFor, slugFromPath, wikiUrl } from '#shared/wiki-routes'
+import { parseStudyPlacement } from '#shared/study-plan'
+import { groupCoursesBySemester, homeSemesterGroup } from '~/utils/semesters'
 
 // Centred hero design — opt out of the layout's left rail. The mobile slideover
 // stays mounted so the hamburger menu still works on small screens.
@@ -149,13 +154,21 @@ const { data: recentPages } = await useAsyncData(
 
 const { data: tagCounts } = await useTagCounts()
 
-const courseList = computed(
-  () =>
-    courses.value?.map((c) => ({
-      slug: resolveCourses(c)[0] ?? slugFromPath(c.path),
-      title: c.title,
-    })) ?? [],
+const allCourses = computed(() =>
+  (courses.value ?? []).map((c) => ({
+    slug: resolveCourses(c)[0] ?? slugFromPath(c.path),
+    title: c.title,
+    placement: parseStudyPlacement(c),
+  })),
 )
+
+// With several semesters, all courses placed, the home lists only the most
+// advanced semester; /courses (the "Vše →" link) stays the full list and the
+// crawl backstop. One semester, or any unplaced course, renders the full list
+// exactly as before.
+const shownGroup = computed(() => homeSemesterGroup(groupCoursesBySemester(allCourses.value)))
+const shownSemesterLabel = computed(() => shownGroup.value?.label)
+const courseList = computed(() => shownGroup.value?.courses ?? allCourses.value)
 
 const recent = computed(
   () =>
