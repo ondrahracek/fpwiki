@@ -64,8 +64,8 @@ are intentionally pinning the build to a specific historical content version.
 Which file a build reads is its **channel**: `FPWIKI_CONTENT_CHANNEL` if set
 (App Hosting sets `master`; CI sets the PR's target branch, else the pushed
 branch), otherwise your checked-out branch when it is `master` or `test`,
-otherwise `master`. So local dev on `test` previews test content, and a
-feature branch previews production content.
+otherwise `master`, or the only pin file present. So local dev on `test`
+previews test content.
 
 ## Working offline
 

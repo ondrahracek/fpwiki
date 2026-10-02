@@ -32,11 +32,9 @@ import { Readable } from 'node:stream'
 import { pipeline } from 'node:stream/promises'
 import process from 'node:process'
 import * as tar from 'tar'
-import { pinFile, resolveChannel } from './content-pin'
+import { CHANNELS, pinFile, resolveChannel } from './content-pin'
 
 const ROOT = process.cwd()
-// Migration fallback; remove with the branch in pickMode().
-const LEGACY_REF_FILE = 'content-ref.txt'
 const CACHE_ROOT = join(ROOT, '.cache', 'content')
 const CONTENT_DIR = join(ROOT, 'content')
 const ASSETS_DIR = join(ROOT, 'public', 'wiki-assets')
@@ -112,6 +110,7 @@ async function pickMode(): Promise<Mode> {
     resolution = resolveChannel({
       envChannel: process.env.FPWIKI_CONTENT_CHANNEL,
       gitBranch: gitBranch(),
+      available: CHANNELS.filter((c) => existsSync(join(ROOT, pinFile(c)))),
     })
   } catch (err) {
     die(err instanceof Error ? err.message : String(err))
@@ -121,12 +120,8 @@ async function pickMode(): Promise<Mode> {
   if (existsSync(join(ROOT, file))) {
     return { kind: 'sha', sha: await readRef(file), source: `${file}, ${why}` }
   }
-  if (existsSync(join(ROOT, LEGACY_REF_FILE))) {
-    warn(`${file} not found; falling back to legacy ${LEGACY_REF_FILE} (${why}).`)
-    return { kind: 'sha', sha: await readRef(LEGACY_REF_FILE), source: LEGACY_REF_FILE }
-  }
   die(
-    `${file} not found (${why}). It is written by the content bot; create it manually with a 40-char SHA from https://github.com/${repo()}/commits.`,
+    `${file} not found (${why}). The content bot writes it on the ${resolution.channel} branch; elsewhere, set FPWIKI_CONTENT_REF to a SHA or branch.`,
   )
 }
 
