@@ -345,12 +345,6 @@
   background: transparent;
   color: inherit;
 }
-.prose .r-runner-caption {
-  margin: 0 0 6px;
-  font-size: 0.75em;
-  letter-spacing: 0.02em;
-  color: var(--color-paper-400);
-}
 .prose .r-runner-output,
 .prose .r-output-pending {
   transition: opacity 0.2s;

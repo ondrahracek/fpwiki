@@ -32,7 +32,6 @@
 
     <div aria-live="polite" :aria-busy="busy">
       <div v-if="ranOnce" class="r-runner-output" :class="{ 'r-runner-stale': busy }">
-        <p class="r-runner-caption">Spočteno ve tvém prohlížeči</p>
         <pre
           v-if="lines.length"
           class="r-runner-console"
