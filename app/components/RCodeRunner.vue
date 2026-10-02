@@ -52,14 +52,15 @@
 
 <script setup lang="ts">
 import type { ROutputLine, RStatus } from '~/composables/useWebR'
+import type { RBlock } from '~/utils/r-blocks'
 
-const props = defineProps<{ code: string }>()
+const props = defineProps<{ code: string; block: RBlock }>()
 const emit = defineEmits<{ settled: []; reset: [] }>()
 
 const textareaId = useId()
 const source = ref(props.code)
 const rows = computed(() => Math.max(3, source.value.split('\n').length))
-const status = ref<RStatus | null>(null)
+const status = ref<RStatus | 'earlier' | null>(null)
 const busy = computed(() => status.value !== null)
 const lines = ref<ROutputLine[]>([])
 const images = shallowRef<ImageBitmap[]>([])
@@ -72,6 +73,8 @@ const statusText = computed(() => {
       return 'Načítám R…'
     case 'installing':
       return 'Instaluji balíčky…'
+    case 'earlier':
+      return 'Spouštím předchozí bloky…'
     case 'running':
       return 'Počítám…'
     default:
@@ -85,6 +88,10 @@ async function run() {
   if (busy.value) return
   status.value = 'loading'
   try {
+    for (const earlier of claimEarlierRBlocks(props.block)) {
+      await runR(earlier.code, (s) => (status.value = s === 'running' ? 'earlier' : s))
+    }
+    markRBlockRun(props.block, source.value)
     const res = await runR(source.value, (s) => (status.value = s))
     lines.value = res.output
     images.value = res.images

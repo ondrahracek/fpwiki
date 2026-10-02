@@ -1,8 +1,9 @@
 <template>
   <div v-if="isR" ref="root" class="r-code">
     <RCodeRunner
-      v-if="active"
+      v-if="active && block"
       :code="(code ?? '').replace(/\n$/, '')"
+      :block="block"
       @settled="state = 'live'"
       @reset="state = 'idle'"
     />
@@ -31,6 +32,7 @@
 
 <script setup lang="ts">
 import UiProsePre from '@nuxt/ui/components/prose/Pre.vue'
+import type { RBlock } from '~/utils/r-blocks'
 
 defineOptions({ inheritAttrs: false })
 
@@ -67,6 +69,13 @@ function staticOutput(): HTMLElement | null {
     ? next
     : null
 }
+
+// Running a block first runs the page's earlier blocks, so it sees their variables.
+const block = shallowRef<RBlock>()
+onMounted(() => {
+  if (root.value) block.value = registerRBlock(root.value, (props.code ?? '').replace(/\n$/, ''))
+})
+onBeforeUnmount(() => block.value && unregisterRBlock(block.value))
 
 watch(state, (s) => {
   const el = staticOutput()

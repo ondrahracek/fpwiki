@@ -112,4 +112,31 @@ describe('ProsePre', () => {
     wrapper.unmount()
     host.remove()
   })
+
+  it('first runs the earlier blocks of the page that have not run yet', async () => {
+    const host = document.body.appendChild(document.createElement('div'))
+    const mountAt = (code: string) =>
+      mountSuspended(ProsePre, {
+        props: { language: 'r', meta: '', code },
+        slots: { default: highlighted },
+        attachTo: host,
+      })
+    const first = await mountAt('a <- 1')
+    const second = await mountAt('b <- a + 1')
+    const third = await mountAt('print(b)')
+
+    run.mockClear()
+    await third.find('button').trigger('click')
+    await flushPromises()
+    expect(run.mock.calls.map((c) => c[0])).toEqual(['a <- 1', 'b <- a + 1', 'print(b)'])
+    expect(first.find('textarea').exists()).toBe(false)
+
+    run.mockClear()
+    await second.find('button').trigger('click')
+    await flushPromises()
+    expect(run.mock.calls.map((c) => c[0])).toEqual(['b <- a + 1'])
+
+    for (const w of [first, second, third]) w.unmount()
+    host.remove()
+  })
 })
