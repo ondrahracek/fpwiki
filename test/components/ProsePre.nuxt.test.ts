@@ -70,4 +70,46 @@ describe('ProsePre', () => {
     expect(wrapper.find('[aria-live="polite"]').exists()).toBe(true)
     expect(wrapper.text()).toContain('Spustit znovu')
   })
+
+  it('replaces the course output with the live run and restores it on reset', async () => {
+    const host = document.body.appendChild(document.createElement('div'))
+    const sibling = document.createElement('div')
+    sibling.innerHTML = '<pre class="prose-pre-output">[1] 1</pre>'
+
+    let finish!: () => void
+    run.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          finish = () =>
+            resolve({ output: [{ type: 'stdout' as const, text: '[1] 2' }], images: [] })
+        }),
+    )
+    const wrapper = await mountSuspended(ProsePre, {
+      props: { language: 'r', meta: '', code: 'x <- 2' },
+      slots: { default: highlighted },
+      attachTo: host,
+    })
+    wrapper.find('.r-code').element.after(sibling)
+    expect(sibling.hidden).toBe(false)
+
+    await wrapper.find('button').trigger('click')
+    await flushPromises()
+    expect(sibling.classList.contains('r-output-pending')).toBe(true)
+    expect(sibling.hidden).toBe(false)
+    expect(wrapper.find('.r-runner-output').exists()).toBe(false)
+
+    finish()
+    await flushPromises()
+    expect(sibling.hidden).toBe(true)
+    expect(wrapper.find('.r-out-stdout').text()).toBe('[1] 2')
+
+    const reset = wrapper.findAll('button').find((b) => b.text().includes('Obnovit původní'))!
+    await reset.trigger('click')
+    await flushPromises()
+    expect(sibling.hidden).toBe(false)
+    expect(sibling.classList.contains('r-output-pending')).toBe(false)
+    expect(wrapper.find('textarea').exists()).toBe(false)
+    wrapper.unmount()
+    host.remove()
+  })
 })

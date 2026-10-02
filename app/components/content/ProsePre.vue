@@ -1,6 +1,11 @@
 <template>
-  <div v-if="isR" class="r-code">
-    <RCodeRunner v-if="active" :code="(code ?? '').replace(/\n$/, '')" />
+  <div v-if="isR" ref="root" class="r-code">
+    <RCodeRunner
+      v-if="active"
+      :code="(code ?? '').replace(/\n$/, '')"
+      @settled="state = 'live'"
+      @reset="state = 'idle'"
+    />
     <template v-else>
       <div class="r-code-toolbar">
         <span class="r-code-lang" aria-hidden="true">R</span>
@@ -8,7 +13,7 @@
           size="xs"
           variant="soft"
           icon="i-lucide-play"
-          @click="active = true"
+          @click="state = 'pending'"
         >
           Spustit v prohlížeči
         </UButton>
@@ -47,5 +52,26 @@ const isR = computed(() => props.language === 'r')
 // MDC sets meta to '' for an explicit ```text fence and leaves it undefined
 // for an untagged one, which it also reports as language 'text'.
 const isOutput = computed(() => props.language === 'text' && props.meta !== undefined)
-const active = ref(false)
+
+// The course's printed output is the next sibling block. It stays in place,
+// dimmed, until the first browser run settles, then the live output replaces it.
+type RunState = 'idle' | 'pending' | 'live'
+const state = ref<RunState>('idle')
+const active = computed(() => state.value !== 'idle')
+const root = ref<HTMLElement>()
+
+function staticOutput(): HTMLElement | null {
+  const next = root.value?.nextElementSibling
+  return next instanceof HTMLElement &&
+    Array.from(next.children).some((c) => c.matches('pre.prose-pre-output'))
+    ? next
+    : null
+}
+
+watch(state, (s) => {
+  const el = staticOutput()
+  if (!el) return
+  el.hidden = s === 'live'
+  el.classList.toggle('r-output-pending', s === 'pending')
+})
 </script>

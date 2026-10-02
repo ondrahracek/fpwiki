@@ -8,10 +8,10 @@
         color="neutral"
         variant="ghost"
         icon="i-lucide-rotate-ccw"
-        :disabled="busy || source === code"
-        @click="source = code"
+        :disabled="busy"
+        @click="emit('reset')"
       >
-        Obnovit kód
+        Obnovit původní
       </UButton>
       <UButton size="xs" variant="soft" icon="i-lucide-play" :loading="busy" @click="run">
         Spustit znovu
@@ -31,14 +31,13 @@
     />
 
     <div aria-live="polite" :aria-busy="busy">
-      <div v-if="lines.length || images.length || (ranOnce && !busy)" class="r-runner-output">
+      <div v-if="ranOnce" class="r-runner-output" :class="{ 'r-runner-stale': busy }">
+        <p class="r-runner-caption">Spočteno ve tvém prohlížeči</p>
         <pre
           v-if="lines.length"
           class="r-runner-console"
         ><span v-for="(l, i) in lines" :key="i" :class="`r-out-${l.type}`">{{ l.text }}{{ l.text.endsWith('\n') ? '' : '\n' }}</span></pre>
-        <p v-else-if="ranOnce && !busy && !images.length" class="r-runner-empty">
-          Kód nevypsal žádný výstup.
-        </p>
+        <p v-else-if="!images.length" class="r-runner-empty">Kód nevypsal žádný výstup.</p>
         <canvas
           v-for="(img, i) in images"
           :key="`${runId}-${i}`"
@@ -56,6 +55,7 @@
 import type { ROutputLine, RStatus } from '~/composables/useWebR'
 
 const props = defineProps<{ code: string }>()
+const emit = defineEmits<{ settled: []; reset: [] }>()
 
 const textareaId = useId()
 const source = ref(props.code)
@@ -85,8 +85,6 @@ const { run: runR } = useWebR()
 async function run() {
   if (busy.value) return
   status.value = 'loading'
-  lines.value = []
-  images.value = []
   try {
     const res = await runR(source.value, (s) => (status.value = s))
     lines.value = res.output
@@ -102,6 +100,7 @@ async function run() {
     status.value = null
     ranOnce.value = true
     runId.value++
+    emit('settled')
   }
 }
 
