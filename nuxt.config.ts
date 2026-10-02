@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { fileURLToPath } from 'node:url'
 import { existsSync, readdirSync } from 'node:fs'
+import { WIKILINK_ALIAS_DIVIDER } from './modules/remark-wikilink-pipe-unescape/build'
 
 // Empty-content guard. content/ and public/wiki-assets/ are .gitignored and
 // fetched at build time by scripts/fetch-content.ts (see CONTRIBUTING.md).
@@ -45,12 +46,11 @@ export default defineNuxtConfig({
     // micromark-extension-math rejects $ in the fence info-string, so any
     // single-line $$content$$ fails as block math and \tag{} errors in KaTeX.
     '~~/modules/math-display-fix',
-    // remark-wikilink-pipe-unescape rewrites `\|` → `|` inside [[wiki-links]]
-    // and ![[embeds]] before remark parses the file. GFM table cells need the
-    // backslash to keep the pipe from splitting the cell, but
-    // @flowershow/remark-wiki-link@3.4.0 consumes the `\` as a literal target
-    // char and produces a broken link. Same beforeParse pattern as
-    // math-display-fix. See CLAUDE.md pitfall #21.
+    // remark-wikilink-pipe-unescape rewrites the alias divider (`|` or `\|`)
+    // inside [[wiki-links]] and ![[embeds]] to WIKILINK_ALIAS_DIVIDER before
+    // remark parses the file, so GFM never splits a table cell mid-link and
+    // @flowershow/remark-wiki-link@3.4.0 never sees the `\`. Same beforeParse
+    // pattern as math-display-fix. See CLAUDE.md pitfall #21.
     '~~/modules/remark-wikilink-pipe-unescape',
     '@nuxt/ui',
     '@nuxt/content',
@@ -121,6 +121,7 @@ export default defineNuxtConfig({
             // handles both [[link]] and ![[image]].
             options: {
               format: 'shortestPossible',
+              aliasDivider: WIKILINK_ALIAS_DIVIDER,
               className: 'wikilink',
               newClassName: 'wikilink-broken',
             },

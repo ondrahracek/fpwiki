@@ -17,23 +17,40 @@
  * for any author who already wrote `[[slug|alias]]` (no backslash).
  *
  * Fenced code blocks are skipped so literal `[[slug\|alias]]` examples
- * inside ``` … ``` survive verbatim. Inline code spans (`…`) are NOT skipped
- * (same limitation as math-display-fix); not currently a problem since no
- * page in the corpus embeds wiki-link syntax inside backticks.
+ * inside ``` … ``` survive verbatim, and so do inline code spans (`…`).
  *
  * Pure logic; no I/O; no @nuxt/kit dependency — fully unit-testable.
  */
 export function unescapeWikilinkPipes(source: string): string {
+  return rewriteWikilinks(source, (m) => m.replace(/\\\|/g, '|'))
+}
+
+/**
+ * Alias divider configured on `@flowershow/remark-wiki-link`. A private-use
+ * character never occurs in content, and unlike `|` it does not split a GFM
+ * table cell, so `[[slug\|alias]]` inside a table renders as one link.
+ */
+export const WIKILINK_ALIAS_DIVIDER = '\uE000'
+
+/** Rewrites `|` and `\|` inside [[…]] / ![[…]] to WIKILINK_ALIAS_DIVIDER. */
+export function markWikilinkAliasDividers(source: string): string {
+  return rewriteWikilinks(source, (m) => m.replace(/\\?\|/g, WIKILINK_ALIAS_DIVIDER))
+}
+
+function rewriteWikilinks(source: string, rewrite: (link: string) => string): string {
   const lines = source.split('\n')
   const out: string[] = []
   let inFence = false
   for (const line of lines) {
     if (/^(`{3,}|~{3,})/.test(line)) inFence = !inFence
-    if (!inFence) {
-      out.push(line.replace(/!?\[\[[^\]\n]+\]\]/g, (m) => m.replace(/\\\|/g, '|')))
-    } else {
-      out.push(line)
-    }
+    // Inline code spans are matched first and returned unchanged.
+    out.push(
+      inFence
+        ? line
+        : line.replace(/(`+)[^`]*?\1|!?\[\[[^\]\n]+\]\]/g, (m) =>
+            m.startsWith('`') ? m : rewrite(m),
+          ),
+    )
   }
   return out.join('\n')
 }

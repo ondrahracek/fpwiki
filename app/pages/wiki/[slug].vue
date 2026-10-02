@@ -57,9 +57,9 @@ const tocLinks = computed(() => {
   // body.toc is added by @nuxtjs/mdc (see PageCollectionItemBase.body in
   // @nuxt/content's types). Empty when the body has no headings.
   const body = page.value?.body as
-    | { toc?: { links?: import('@nuxt/content').TocLink[] } }
+    | { value?: unknown[]; toc?: { links?: import('@nuxt/content').TocLink[] } }
     | undefined
-  return body?.toc?.links ?? []
+  return cleanTocLinks(body?.toc?.links ?? [], body?.value ?? [])
 })
 
 if (!page.value) {

@@ -1,10 +1,12 @@
 import { defineNuxtModule, useLogger } from '@nuxt/kit'
 import type { FileBeforeParseHook } from '@nuxt/content'
-import { unescapeWikilinkPipes } from './build'
+import { markWikilinkAliasDividers } from './build'
 
 /**
- * Nuxt module that rewrites `\|` to `|` inside [[wiki-links]] and ![[embeds]]
- * before remark parses the file.
+ * Nuxt module that rewrites the alias divider (`|` or `\|`) inside
+ * [[wiki-links]] and ![[embeds]] to WIKILINK_ALIAS_DIVIDER before remark
+ * parses the file. Unescaping to a bare `|` fixed the target but let GFM
+ * split table cells mid-link, so links in tables rendered as raw text.
  *
  * Why: GFM tables require authors to write `[[slug\|alias]]` in a cell so the
  * `|` doesn't split the cell. `@flowershow/remark-wiki-link@3.4.0` then
@@ -34,9 +36,9 @@ export default defineNuxtModule({
     // under our tsconfig. See CLAUDE.md pitfall #17. Runtime is unaffected.
     nuxt.hook('content:file:beforeParse', (ctx: FileBeforeParseHook) => {
       if (!ctx.file.id?.endsWith('.md')) return
-      ctx.file.body = unescapeWikilinkPipes(ctx.file.body as string)
+      ctx.file.body = markWikilinkAliasDividers(ctx.file.body as string)
     })
 
-    logger.info('wikilink-pipe-unescape: registered \\| → | rewriter')
+    logger.info('wikilink-pipe-unescape: registered alias-divider rewriter')
   },
 })
