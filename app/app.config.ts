@@ -9,6 +9,12 @@ export default defineAppConfig({
       secondary: 'fp-red',
       neutral: 'paper',
     },
+    prose: {
+      pre: {
+        // Code and R console output keep their columns; long lines scroll.
+        slots: { base: 'whitespace-pre wrap-normal' },
+      },
+    },
     breadcrumb: {
       // Non-active linked crumbs use the project --ui-link token (purple-ink)
       // so dark mode flips automatically. Default Nuxt UI variant is text-muted.

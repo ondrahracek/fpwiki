@@ -98,7 +98,16 @@ FPWIKI_CONTENT_LOCAL=../fpwiki-content pnpm dev
 
 # Wipe and re-download the pinned SHA (cache recovery)
 pnpm content:refresh
+
+# Fast local production build (~20 s): pages render on request instead of
+# being prerendered. Serve with the mise Node, which better-sqlite3 was built for.
+FPWIKI_ON_DEMAND=1 FPWIKI_CONTENT_LOCAL=../fpwiki-content pnpm build
+PORT=3000 node .output/server/index.mjs
 ```
+
+`pnpm dev` compiles each module and page on first request and re-indexes content
+on change, so pages can render partially, then fully, or 404 while indexing.
+Use the on-demand build to read the site; use `pnpm dev` to work on its code.
 
 ## Commit conventions
 

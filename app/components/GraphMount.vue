@@ -167,14 +167,14 @@ const COLOR_TOKEN_VARS_LIGHT: Record<CurveColor, string> = {
   'fp-red': '--color-fp-red-600',
   'paper-700': '--color-paper-700',
   'paper-500': '--color-paper-500',
-  ink: '--color-ink',
+  ink: '--color-paper-900',
 }
 const COLOR_TOKEN_VARS_DARK: Record<CurveColor, string> = {
   'fp-purple': '--color-fp-purple-300',
   'fp-red': '--color-fp-red-300',
   'paper-700': '--color-paper-300',
   'paper-500': '--color-paper-400',
-  ink: '--color-ink',
+  ink: '--color-paper-50',
 }
 
 function tokenVar(token: CurveColor, isDark: boolean): string {
@@ -417,7 +417,7 @@ onBeforeUnmount(() => {
   background: var(--color-paper-500);
 }
 .graph-legend-swatch[data-color='ink'] {
-  background: var(--color-ink);
+  background: var(--color-paper-900);
 }
 
 .graph-legend-swatch.graph-legend-marker {
@@ -439,6 +439,9 @@ onBeforeUnmount(() => {
 }
 .dark .graph-legend-swatch[data-color='paper-500'] {
   background: var(--color-paper-400);
+}
+.dark .graph-legend-swatch[data-color='ink'] {
+  background: var(--color-paper-50);
 }
 .dark .graph-legend-swatch.graph-legend-marker {
   border-top-color: var(--color-paper-400);

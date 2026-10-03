@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import { unescapeWikilinkPipes } from '../../modules/remark-wikilink-pipe-unescape/build'
+import {
+  WIKILINK_ALIAS_DIVIDER as D,
+  markWikilinkAliasDividers,
+  unescapeWikilinkPipes,
+} from '../../modules/remark-wikilink-pipe-unescape/build'
 
 describe('unescapeWikilinkPipes', () => {
   it('rewrites \\| → | inside [[…]] (table-cell case)', () => {
@@ -61,5 +65,29 @@ describe('unescapeWikilinkPipes', () => {
   it('leaves bare text without wikilinks untouched', () => {
     const md = '# Heading\n\nSome paragraph with no links at all.\n'
     expect(unescapeWikilinkPipes(md)).toBe(md)
+  })
+})
+
+describe('markWikilinkAliasDividers', () => {
+  it('leaves no | inside a table-cell link, so GFM cannot split the cell', () => {
+    const out = markWikilinkAliasDividers('| [[isms\\|ISMS]] | popis |')
+    expect(out).toBe(`| [[isms${D}ISMS]] | popis |`)
+    expect(out.split('|')).toHaveLength(4)
+  })
+
+  it('marks unescaped dividers in prose and embeds', () => {
+    expect(markWikilinkAliasDividers('[[a|A]] a ![[x.png|alt]]')).toBe(
+      `[[a${D}A]] a ![[x.png${D}alt]]`,
+    )
+  })
+
+  it('keeps pipes outside links, links without alias and fenced code', () => {
+    const src = 'a \\| b [[isms]]\n```\n[[s\\|S]]\n```'
+    expect(markWikilinkAliasDividers(src)).toBe(src)
+  })
+
+  it('leaves wikilinks quoted in inline code untouched', () => {
+    const src = 'zápis `[[isms|ISMS]]` a [[a|A]]'
+    expect(markWikilinkAliasDividers(src)).toBe(`zápis \`[[isms|ISMS]]\` a [[a${D}A]]`)
   })
 })

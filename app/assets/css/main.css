@@ -249,6 +249,136 @@
 .dark .prose pre {
   background: var(--color-paper-800);
 }
+.prose pre {
+  line-height: 1.6;
+  tab-size: 2;
+}
+/* Ligatures would show R's `<-` as an arrow. */
+.prose code,
+.prose .r-runner-editor {
+  font-variant-ligatures: none;
+}
+.dark .prose pre code {
+  background: transparent;
+}
+.prose pre.prose-pre-output {
+  background: transparent;
+  border: 1px dashed var(--ui-border);
+  border-left: 3px solid var(--ui-border-accented);
+  color: var(--ui-text-toned);
+}
+
+/* ```r blocks: toolbar above the code (ProsePre.vue) and the webR runner
+   (RCodeRunner.vue) share one frame so clicking "Spustit" barely shifts it. */
+.prose .r-code {
+  margin: 20px 0;
+}
+.prose .r-code > div:not(.r-code-toolbar) {
+  margin: 0;
+}
+.prose .r-code pre,
+.prose .r-runner-editor {
+  margin: 0;
+  border-top-color: var(--ui-border);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.prose .r-code-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 4px 6px 4px 14px;
+  border: 1px solid var(--ui-rule-soft);
+  border-bottom: 0;
+  border-radius: 6px 6px 0 0;
+  background: var(--ui-rule-soft);
+}
+.prose .r-code-lang {
+  margin-right: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--ui-text-muted);
+}
+.prose .r-runner-status {
+  font-size: 12px;
+  color: var(--ui-text-muted);
+}
+.prose .r-runner-editor {
+  display: block;
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  line-height: 1.6;
+  tab-size: 2;
+  padding: 12px 14px;
+  white-space: pre;
+  overflow-x: auto;
+  resize: vertical;
+  color: var(--ui-text);
+  background: var(--ui-bg);
+  border: 1px solid var(--ui-rule-soft);
+  border-radius: 0 0 6px 6px;
+}
+.prose .r-runner-editor:focus-visible {
+  outline: 2px solid var(--ui-primary);
+  outline-offset: -2px;
+}
+.prose .r-runner-output {
+  margin-top: 8px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  background: var(--color-paper-800);
+  color: var(--color-paper-100);
+}
+.dark .prose .r-runner-output {
+  background: var(--color-paper-950);
+  border: 1px solid var(--ui-border);
+}
+.prose .r-runner-output pre.r-runner-console {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
+.prose .r-runner-output,
+.prose .r-output-pending {
+  transition: opacity 0.2s;
+}
+.prose .r-runner-stale,
+.prose .r-output-pending {
+  opacity: 0.45;
+}
+.prose .r-runner-empty {
+  margin: 0;
+  font-size: 0.85em;
+  color: var(--color-paper-400);
+}
+.prose .r-out-stderr,
+.prose .r-out-message {
+  color: var(--color-paper-300);
+}
+.prose .r-out-warning {
+  color: var(--color-highlight-light);
+}
+.prose .r-out-error {
+  color: var(--color-fp-red-200);
+}
+.prose .r-runner-plot {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-top: 8px;
+  border-radius: 4px;
+  background: var(--color-paper-50);
+}
+.prose .r-runner-plot:first-child {
+  margin-top: 0;
+}
 
 .prose blockquote {
   font-family: var(--font-serif);
