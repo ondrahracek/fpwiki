@@ -8,7 +8,13 @@
       </p>
     </header>
 
-    <ul v-if="items.length" class="space-y-1">
+    <ul
+      v-if="items.length"
+      class="space-y-1"
+      :data-analytics-component="ANALYTICS_COMPONENTS.recentUpdates"
+      :data-analytics-placement="ANALYTICS_PLACEMENTS.article"
+      :data-analytics-layout="ANALYTICS_LAYOUTS.inline"
+    >
       <li v-for="r in items" :key="r.path">
         <RecentRow :path="r.path" :title="r.title" :updated="r.updated" :page="r.raw" />
       </li>
@@ -18,6 +24,7 @@
 </template>
 
 <script setup lang="ts">
+import { ANALYTICS_COMPONENTS, ANALYTICS_LAYOUTS, ANALYTICS_PLACEMENTS } from '#shared/analytics'
 import { pathFor } from '#shared/wiki-routes'
 import { toISODate } from '~/utils/frontmatter'
 

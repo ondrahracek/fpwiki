@@ -1,6 +1,9 @@
 <template>
   <footer
     class="mt-16 border-t border-(--ui-border) bg-(--ui-bg-muted) py-8 text-sm text-(--ui-text-muted)"
+    :data-analytics-component="ANALYTICS_COMPONENTS.footerLinks"
+    :data-analytics-placement="ANALYTICS_PLACEMENTS.footer"
+    :data-analytics-layout="ANALYTICS_LAYOUTS.inline"
   >
     <div
       class="mx-auto flex max-w-screen-xl flex-col items-start gap-3 px-6 sm:flex-row sm:items-center sm:justify-between"
@@ -13,6 +16,12 @@
         <span>
           Nejde o oficiální materiály FP VUT. Obsah je výběrový a slouží jako pomůcka ke studiu.
         </span>
+        <NuxtLink
+          to="/about/soukromi"
+          class="text-(--ui-text-muted) hover:text-(--ui-text-highlighted)"
+        >
+          Soukromí
+        </NuxtLink>
         <a
           href="https://github.com/ondrahracek/fpwiki"
           target="_blank"
@@ -26,3 +35,7 @@
     </div>
   </footer>
 </template>
+
+<script setup lang="ts">
+import { ANALYTICS_COMPONENTS, ANALYTICS_LAYOUTS, ANALYTICS_PLACEMENTS } from '#shared/analytics'
+</script>

@@ -4,7 +4,11 @@
          lighter inline header below — the design's "card hero" pattern is
          specifically for course-overview surfaces. -->
     <header v-if="isCourse" class="course-hero mb-8 rounded-xl border p-6 sm:p-8" :style="hueVars">
-      <div class="mb-3 flex flex-wrap items-center gap-2 text-xs">
+      <div
+        class="mb-3 flex flex-wrap items-center gap-2 text-xs"
+        :data-analytics-component="ANALYTICS_COMPONENTS.subjectLabels"
+        :data-analytics-placement="ANALYTICS_PLACEMENTS.pageHeader"
+      >
         <CoursePill :slug="primaryCourse ?? ''" big />
         <span class="text-(--ui-text-muted)">
           {{ heroMeta }}<span v-if="firstTag"> · #{{ firstTag }}</span>
@@ -18,7 +22,11 @@
     </header>
 
     <header v-else class="mb-6 border-b border-(--ui-border) pb-5">
-      <div class="mb-3 flex flex-wrap items-center gap-2 text-xs">
+      <div
+        class="mb-3 flex flex-wrap items-center gap-2 text-xs"
+        :data-analytics-component="ANALYTICS_COMPONENTS.subjectLabels"
+        :data-analytics-placement="ANALYTICS_PLACEMENTS.pageHeader"
+      >
         <UBadge color="neutral" variant="soft">{{ typeLabelText }}</UBadge>
         <CoursePill v-for="c in courses" :key="c" :slug="c" />
         <span v-if="updatedDisplay" class="text-(--ui-text-muted)">
@@ -26,14 +34,24 @@
         </span>
       </div>
       <h1 class="text-3xl font-semibold tracking-tight">{{ page.title }}</h1>
-      <div v-if="tags.length" class="mt-4 flex flex-wrap gap-2">
+      <div
+        v-if="tags.length"
+        class="mt-4 flex flex-wrap gap-2"
+        :data-analytics-component="ANALYTICS_COMPONENTS.tags"
+        :data-analytics-placement="ANALYTICS_PLACEMENTS.pageHeader"
+      >
         <TagPill v-for="t in tags" :key="t" :tag="t" />
       </div>
     </header>
 
     <!-- Témata section (course pages only): curated topic list with 1-line
          descriptions sourced from _index.md, links to each topic. -->
-    <section v-if="isCourse && courseTopics.length" class="mb-10">
+    <section
+      v-if="isCourse && courseTopics.length"
+      class="mb-10"
+      :data-analytics-component="ANALYTICS_COMPONENTS.courseTopics"
+      :data-analytics-placement="ANALYTICS_PLACEMENTS.article"
+    >
       <div class="mb-3 flex items-baseline gap-2">
         <h2 class="text-lg font-semibold">Témata</h2>
         <span class="text-xs text-(--ui-text-muted)">{{ courseTopics.length }} položek</span>
@@ -50,7 +68,12 @@
       </ul>
     </section>
 
-    <div class="prose">
+    <div
+      class="prose"
+      :data-analytics-component="ANALYTICS_COMPONENTS.articleLinks"
+      :data-analytics-placement="ANALYTICS_PLACEMENTS.article"
+      :data-analytics-layout="ANALYTICS_LAYOUTS.inline"
+    >
       <ContentRenderer :value="page" />
     </div>
   </article>
@@ -63,6 +86,7 @@
  * topics/summaries/outputs get the inline header.
  */
 import type { WikiPageType } from '#shared/types/wiki'
+import { ANALYTICS_COMPONENTS, ANALYTICS_LAYOUTS, ANALYTICS_PLACEMENTS } from '#shared/analytics'
 import { pathFor } from '#shared/wiki-routes'
 import { resolveCourses, toISODate } from '~/utils/frontmatter'
 import { degreeLabel, typeLabel } from '~/utils/labels'

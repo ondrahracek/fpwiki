@@ -1,5 +1,10 @@
 <template>
-  <header class="sticky top-0 z-20 border-b border-(--ui-border) bg-(--ui-bg)/80 backdrop-blur">
+  <header
+    class="sticky top-0 z-20 border-b border-(--ui-border) bg-(--ui-bg)/80 backdrop-blur"
+    :data-analytics-component="ANALYTICS_COMPONENTS.primaryNav"
+    :data-analytics-placement="ANALYTICS_PLACEMENTS.siteHeader"
+    :data-analytics-layout="ANALYTICS_LAYOUTS.inline"
+  >
     <div class="mx-auto flex max-w-screen-xl items-center gap-3 px-4 py-3 sm:gap-6 sm:px-7">
       <UButton
         icon="i-lucide-menu"
@@ -9,7 +14,11 @@
         aria-label="Otevřít boční panel"
         @click="mobileSidebarOpen = true"
       />
-      <NuxtLink to="/" class="flex items-center gap-2 text-base font-semibold tracking-tight">
+      <NuxtLink
+        to="/"
+        class="flex items-center gap-2 text-base font-semibold tracking-tight"
+        :data-analytics-component="ANALYTICS_COMPONENTS.siteBrand"
+      >
         <img src="/icons/icon-cut-512.png" alt="" width="28" height="28" class="size-7" />
         <span class="text-(--ui-text-highlighted)">fpwiki</span>
       </NuxtLink>
@@ -79,6 +88,8 @@
 </template>
 
 <script setup lang="ts">
+import { ANALYTICS_COMPONENTS, ANALYTICS_LAYOUTS, ANALYTICS_PLACEMENTS } from '#shared/analytics'
+
 const nav = [
   { to: '/', label: 'Domů' },
   { to: '/courses', label: 'Předměty' },

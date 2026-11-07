@@ -1,5 +1,9 @@
 <template>
-  <div class="space-y-5">
+  <div
+    class="space-y-5"
+    :data-analytics-placement="ANALYTICS_PLACEMENTS.rightSidebar"
+    :data-analytics-layout="ANALYTICS_LAYOUTS.desktopSidebar"
+  >
     <!-- 1. Reading progress -->
     <section>
       <WikiProgressChip />
@@ -33,6 +37,7 @@
 </template>
 
 <script setup lang="ts">
+import { ANALYTICS_LAYOUTS, ANALYTICS_PLACEMENTS } from '#shared/analytics'
 import type { TocLink } from '@nuxt/content'
 import type { WikiPageType } from '#shared/types/wiki'
 

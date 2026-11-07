@@ -10,7 +10,13 @@
       </h1>
     </header>
 
-    <ul v-if="items.length" class="space-y-2">
+    <ul
+      v-if="items.length"
+      class="space-y-2"
+      :data-analytics-component="ANALYTICS_COMPONENTS.articleLinks"
+      :data-analytics-placement="ANALYTICS_PLACEMENTS.article"
+      :data-analytics-layout="ANALYTICS_LAYOUTS.inline"
+    >
       <li v-for="p in items" :key="p.path">
         <NuxtLink
           :to="p.path"
@@ -30,6 +36,7 @@
 </template>
 
 <script setup lang="ts">
+import { ANALYTICS_COMPONENTS, ANALYTICS_LAYOUTS, ANALYTICS_PLACEMENTS } from '#shared/analytics'
 import { wikiUrl } from '#shared/wiki-routes'
 import { collectionLabel } from '~/utils/labels'
 
@@ -39,6 +46,12 @@ const slug = computed(() => String(route.params.slug))
 const { data: pages } = await useTagPages(slug)
 
 const items = computed(() => pages.value ?? [])
+
+useAnalyticsPage(() => ({
+  pageType: 'tag',
+  title: `#${slug.value}`,
+  verifiedDynamic: items.value.length > 0,
+}))
 
 usePageSeo({
   title: () => `#${slug.value}`,

@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { WIKI_PAGE_COLLECTIONS } from '#shared/types/wiki'
 import { wikiUrl } from '#shared/wiki-routes'
-import { toISODate } from '~/utils/frontmatter'
+import { resolveCourses, toISODate } from '~/utils/frontmatter'
 
 const route = useRoute()
 const slug = computed(() => String(route.params.slug))
@@ -53,6 +53,20 @@ const { data: found } = await useAsyncData(
 )
 
 const page = computed(() => found.value?.page ?? null)
+useAnalyticsPage(() => ({
+  pageType: !page.value
+    ? 'not_found'
+    : found.value?.collection === 'courses'
+      ? 'course'
+      : found.value?.collection === 'summaries'
+        ? 'summary'
+        : found.value?.collection === 'outputs'
+          ? 'output'
+          : 'topic',
+  courses: resolveCourses(page.value),
+  title: page.value?.title ?? 'Nenalezeno',
+  verifiedDynamic: Boolean(page.value),
+}))
 const tocLinks = computed(() => {
   // body.toc is added by @nuxtjs/mdc (see PageCollectionItemBase.body in
   // @nuxt/content's types). Empty when the body has no headings.
