@@ -28,6 +28,11 @@ import { ANALYTICS_COMPONENTS, ANALYTICS_LAYOUTS, ANALYTICS_PLACEMENTS } from '#
 import { pathFor } from '#shared/wiki-routes'
 import { toISODate } from '~/utils/frontmatter'
 
+useAnalyticsPage(() => ({
+  pageType: 'recent',
+  title: 'Nedávné',
+}))
+
 usePageSeo({
   title: 'Nedávné',
   description: 'Nedávno upravené zápisky a témata na fpwiki.',

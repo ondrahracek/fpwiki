@@ -112,6 +112,11 @@ import { identityColor } from '~/plugins/tag-colors'
 import { parseStudyPlacement } from '#shared/study-plan'
 import { groupCoursesBySemester } from '~/utils/semesters'
 
+useAnalyticsPage(() => ({
+  pageType: 'courses',
+  title: 'Předměty',
+}))
+
 usePageSeo({
   title: 'Předměty',
   description: 'Seznam magisterských předmětů na FP VUT s mými zápisky a propojenými tématy.',

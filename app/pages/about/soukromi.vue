@@ -54,6 +54,11 @@ import { ANALYTICS_COMPONENTS, ANALYTICS_LAYOUTS, ANALYTICS_PLACEMENTS } from '#
 
 definePageMeta({ noAside: true })
 
+useAnalyticsPage(() => ({
+  pageType: 'about',
+  title: 'Soukromí a měření návštěvnosti',
+}))
+
 usePageSeo({
   title: 'Soukromí a měření návštěvnosti',
   description: 'Jak fpwiki používá Google Analytics a jak lze změnit souhlas s měřením.',

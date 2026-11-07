@@ -134,6 +134,11 @@ import { groupCoursesBySemester, homeSemesterGroup } from '~/utils/semesters'
 // stays mounted so the hamburger menu still works on small screens.
 definePageMeta({ noAside: true })
 
+useAnalyticsPage(() => ({
+  pageType: 'home',
+  title: 'fpwiki — zápisky k vybraným předmětům FP VUT',
+}))
+
 usePageSeo({
   title: 'fpwiki — zápisky k vybraným předmětům FP VUT',
   description:

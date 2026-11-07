@@ -38,7 +38,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   })
 
   nuxtApp.hook('page:start', () => {
-    pageContext.value = null
+    // The destination may publish its context before this suspense hook runs.
     client.setPageContext(null)
   })
   nuxtApp.hook('page:finish', () => {

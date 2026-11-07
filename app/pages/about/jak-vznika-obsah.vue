@@ -93,6 +93,11 @@ import { ANALYTICS_COMPONENTS, ANALYTICS_LAYOUTS, ANALYTICS_PLACEMENTS } from '#
 // slideover still mounts so the hamburger menu works on small screens.
 definePageMeta({ noAside: true })
 
+useAnalyticsPage(() => ({
+  pageType: 'about',
+  title: 'Jak vzniká fpwiki',
+}))
+
 usePageSeo({
   title: 'Jak vzniká fpwiki',
   description:

@@ -23,6 +23,11 @@
 
 <script setup lang="ts">
 import { ANALYTICS_COMPONENTS, ANALYTICS_LAYOUTS, ANALYTICS_PLACEMENTS } from '#shared/analytics'
+useAnalyticsPage(() => ({
+  pageType: 'tags',
+  title: 'Štítky',
+}))
+
 usePageSeo({
   title: 'Štítky',
   description: 'Štítky napříč všemi zápisky — projděte si témata.',
