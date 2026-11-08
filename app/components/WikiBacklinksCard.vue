@@ -1,5 +1,9 @@
 <template>
-  <ul v-if="backlinks.length" class="space-y-1">
+  <ul
+    v-if="backlinks.length"
+    class="space-y-1"
+    :data-analytics-component="ANALYTICS_COMPONENTS.backlinks"
+  >
     <li v-for="ref in backlinks" :key="ref.slug">
       <NuxtLink :to="ref.path" class="block rounded px-2 py-2 hover:bg-(--ui-bg-elevated)">
         <div class="truncate text-[13px] font-medium text-(--ui-text)">{{ ref.title }}</div>
@@ -17,6 +21,7 @@
 </template>
 
 <script setup lang="ts">
+import { ANALYTICS_COMPONENTS } from '#shared/analytics'
 import type { WikiBacklinkRef, WikiBacklinksMap } from '#shared/types/wiki'
 import { parseHighlight } from '~/utils/snippet-highlight'
 

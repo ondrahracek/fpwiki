@@ -1,6 +1,10 @@
 <template>
   <UContainer class="max-w-3xl py-10">
-    <article>
+    <article
+      :data-analytics-component="ANALYTICS_COMPONENTS.articleLinks"
+      :data-analytics-placement="ANALYTICS_PLACEMENTS.article"
+      :data-analytics-layout="ANALYTICS_LAYOUTS.inline"
+    >
       <h1 class="mb-4 text-3xl font-semibold tracking-tight">Jak vzniká fpwiki</h1>
 
       <img
@@ -83,9 +87,16 @@
 </template>
 
 <script setup lang="ts">
+import { ANALYTICS_COMPONENTS, ANALYTICS_LAYOUTS, ANALYTICS_PLACEMENTS } from '#shared/analytics'
+
 // Centred article design — opt out of the layout's left rail. The mobile
 // slideover still mounts so the hamburger menu works on small screens.
 definePageMeta({ noAside: true })
+
+useAnalyticsPage(() => ({
+  pageType: 'about',
+  title: 'Jak vzniká fpwiki',
+}))
 
 usePageSeo({
   title: 'Jak vzniká fpwiki',

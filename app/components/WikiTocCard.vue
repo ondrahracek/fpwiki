@@ -1,5 +1,10 @@
 <template>
-  <nav v-if="flatLinks.length" aria-label="Na této stránce" class="text-xs">
+  <nav
+    v-if="flatLinks.length"
+    aria-label="Na této stránce"
+    class="text-xs"
+    :data-analytics-component="ANALYTICS_COMPONENTS.tableOfContents"
+  >
     <ul class="space-y-0.5 border-l border-(--ui-border)">
       <li v-for="link in flatLinks" :key="link.id" :class="link.depth >= 3 ? 'ml-3' : ''">
         <a
@@ -20,6 +25,7 @@
 </template>
 
 <script setup lang="ts">
+import { ANALYTICS_COMPONENTS } from '#shared/analytics'
 import type { TocLink } from '@nuxt/content'
 
 const props = defineProps<{ links: TocLink[] }>()

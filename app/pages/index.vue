@@ -21,7 +21,12 @@
         dostupných podkladů a jsou upravené tak, aby se v nich dalo rychle hledat a opakovat si
         látku.
       </p>
-      <div class="mt-8 flex flex-wrap items-center gap-2 sm:mt-10">
+      <div
+        class="mt-8 flex flex-wrap items-center gap-2 sm:mt-10"
+        :data-analytics-component="ANALYTICS_COMPONENTS.heroActions"
+        :data-analytics-placement="ANALYTICS_PLACEMENTS.article"
+        :data-analytics-layout="ANALYTICS_LAYOUTS.inline"
+      >
         <UButton to="/courses" color="primary" trailing-icon="i-lucide-arrow-right">
           Procházet předměty
         </UButton>
@@ -41,7 +46,11 @@
     <HomeStatsBar />
 
     <section class="grid grid-cols-1 gap-8 py-10 md:grid-cols-3">
-      <div>
+      <div
+        :data-analytics-component="ANALYTICS_COMPONENTS.courseCards"
+        :data-analytics-placement="ANALYTICS_PLACEMENTS.article"
+        :data-analytics-layout="ANALYTICS_LAYOUTS.inline"
+      >
         <div class="mb-3 flex items-center justify-between">
           <h3 class="section-label">Předměty</h3>
           <NuxtLink
@@ -71,7 +80,11 @@
         </ul>
       </div>
 
-      <div>
+      <div
+        :data-analytics-component="ANALYTICS_COMPONENTS.recentUpdates"
+        :data-analytics-placement="ANALYTICS_PLACEMENTS.article"
+        :data-analytics-layout="ANALYTICS_LAYOUTS.inline"
+      >
         <div class="mb-3 flex items-center justify-between">
           <h3 class="section-label">Poslední úpravy</h3>
           <NuxtLink
@@ -88,7 +101,11 @@
         </ul>
       </div>
 
-      <div>
+      <div
+        :data-analytics-component="ANALYTICS_COMPONENTS.tags"
+        :data-analytics-placement="ANALYTICS_PLACEMENTS.article"
+        :data-analytics-layout="ANALYTICS_LAYOUTS.inline"
+      >
         <div class="mb-3 flex items-center justify-between">
           <h3 class="section-label">Témata</h3>
           <NuxtLink
@@ -107,6 +124,7 @@
 </template>
 
 <script setup lang="ts">
+import { ANALYTICS_COMPONENTS, ANALYTICS_LAYOUTS, ANALYTICS_PLACEMENTS } from '#shared/analytics'
 import { resolveCourses, toISODate } from '~/utils/frontmatter'
 import { pathFor, slugFromPath, wikiUrl } from '#shared/wiki-routes'
 import { parseStudyPlacement } from '#shared/study-plan'
@@ -115,6 +133,11 @@ import { groupCoursesBySemester, homeSemesterGroup } from '~/utils/semesters'
 // Centred hero design — opt out of the layout's left rail. The mobile slideover
 // stays mounted so the hamburger menu still works on small screens.
 definePageMeta({ noAside: true })
+
+useAnalyticsPage(() => ({
+  pageType: 'home',
+  title: 'fpwiki — zápisky k vybraným předmětům FP VUT',
+}))
 
 usePageSeo({
   title: 'fpwiki — zápisky k vybraným předmětům FP VUT',

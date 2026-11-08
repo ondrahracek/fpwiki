@@ -20,10 +20,17 @@
       </div>
 
       <div class="max-h-[60vh] overflow-y-auto p-2">
-        <ul v-if="hits.length" class="space-y-1">
+        <ul
+          v-if="hits.length"
+          class="space-y-1"
+          :data-analytics-component="ANALYTICS_COMPONENTS.searchResults"
+          :data-analytics-placement="ANALYTICS_PLACEMENTS.search"
+          :data-analytics-layout="ANALYTICS_LAYOUTS.inline"
+        >
           <li v-for="hit in hits" :key="hit.section.id">
             <NuxtLink
               :to="pathFor({ path: hit.section.id, collection: hit.section.collection })"
+              :data-analytics-approved-section="hit.section.id.includes('#') ? 'true' : undefined"
               class="flex flex-col gap-1 rounded-md px-3 py-2 hover:bg-(--ui-bg-elevated)"
               @click="close"
             >
@@ -56,6 +63,7 @@
  *   - delete the other composable + the switch
  */
 import type { WikiSearchSection } from '#shared/types/wiki'
+import { ANALYTICS_COMPONENTS, ANALYTICS_LAYOUTS, ANALYTICS_PLACEMENTS } from '#shared/analytics'
 import { pathFor } from '#shared/wiki-routes'
 import { collectionLabel } from '~/utils/labels'
 

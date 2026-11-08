@@ -5,7 +5,11 @@
       <slot v-if="noAside" />
       <UContainer v-else class="py-6 lg:py-10" :class="containerWidthClass">
         <div class="lg:grid lg:grid-cols-[260px_1fr] lg:gap-10">
-          <aside class="hidden lg:block">
+          <aside
+            class="hidden lg:block"
+            :data-analytics-placement="ANALYTICS_PLACEMENTS.leftSidebar"
+            :data-analytics-layout="ANALYTICS_LAYOUTS.desktopSidebar"
+          >
             <div class="sticky top-20">
               <AppPrimaryNav />
             </div>
@@ -20,7 +24,11 @@
 
     <USlideover v-model:open="mobileOpen" side="left" :ui="{ content: 'max-w-xs' }">
       <template #content>
-        <div class="h-full overflow-y-auto p-6">
+        <div
+          class="h-full overflow-y-auto p-6"
+          :data-analytics-placement="ANALYTICS_PLACEMENTS.leftSidebar"
+          :data-analytics-layout="ANALYTICS_LAYOUTS.mobileDrawer"
+        >
           <AppPrimaryNav />
         </div>
       </template>
@@ -29,6 +37,8 @@
 </template>
 
 <script setup lang="ts">
+import { ANALYTICS_LAYOUTS, ANALYTICS_PLACEMENTS } from '#shared/analytics'
+
 const route = useRoute()
 const mobileOpen = useMobileNavOpen()
 

@@ -1,8 +1,15 @@
 <template>
-  <UBreadcrumb :items="items" class="text-sm text-(--ui-text-muted)" />
+  <div
+    :data-analytics-component="ANALYTICS_COMPONENTS.breadcrumbs"
+    :data-analytics-placement="ANALYTICS_PLACEMENTS.pageHeader"
+    :data-analytics-layout="ANALYTICS_LAYOUTS.inline"
+  >
+    <UBreadcrumb :items="items" class="text-sm text-(--ui-text-muted)" />
+  </div>
 </template>
 
 <script setup lang="ts">
+import { ANALYTICS_COMPONENTS, ANALYTICS_LAYOUTS, ANALYTICS_PLACEMENTS } from '#shared/analytics'
 import type { WikiCollectionName } from '#shared/types/wiki'
 import { wikiUrl } from '#shared/wiki-routes'
 import { collectionPluralLabel } from '~/utils/labels'
