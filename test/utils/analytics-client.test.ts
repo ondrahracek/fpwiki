@@ -16,19 +16,22 @@ const page = (overrides: Partial<AnalyticsPageContext> = {}): AnalyticsPageConte
 })
 
 function eventPayloads(name?: string): Array<Record<string, string>> {
-  const entries = ((window as unknown as { dataLayer?: unknown[] }).dataLayer ?? []) as unknown[][]
+  const entries = ((window as unknown as { dataLayer?: unknown[] }).dataLayer ??
+    []) as ArrayLike<unknown>[]
   return entries
     .filter((entry) => entry[0] === 'event' && (!name || entry[1] === name))
     .map((entry) => entry[2] as Record<string, string>)
 }
 
 function commandPayload(name: string): Record<string, unknown> | undefined {
-  const entries = ((window as unknown as { dataLayer?: unknown[] }).dataLayer ?? []) as unknown[][]
+  const entries = ((window as unknown as { dataLayer?: unknown[] }).dataLayer ??
+    []) as ArrayLike<unknown>[]
   return entries.find((entry) => entry[0] === name)?.[2] as Record<string, unknown> | undefined
 }
 
 function commandPayloads(name: string): Array<Record<string, unknown>> {
-  const entries = ((window as unknown as { dataLayer?: unknown[] }).dataLayer ?? []) as unknown[][]
+  const entries = ((window as unknown as { dataLayer?: unknown[] }).dataLayer ??
+    []) as ArrayLike<unknown>[]
   return entries
     .filter((entry) => entry[0] === name)
     .map((entry) => entry[2] as Record<string, unknown>)
@@ -93,6 +96,17 @@ describe('analytics client', () => {
     for (const client of clients.splice(0)) client.destroy()
     delete (window as unknown as { gtag?: unknown }).gtag
     delete (window as unknown as { dataLayer?: unknown }).dataLayer
+  })
+
+  it('queues Arguments objects that the Google tag processes as commands', () => {
+    setup()
+    const entries = (window as unknown as { dataLayer: unknown[] }).dataLayer
+    expect(entries).toHaveLength(3)
+    expect(entries.map((entry) => Object.prototype.toString.call(entry))).toEqual([
+      '[object Arguments]',
+      '[object Arguments]',
+      '[object Arguments]',
+    ])
   })
 
   it('validates versioned saved choices', () => {

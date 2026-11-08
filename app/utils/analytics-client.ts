@@ -91,7 +91,11 @@ export function createAnalyticsClient(options: {
     if (enabled || !context || !/^G-[A-Z0-9]+$/i.test(gaId)) return false
     enabled = true
     win.dataLayer = []
-    win.gtag = (...args: unknown[]) => win.dataLayer?.push(args)
+    win.gtag = function () {
+      // Google recognizes Arguments objects as commands; plain arrays are ignored.
+      // eslint-disable-next-line prefer-rest-params
+      win.dataLayer?.push(arguments)
+    }
     win.gtag('js', new Date())
     win.gtag('config', gaId, {
       send_page_view: false,
