@@ -17,7 +17,14 @@ import { queryCollection } from '@nuxt/content/server'
 import { pathFor, wikiUrl } from '#shared/wiki-routes'
 import type { WikiCollectionName } from '#shared/types/wiki'
 
-const STATIC_ROUTES = ['/', '/courses', '/recent', '/tags', '/about/jak-vznika-obsah']
+const STATIC_ROUTES = [
+  '/',
+  '/courses',
+  '/recent',
+  '/tags',
+  '/about/jak-vznika-obsah',
+  '/about/soukromi',
+]
 const PAGE_COLLECTIONS: WikiCollectionName[] = ['courses', 'topics', 'summaries', 'outputs']
 
 const escapeXml = (s: string): string =>

@@ -165,7 +165,15 @@ export default defineNuxtConfig({
           // entries are belt-and-braces against nav regressions — AppPrimaryNav
           // links to all of them on every page, so crawlLinks would reach them
           // anyway, but pinning here protects against accidental nav changes.
-          routes: ['/', '/courses', '/tags', '/recent', '/about/jak-vznika-obsah', '/sitemap.xml'],
+          routes: [
+            '/',
+            '/courses',
+            '/tags',
+            '/recent',
+            '/about/jak-vznika-obsah',
+            '/about/soukromi',
+            '/sitemap.xml',
+          ],
         },
   },
 

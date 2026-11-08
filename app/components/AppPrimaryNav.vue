@@ -1,6 +1,6 @@
 <template>
   <nav class="space-y-7 text-sm" aria-label="Hlavní navigace">
-    <section>
+    <section :data-analytics-component="ANALYTICS_COMPONENTS.primaryNav">
       <h2 class="section-label mb-2">Navigace</h2>
       <ul class="space-y-1">
         <li v-for="link in primaryLinks" :key="link.key">
@@ -20,7 +20,7 @@
       </ul>
     </section>
 
-    <section>
+    <section :data-analytics-component="ANALYTICS_COMPONENTS.subjectList">
       <h2 class="section-label mb-2">Předměty</h2>
       <!-- One semester (or no course placed): flat list, no group headers. -->
       <NavCourseList v-if="courseGroups.length <= 1" :rows="courseRows" />
@@ -59,7 +59,7 @@
       </NuxtLink>
     </section>
 
-    <section>
+    <section :data-analytics-component="ANALYTICS_COMPONENTS.tags">
       <h2 class="section-label mb-2">Štítky</h2>
       <ul class="space-y-1">
         <li v-for="t in tagRows" :key="t.tag">
@@ -86,7 +86,7 @@
       </NuxtLink>
     </section>
 
-    <section>
+    <section :data-analytics-component="ANALYTICS_COMPONENTS.projectLinks">
       <h2 class="section-label mb-2">O bázi</h2>
       <ul class="space-y-1">
         <li>
@@ -129,6 +129,7 @@
 </template>
 
 <script setup lang="ts">
+import { ANALYTICS_COMPONENTS } from '#shared/analytics'
 import { wikiUrl } from '#shared/wiki-routes'
 import { groupCoursesBySemester, latestSemesterGroup } from '~/utils/semesters'
 

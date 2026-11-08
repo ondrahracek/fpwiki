@@ -8,7 +8,13 @@
       </p>
     </header>
 
-    <div v-if="tagOptions.length" class="flex flex-wrap gap-2">
+    <div
+      v-if="tagOptions.length"
+      class="flex flex-wrap gap-2"
+      :data-analytics-component="ANALYTICS_COMPONENTS.tags"
+      :data-analytics-placement="ANALYTICS_PLACEMENTS.article"
+      :data-analytics-layout="ANALYTICS_LAYOUTS.inline"
+    >
       <TagPill v-for="t in tagOptions" :key="t.tag" :tag="t.tag" :count="t.count" />
     </div>
     <p v-else class="text-(--ui-text-muted)">Zatím tu nic není.</p>
@@ -16,6 +22,12 @@
 </template>
 
 <script setup lang="ts">
+import { ANALYTICS_COMPONENTS, ANALYTICS_LAYOUTS, ANALYTICS_PLACEMENTS } from '#shared/analytics'
+useAnalyticsPage(() => ({
+  pageType: 'tags',
+  title: 'Štítky',
+}))
+
 usePageSeo({
   title: 'Štítky',
   description: 'Štítky napříč všemi zápisky — projděte si témata.',

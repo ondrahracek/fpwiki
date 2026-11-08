@@ -30,7 +30,14 @@
       </div>
     </header>
 
-    <nav v-if="showGroupHeaders" class="mb-6 flex flex-wrap gap-2" aria-label="Semestry">
+    <nav
+      v-if="showGroupHeaders"
+      class="mb-6 flex flex-wrap gap-2"
+      aria-label="Semestry"
+      :data-analytics-component="ANALYTICS_COMPONENTS.studyPlanNavigation"
+      :data-analytics-placement="ANALYTICS_PLACEMENTS.pageHeader"
+      :data-analytics-layout="ANALYTICS_LAYOUTS.inline"
+    >
       <UButton
         v-for="g in groups"
         :key="g.key"
@@ -43,7 +50,14 @@
       </UButton>
     </nav>
 
-    <section v-for="g in groups" :key="g.key" class="mb-8 last:mb-0">
+    <section
+      v-for="g in groups"
+      :key="g.key"
+      class="mb-8 last:mb-0"
+      :data-analytics-component="ANALYTICS_COMPONENTS.courseCards"
+      :data-analytics-placement="ANALYTICS_PLACEMENTS.article"
+      :data-analytics-layout="ANALYTICS_LAYOUTS.inline"
+    >
       <h2 v-if="showGroupHeaders" :id="g.key" class="section-label mb-3 scroll-mt-20">
         {{ g.label }}
       </h2>
@@ -90,12 +104,18 @@
 </template>
 
 <script setup lang="ts">
+import { ANALYTICS_COMPONENTS, ANALYTICS_LAYOUTS, ANALYTICS_PLACEMENTS } from '#shared/analytics'
 import { resolveCourses } from '~/utils/frontmatter'
 import { slugFromPath, wikiUrl } from '#shared/wiki-routes'
 import { shortDate } from '~/utils/format-date'
 import { identityColor } from '~/plugins/tag-colors'
 import { parseStudyPlacement } from '#shared/study-plan'
 import { groupCoursesBySemester } from '~/utils/semesters'
+
+useAnalyticsPage(() => ({
+  pageType: 'courses',
+  title: 'Předměty',
+}))
 
 usePageSeo({
   title: 'Předměty',

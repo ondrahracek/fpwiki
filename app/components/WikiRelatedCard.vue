@@ -1,5 +1,9 @@
 <template>
-  <ul v-if="related.length" class="space-y-0.5">
+  <ul
+    v-if="related.length"
+    class="space-y-0.5"
+    :data-analytics-component="ANALYTICS_COMPONENTS.relatedTopics"
+  >
     <li v-for="r in related" :key="r.slug">
       <NuxtLink
         :to="r.path"
@@ -12,6 +16,7 @@
 </template>
 
 <script setup lang="ts">
+import { ANALYTICS_COMPONENTS } from '#shared/analytics'
 import type { WikiCollectionName } from '#shared/types/wiki'
 import { deriveRelated } from '~/utils/related'
 
